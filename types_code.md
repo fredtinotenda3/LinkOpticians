@@ -1,10 +1,13 @@
+﻿===============================
+  types\index.ts
+===============================
+`$lang
 export interface AppointmentCreateData {
   patientName: string;
   phone: string;
   email?: string;
   serviceId: string;
   branchId: string;
-  opticianId?: string;
   scheduledAt: Date;
   notes?: string;
 }
@@ -15,7 +18,6 @@ export interface AppointmentUpdateData {
   email?: string;
   serviceId?: string;
   branchId?: string;
-  opticianId?: string;
   scheduledAt?: Date;
   status?: AppointmentStatus;
   notes?: string;
@@ -46,13 +48,5 @@ export interface Branch {
   operatingHours: string;
 }
 
-export interface Optician {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  specialty?: string;
-  isActive: boolean;
-  branchId: string;
-  branch: Branch;
-}
+```
+

@@ -2,12 +2,39 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
-async function getAppointment(id: string) {
+interface AppointmentWithDetails {
+  id: string;
+  patientName: string;
+  phone: string;
+  email: string | null;
+  scheduledAt: Date;
+  notes: string | null;
+  service: {
+    id: string;
+    name: string;
+  };
+  branch: {
+    id: string;
+    name: string;
+    phone: string;
+    address: string;
+  };
+  optician: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+}
+
+async function getAppointment(
+  id: string
+): Promise<AppointmentWithDetails | null> {
   return await prisma.appointment.findUnique({
     where: { id },
     include: {
       service: true,
       branch: true,
+      optician: true,
     },
   });
 }
@@ -17,7 +44,6 @@ export default async function Confirmation({
 }: {
   searchParams: Promise<{ appointmentId: string }>;
 }) {
-  // Await the searchParams Promise
   const params = await searchParams;
   const appointmentId = params.appointmentId;
 
@@ -97,6 +123,14 @@ export default async function Confirmation({
                 <span className="text-gray-600">Branch:</span>
                 <span className="font-medium">{appointment.branch.name}</span>
               </div>
+              {appointment.optician && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Optician:</span>
+                  <span className="font-medium">
+                    {appointment.optician.name}
+                  </span>
+                </div>
+              )}
               <div className="flex justify-between">
                 <span className="text-gray-600">Date & Time:</span>
                 <span className="font-medium">
@@ -110,6 +144,14 @@ export default async function Confirmation({
               <div className="flex justify-between">
                 <span className="text-gray-600">Phone:</span>
                 <span className="font-medium">{appointment.phone}</span>
+              </div>
+              <div className="mt-4 pt-4 border-t border-blue-200">
+                <p className="text-sm text-blue-700">
+                  📍 {appointment.branch.address}
+                </p>
+                <p className="text-sm text-blue-700">
+                  📞 {appointment.branch.phone}
+                </p>
               </div>
             </div>
           </div>

@@ -17,6 +17,7 @@ function DateSelectionContent() {
 
   const serviceId = searchParams.get("serviceId");
   const branchId = searchParams.get("branchId");
+  const opticianId = searchParams.get("opticianId");
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
@@ -41,12 +42,18 @@ function DateSelectionContent() {
         console.log("Fetching availability for:", {
           branchId,
           serviceId,
+          opticianId,
           date: date.toISOString(),
         });
 
-        const response = await fetch(
-          `/api/availability?branchId=${branchId}&serviceId=${serviceId}&date=${date.toISOString()}`
-        );
+        const params = new URLSearchParams({
+          branchId,
+          serviceId,
+          date: date.toISOString(),
+          ...(opticianId && { opticianId }),
+        });
+
+        const response = await fetch(`/api/availability?${params}`);
 
         console.log("Response status:", response.status);
 
@@ -66,7 +73,7 @@ function DateSelectionContent() {
         setLoading(false);
       }
     },
-    [serviceId, branchId]
+    [serviceId, branchId, opticianId]
   );
 
   useEffect(() => {
@@ -103,9 +110,14 @@ function DateSelectionContent() {
   const handleTimeSelect = (slot: string) => {
     if (!serviceId || !branchId) return;
 
-    router.push(
-      `/book/details?serviceId=${serviceId}&branchId=${branchId}&scheduledAt=${slot}`
-    );
+    const params = new URLSearchParams({
+      serviceId,
+      branchId,
+      scheduledAt: slot,
+      ...(opticianId && { opticianId }),
+    });
+
+    router.push(`/book/details?${params}`);
   };
 
   if (!serviceId || !branchId) {
@@ -125,6 +137,11 @@ function DateSelectionContent() {
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Select Date & Time
           </h1>
+          {opticianId && (
+            <p className="text-sm text-gray-600">
+              Availability shown for your selected optician
+            </p>
+          )}
         </div>
 
         {/* Date Selection */}
@@ -186,10 +203,10 @@ function DateSelectionContent() {
 
         <div className="text-center mt-8">
           <Link
-            href={`/book/branch?serviceId=${serviceId}`}
+            href={`/book/optician?serviceId=${serviceId}&branchId=${branchId}`}
             className="text-blue-600 hover:text-blue-800 font-medium"
           >
-            ← Back to Branches
+            ← Back to Opticians
           </Link>
         </div>
       </div>

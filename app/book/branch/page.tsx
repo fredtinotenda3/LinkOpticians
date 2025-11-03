@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { Branch, Service } from "@/types";
 
-async function getBranches() {
+async function getBranches(): Promise<Branch[]> {
   return await prisma.branch.findMany();
 }
 
-async function getService(serviceId: string) {
+async function getService(serviceId: string): Promise<Service | null> {
   return await prisma.service.findUnique({
     where: { id: serviceId },
   });
@@ -17,7 +18,6 @@ export default async function BranchSelection({
 }: {
   searchParams: Promise<{ serviceId: string }>;
 }) {
-  // Await the searchParams Promise
   const params = await searchParams;
   const serviceId = params.serviceId;
 
@@ -47,32 +47,23 @@ export default async function BranchSelection({
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {branches.map(
-            (branch: {
-              id: string;
-              name: string;
-              address: string;
-              phone: string;
-              email: string;
-              operatingHours: string;
-            }) => (
-              <Link
-                key={branch.id}
-                href={`/book/date?serviceId=${serviceId}&branchId=${branch.id}`}
-                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border border-gray-200"
-              >
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  {branch.name}
-                </h3>
-                <p className="text-gray-600 mb-3">{branch.address}</p>
-                <div className="space-y-2 text-sm text-gray-500">
-                  <p>📞 {branch.phone}</p>
-                  <p>📧 {branch.email}</p>
-                  <p>🕒 {branch.operatingHours}</p>
-                </div>
-              </Link>
-            )
-          )}
+          {branches.map((branch: Branch) => (
+            <Link
+              key={branch.id}
+              href={`/book/optician?serviceId=${serviceId}&branchId=${branch.id}`}
+              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border border-gray-200"
+            >
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                {branch.name}
+              </h3>
+              <p className="text-gray-600 mb-3">{branch.address}</p>
+              <div className="space-y-2 text-sm text-gray-500">
+                <p>📞 {branch.phone}</p>
+                <p>📧 {branch.email}</p>
+                <p>🕒 {branch.operatingHours}</p>
+              </div>
+            </Link>
+          ))}
         </div>
 
         <div className="text-center mt-8">

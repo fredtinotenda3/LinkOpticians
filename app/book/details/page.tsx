@@ -11,6 +11,7 @@ function BookingDetailsContent() {
 
   const serviceId = searchParams.get("serviceId");
   const branchId = searchParams.get("branchId");
+  const opticianId = searchParams.get("opticianId");
   const scheduledAt = searchParams.get("scheduledAt");
 
   const [formData, setFormData] = useState({
@@ -43,6 +44,7 @@ function BookingDetailsContent() {
           ...formData,
           serviceId,
           branchId,
+          opticianId: opticianId || undefined,
           scheduledAt,
         }),
       });
@@ -117,6 +119,11 @@ function BookingDetailsContent() {
             Scheduled for:{" "}
             <span className="font-medium">{formatDateTime(scheduledAt)}</span>
           </p>
+          {opticianId && (
+            <p className="text-sm text-gray-500 mt-2">
+              With your selected optician
+            </p>
+          )}
         </div>
 
         <form
@@ -207,7 +214,9 @@ function BookingDetailsContent() {
 
           <div className="mt-6 flex gap-4">
             <Link
-              href={`/book/date?serviceId=${serviceId}&branchId=${branchId}`}
+              href={`/book/date?serviceId=${serviceId}&branchId=${branchId}${
+                opticianId ? `&opticianId=${opticianId}` : ""
+              }`}
               className="flex-1 bg-gray-500 text-white py-3 px-4 rounded-md text-center font-medium hover:bg-gray-600 transition-colors"
             >
               Back
