@@ -110,3 +110,35 @@ export interface OperatingHours {
   start: string;
   end: string;
 }
+
+// Add these to your existing types/index.ts file
+
+export interface OpticianForAdmin {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  specialty: string | null;
+  isActive: boolean;
+  branchId: string;
+  branch: {
+    id: string;
+    name: string;
+    address: string;
+  };
+}
+
+export interface BranchForSelect {
+  id: string;
+  name: string;
+  address: string;
+}
+
+export interface EditOpticianForm {
+  name: string;
+  email: string;
+  phone: string;
+  specialty: string;
+  branchId: string;
+  isActive: boolean;
+}

@@ -4,7 +4,7 @@
 `$lang
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 interface Appointment {
   id: string;
@@ -12,14 +12,32 @@ interface Appointment {
   phone: string;
   email: string | null;
   service: { name: string };
-  branch: { name: string };
+  branch: { name: string; id: string };
+  optician: { id: string; name: string; email: string } | null;
   scheduledAt: Date;
   status: string;
   notes: string | null;
 }
 
+interface OpticianForSelect {
+  id: string;
+  name: string;
+  email: string;
+  branchId: string;
+  branchName: string;
+}
+
 interface AdminAppointmentTableProps {
   initialAppointments: Appointment[];
+}
+
+interface EditAppointmentForm {
+  patientName?: string;
+  phone?: string;
+  email?: string;
+  status?: string;
+  notes?: string;
+  opticianId?: string;
 }
 
 export function AdminAppointmentTable({
@@ -27,11 +45,29 @@ export function AdminAppointmentTable({
 }: AdminAppointmentTableProps) {
   const [appointments, setAppointments] =
     useState<Appointment[]>(initialAppointments);
+  const [opticians, setOpticians] = useState<OpticianForSelect[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState<Partial<Appointment>>({});
+  const [editForm, setEditForm] = useState<EditAppointmentForm>({});
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [branchFilter, setBranchFilter] = useState("all");
+
+  // Fetch opticians on component mount
+  useEffect(() => {
+    const fetchOpticians = async () => {
+      try {
+        const response = await fetch("/api/opticians");
+        if (response.ok) {
+          const data = await response.json();
+          setOpticians(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch opticians:", error);
+      }
+    };
+
+    fetchOpticians();
+  }, []);
 
   // Filter appointments based on search and filters
   const filteredAppointments = useMemo(() => {
@@ -45,6 +81,9 @@ export function AdminAppointmentTable({
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         appointment.branch.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        appointment.optician?.name
           .toLowerCase()
           .includes(searchTerm.toLowerCase());
 
@@ -138,7 +177,8 @@ export function AdminAppointmentTable({
       patientName: appointment.patientName,
       phone: appointment.phone,
       status: appointment.status,
-      notes: appointment.notes,
+      notes: appointment.notes || "",
+      opticianId: appointment.optician?.id || "",
     });
   };
 
@@ -172,6 +212,11 @@ export function AdminAppointmentTable({
     }
   };
 
+  // Get opticians for the current appointment's branch
+  const getOpticiansForBranch = (branchId: string) => {
+    return opticians.filter((optician) => optician.branchId === branchId);
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md">
       <div className="px-6 py-4 border-b border-gray-200">
@@ -185,7 +230,7 @@ export function AdminAppointmentTable({
             {/* Search */}
             <input
               type="text"
-              placeholder="Search patients, phone, service..."
+              placeholder="Search patients, phone, service, optician..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
@@ -233,6 +278,9 @@ export function AdminAppointmentTable({
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Branch
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Optician
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Date & Time
@@ -301,6 +349,33 @@ export function AdminAppointmentTable({
                   <div className="text-sm text-gray-900">
                     {appointment.branch.name}
                   </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {editingId === appointment.id ? (
+                    <select
+                      value={editForm.opticianId || ""}
+                      onChange={(e) =>
+                        setEditForm((prev) => ({
+                          ...prev,
+                          opticianId: e.target.value,
+                        }))
+                      }
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                    >
+                      <option value="">No Optician</option>
+                      {getOpticiansForBranch(appointment.branch.id).map(
+                        (optician) => (
+                          <option key={optician.id} value={optician.id}>
+                            {optician.name}
+                          </option>
+                        )
+                      )}
+                    </select>
+                  ) : (
+                    <div className="text-sm text-gray-900">
+                      {appointment.optician?.name || "Not assigned"}
+                    </div>
+                  )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">

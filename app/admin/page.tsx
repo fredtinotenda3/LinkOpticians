@@ -7,7 +7,7 @@ async function getAppointments() {
     include: {
       service: true,
       branch: true,
-      optician: true, // Include optician data
+      optician: true,
     },
     orderBy: {
       scheduledAt: "asc",
@@ -49,15 +49,23 @@ export default async function AdminDashboard() {
                 Admin Dashboard
               </h1>
               <p className="text-sm text-gray-600 mt-1">
-                Manage appointments and view analytics
+                Manage appointments and opticians
               </p>
             </div>
-            <Link
-              href="/"
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-            >
-              ← Back to Site
-            </Link>
+            <div className="flex gap-4">
+              <Link
+                href="/admin/opticians"
+                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+              >
+                Manage Opticians
+              </Link>
+              <Link
+                href="/"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              >
+                ← Back to Site
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -66,7 +74,9 @@ export default async function AdminDashboard() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Total</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Total Appointments
+            </h3>
             <p className="text-3xl font-bold text-gray-600">{stats.total}</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-6">

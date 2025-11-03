@@ -113,6 +113,7 @@ async function getAppointments() {
     include: {
       service: true,
       branch: true,
+      optician: true, // Include optician data
     },
     orderBy: {
       scheduledAt: "asc",
@@ -223,11 +224,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { sendSMS } from "@/lib/twilio";
+import { AppointmentUpdateData } from "@/types";
 
 const updateAppointmentSchema = z.object({
   status: z.enum(["pending", "confirmed", "completed", "cancelled"]).optional(),
   patientName: z.string().min(2).optional(),
   phone: z.string().min(10).optional(),
+  email: z.string().email().optional().or(z.literal("")),
+  opticianId: z.string().cuid().optional().or(z.literal("")), // Add opticianId to schema
   notes: z.string().optional(),
 });
 
@@ -257,15 +261,28 @@ export async function PATCH(
     // Get current appointment to compare changes
     const currentAppointment = await prisma.appointment.findUnique({
       where: { id: appointmentId },
-      include: { service: true, branch: true },
-    });
-
-    const updatedAppointment = await prisma.appointment.update({
-      where: { id: appointmentId },
-      data: validationResult.data,
       include: {
         service: true,
         branch: true,
+        optician: true, // Include optician data
+      },
+    });
+
+    // Prepare update data with proper type handling for opticianId
+    const updateData: AppointmentUpdateData = { ...validationResult.data };
+
+    // Handle opticianId conversion properly
+    if (updateData.opticianId === "") {
+      delete updateData.opticianId; // Remove the field to let Prisma handle it as null
+    }
+
+    const updatedAppointment = await prisma.appointment.update({
+      where: { id: appointmentId },
+      data: updateData,
+      include: {
+        service: true,
+        branch: true,
+        optician: true, // Include optician in response
       },
     });
 
@@ -276,7 +293,15 @@ export async function PATCH(
       currentAppointment.status !== validationResult.data.status
     ) {
       try {
-        const smsMessage = `Hi ${updatedAppointment.patientName}! Your appointment status has been updated to: ${validationResult.data.status}. For questions, call ${updatedAppointment.branch.phone}.`;
+        let smsMessage = `Hi ${updatedAppointment.patientName}! Your appointment status has been updated to: ${validationResult.data.status}.`;
+
+        // Include optician info if available
+        if (updatedAppointment.optician) {
+          smsMessage += ` Your assigned optician: ${updatedAppointment.optician.name}.`;
+        }
+
+        smsMessage += ` For questions, call ${updatedAppointment.branch.phone}.`;
+
         await sendSMS(updatedAppointment.phone, smsMessage);
       } catch (smsError) {
         console.error("Failed to send status update SMS:", smsError);
@@ -304,7 +329,10 @@ export async function DELETE(
     // Get appointment details before deletion for SMS
     const appointment = await prisma.appointment.findUnique({
       where: { id: appointmentId },
-      include: { branch: true },
+      include: {
+        branch: true,
+        optician: true, // Include optician data
+      },
     });
 
     await prisma.appointment.delete({
@@ -314,7 +342,15 @@ export async function DELETE(
     // Send cancellation SMS
     if (appointment) {
       try {
-        const smsMessage = `Hi ${appointment.patientName}! Your appointment has been cancelled. If this was a mistake, please call ${appointment.branch.phone}.`;
+        let smsMessage = `Hi ${appointment.patientName}! Your appointment has been cancelled.`;
+
+        // Include optician info if available
+        if (appointment.optician) {
+          smsMessage += ` Your assigned optician was: ${appointment.optician.name}.`;
+        }
+
+        smsMessage += ` If this was a mistake, please call ${appointment.branch.phone}.`;
+
         await sendSMS(appointment.phone, smsMessage);
       } catch (smsError) {
         console.error("Failed to send cancellation SMS:", smsError);
@@ -349,6 +385,7 @@ const createAppointmentSchema = z.object({
   email: z.string().email().optional().or(z.literal("")),
   serviceId: z.string().cuid(),
   branchId: z.string().cuid(),
+  opticianId: z.string().cuid().optional().or(z.literal("")), // Add opticianId to schema
   scheduledAt: z.string().datetime(),
   notes: z.string().optional(),
 });
@@ -366,10 +403,15 @@ export async function POST(request: NextRequest) {
     }
 
     const { data } = validationResult;
-    const result = await appointmentService.createAppointment({
+
+    // Prepare appointment data including opticianId if provided
+    const appointmentData = {
       ...data,
       scheduledAt: new Date(data.scheduledAt),
-    });
+      opticianId: data.opticianId || undefined, // Convert empty string to undefined
+    };
+
+    const result = await appointmentService.createAppointment(appointmentData);
 
     if (!result.success) {
       return NextResponse.json({ error: result.error }, { status: 400 });
@@ -378,7 +420,7 @@ export async function POST(request: NextRequest) {
     // Send real SMS notification after successful appointment creation
     if (result.success && result.data) {
       try {
-        // Get service and branch details for the SMS
+        // Get service, branch, and optician details for the SMS
         const service = await prisma.service.findUnique({
           where: { id: data.serviceId },
         });
@@ -387,12 +429,25 @@ export async function POST(request: NextRequest) {
           where: { id: data.branchId },
         });
 
+        const optician = data.opticianId
+          ? await prisma.optician.findUnique({
+              where: { id: data.opticianId },
+            })
+          : null;
+
         if (service && branch) {
-          const smsMessage = `Hi ${data.patientName}! Your ${
+          let smsMessage = `Hi ${data.patientName}! Your ${
             service.name
           } appointment at ${branch.name} is confirmed for ${new Date(
             data.scheduledAt
-          ).toLocaleString()}. Thank you for choosing Link Opticians!`;
+          ).toLocaleString()}.`;
+
+          // Include optician info in SMS if available
+          if (optician) {
+            smsMessage += ` Your optician: ${optician.name}.`;
+          }
+
+          smsMessage += " Thank you for choosing Link Opticians!";
 
           await sendSMS(data.phone, smsMessage);
         }
@@ -460,6 +515,7 @@ const availabilitySchema = z.object({
   branchId: z.string().min(1, "Branch ID is required"),
   serviceId: z.string().min(1, "Service ID is required"),
   date: z.string().datetime(),
+  opticianId: z.string().optional(), // Add opticianId to schema
 });
 
 export async function GET(request: NextRequest) {
@@ -468,13 +524,20 @@ export async function GET(request: NextRequest) {
     const branchId = searchParams.get("branchId");
     const serviceId = searchParams.get("serviceId");
     const date = searchParams.get("date");
+    const opticianId = searchParams.get("opticianId"); // Get opticianId from query params
 
-    console.log("Availability check params:", { branchId, serviceId, date });
+    console.log("Availability check params:", {
+      branchId,
+      serviceId,
+      date,
+      opticianId,
+    });
 
     const validationResult = availabilitySchema.safeParse({
       branchId,
       serviceId,
       date,
+      opticianId: opticianId || undefined, // Convert null to undefined
     });
 
     if (!validationResult.success) {
@@ -493,7 +556,8 @@ export async function GET(request: NextRequest) {
     const result = await appointmentService.checkAvailability(
       data.branchId,
       data.serviceId,
-      new Date(data.date)
+      new Date(data.date),
+      data.opticianId // Pass opticianId to service
     );
 
     console.log("Availability result:", result);
@@ -577,6 +641,67 @@ export async function GET() {
     version: "1.0.0",
     services: ["Eye", "Care", "Company", "Marketing"],
   });
+}
+
+```
+
+===============================
+ C:\Users\fredt\Desktop\LinkOpticians\app\api\opticians\route.ts
+===============================
+`$lang
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const branchId = searchParams.get("branchId");
+
+    // Build where clause with proper typing
+    const whereClause: {
+      isActive: boolean;
+      branchId?: string;
+    } = {
+      isActive: true,
+    };
+
+    // Filter by branch if provided
+    if (branchId) {
+      whereClause.branchId = branchId;
+    }
+
+    const opticians = await prisma.optician.findMany({
+      where: whereClause,
+      include: {
+        branch: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        name: "asc",
+      },
+    });
+
+    // Transform the data to match the expected format
+    const transformedOpticians = opticians.map((optician) => ({
+      id: optician.id,
+      name: optician.name,
+      email: optician.email,
+      branchId: optician.branchId,
+      branchName: optician.branch.name,
+    }));
+
+    return NextResponse.json(transformedOpticians);
+  } catch (error) {
+    console.error("Error fetching opticians:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch opticians" },
+      { status: 500 }
+    );
+  }
 }
 
 ```
