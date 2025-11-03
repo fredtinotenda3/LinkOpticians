@@ -4,9 +4,29 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioPhone = process.env.TWILIO_PHONE_NUMBER;
 
-const client = twilio(accountSid, authToken);
+// Check if Twilio credentials are valid (not placeholders)
+const hasValidTwilioConfig =
+  accountSid &&
+  authToken &&
+  twilioPhone &&
+  accountSid.startsWith("AC") &&
+  authToken !== "your_auth_token_here" &&
+  twilioPhone !== "+1234567890";
+
+// Only initialize Twilio client if valid credentials are provided
+const client = hasValidTwilioConfig ? twilio(accountSid, authToken) : null;
 
 export async function sendSMS(to: string, message: string) {
+  // If Twilio is not configured or using placeholder credentials, log and return
+  if (!hasValidTwilioConfig) {
+    console.log(
+      "📱 SMS would be sent (Twilio not configured or using placeholder credentials):"
+    );
+    console.log(`To: ${to}`);
+    console.log(`Message: ${message}`);
+    return { success: true, messageId: "simulated" };
+  }
+
   try {
     // Format Zimbabwe numbers properly
     let formattedTo = to.trim();
@@ -31,9 +51,9 @@ export async function sendSMS(to: string, message: string) {
     console.log(`📱 Attempting to send SMS to: ${formattedTo}`);
     console.log(`💬 Message: ${message}`);
 
-    const result = await client.messages.create({
+    const result = await client!.messages.create({
       body: message,
-      from: twilioPhone,
+      from: twilioPhone!,
       to: formattedTo,
     });
 
