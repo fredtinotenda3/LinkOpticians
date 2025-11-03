@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { OpticianForAdmin, BranchForSelect, EditOpticianForm } from "@/types";
+import Link from "next/link";
 
 interface AdminOpticianTableProps {
   initialOpticians: OpticianForAdmin[];
@@ -502,6 +503,12 @@ export function AdminOpticianTable({
                     </>
                   ) : (
                     <>
+                      <Link
+                        href={`/admin/opticians/${optician.id}/availability`}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
+                        Availability
+                      </Link>
                       <button
                         onClick={() => startEdit(optician)}
                         className="text-blue-600 hover:text-blue-900"

@@ -5,7 +5,19 @@ import {
   ServiceResult,
   OperatingHours,
   AppointmentStatus,
+  AvailabilityCheckParams,
+  TimeSlot,
+  DayAvailability,
 } from "@/types";
+
+// Interface for time off where clause
+interface TimeOffWhereClause {
+  opticianId: string;
+  OR?: Array<{
+    startDate: { lte: Date };
+    endDate: { gte: Date };
+  }>;
+}
 
 export const appointmentService = {
   async createAppointment(
@@ -31,6 +43,21 @@ export const appointmentService = {
           success: false,
           error: "Time slot is already booked",
         };
+      }
+
+      // Check if optician is available (if specified)
+      if (data.opticianId) {
+        const opticianAvailability = await this.checkOpticianAvailability(
+          data.opticianId,
+          data.scheduledAt
+        );
+
+        if (!opticianAvailability.isAvailable) {
+          return {
+            success: false,
+            error: `Optician is not available at the selected time: ${opticianAvailability.reason}`,
+          };
+        }
       }
 
       // Create the appointment with optician data if provided
@@ -151,14 +178,25 @@ export const appointmentService = {
 
       // Filter out booked slots
       const bookedSlots = new Set<string>();
-      existingAppointments.forEach((apt) => {
-        const slotTime = new Date(apt.scheduledAt);
-        bookedSlots.add(slotTime.toISOString());
-      });
+      existingAppointments.forEach(
+        (apt: { scheduledAt: Date; service: { duration: number } }) => {
+          const slotTime = new Date(apt.scheduledAt);
+          bookedSlots.add(slotTime.toISOString());
+        }
+      );
 
-      const filteredSlots = availableSlots.filter(
+      // If optician is specified, check their individual availability
+      let filteredSlots = availableSlots.filter(
         (slot) => !bookedSlots.has(new Date(slot).toISOString())
       );
+
+      if (opticianId) {
+        filteredSlots = await this.filterByOpticianAvailability(
+          opticianId,
+          filteredSlots,
+          serviceDuration
+        );
+      }
 
       return {
         success: true,
@@ -216,6 +254,165 @@ export const appointmentService = {
         error: "Failed to fetch appointments",
       };
     }
+  },
+
+  // New methods for advanced optician availability
+  async checkOpticianAvailability(
+    opticianId: string,
+    dateTime: Date
+  ): Promise<{ isAvailable: boolean; reason?: string }> {
+    try {
+      const date = new Date(dateTime);
+      const dayOfWeek = date.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+
+      // Check working hours
+      const workingHours = await prisma.opticianWorkingHours.findUnique({
+        where: {
+          opticianId_dayOfWeek: {
+            opticianId,
+            dayOfWeek,
+          },
+        },
+      });
+
+      if (!workingHours || !workingHours.isAvailable) {
+        return {
+          isAvailable: false,
+          reason: "Not scheduled to work on this day",
+        };
+      }
+
+      // Check if within working hours
+      const timeString = date.toTimeString().slice(0, 5); // "HH:MM" format
+      if (
+        timeString < workingHours.startTime ||
+        timeString > workingHours.endTime
+      ) {
+        return {
+          isAvailable: false,
+          reason: "Outside working hours",
+        };
+      }
+
+      // Check time off
+      const timeOff = await prisma.opticianTimeOff.findFirst({
+        where: {
+          opticianId,
+          startDate: { lte: date },
+          endDate: { gte: date },
+        },
+      });
+
+      if (timeOff) {
+        return {
+          isAvailable: false,
+          reason: timeOff.reason || "Time off",
+        };
+      }
+
+      return { isAvailable: true };
+    } catch (error) {
+      console.error("Optician availability check error:", error);
+      return { isAvailable: false, reason: "Error checking availability" };
+    }
+  },
+
+  async filterByOpticianAvailability(
+    opticianId: string,
+    timeSlots: string[],
+    serviceDuration: number
+  ): Promise<string[]> {
+    const availableSlots: string[] = [];
+
+    for (const slot of timeSlots) {
+      const slotDateTime = new Date(slot);
+      const availability = await this.checkOpticianAvailability(
+        opticianId,
+        slotDateTime
+      );
+
+      if (availability.isAvailable) {
+        availableSlots.push(slot);
+      }
+    }
+
+    return availableSlots;
+  },
+
+  async getOpticianWorkingHours(opticianId: string) {
+    return await prisma.opticianWorkingHours.findMany({
+      where: { opticianId },
+      orderBy: { dayOfWeek: "asc" },
+    });
+  },
+
+  async setOpticianWorkingHours(
+    opticianId: string,
+    workingHours: {
+      dayOfWeek: number;
+      startTime: string;
+      endTime: string;
+      isAvailable?: boolean;
+    }[]
+  ) {
+    // Delete existing working hours
+    await prisma.opticianWorkingHours.deleteMany({
+      where: { opticianId },
+    });
+
+    // Create new working hours
+    const createdHours = await prisma.opticianWorkingHours.createMany({
+      data: workingHours.map((wh) => ({
+        opticianId,
+        dayOfWeek: wh.dayOfWeek,
+        startTime: wh.startTime,
+        endTime: wh.endTime,
+        isAvailable: wh.isAvailable ?? true,
+      })),
+    });
+
+    return createdHours;
+  },
+
+  async createTimeOff(
+    opticianId: string,
+    startDate: Date,
+    endDate: Date,
+    reason?: string,
+    isAllDay: boolean = true
+  ) {
+    return await prisma.opticianTimeOff.create({
+      data: {
+        opticianId,
+        startDate,
+        endDate,
+        reason,
+        isAllDay,
+      },
+    });
+  },
+
+  async getOpticianTimeOff(
+    opticianId: string,
+    startDate?: Date,
+    endDate?: Date
+  ) {
+    const whereClause: TimeOffWhereClause = { opticianId };
+
+    if (startDate && endDate) {
+      whereClause.OR = [
+        // Time off that overlaps with the date range
+        {
+          startDate: { lte: endDate },
+          endDate: { gte: startDate },
+        },
+      ];
+    }
+
+    return await prisma.opticianTimeOff.findMany({
+      where: whereClause,
+      orderBy: { startDate: "asc" },
+    });
   },
 
   // Helper methods

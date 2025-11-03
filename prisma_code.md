@@ -57,6 +57,8 @@ model Optician {
   branch      Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
   
   appointments Appointment[]
+  workingHours OpticianWorkingHours[]
+  timeOff      OpticianTimeOff[]
   
   @@map("opticians")
 }
@@ -87,6 +89,40 @@ model Appointment {
   updatedAt   DateTime @updatedAt
   
   @@map("appointments")
+}
+
+// New models for advanced optician availability
+model OpticianWorkingHours {
+  id          String   @id @default(cuid())
+  opticianId  String
+  optician    Optician @relation(fields: [opticianId], references: [id], onDelete: Cascade)
+  
+  dayOfWeek   Int      // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime   String   // Format: "HH:MM" (24-hour)
+  endTime     String   // Format: "HH:MM" (24-hour)
+  isAvailable Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([opticianId, dayOfWeek])
+  @@map("optician_working_hours")
+}
+
+model OpticianTimeOff {
+  id          String   @id @default(cuid())
+  opticianId  String
+  optician    Optician @relation(fields: [opticianId], references: [id], onDelete: Cascade)
+  
+  startDate   DateTime
+  endDate     DateTime
+  reason      String?  // e.g., "Vacation", "Sick Leave", "Training"
+  isAllDay    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("optician_time_off")
 }
 
 enum AppointmentStatus {
@@ -193,7 +229,7 @@ async function main() {
   const allBranches = await prisma.branch.findMany();
 
   for (const branch of allBranches) {
-    await prisma.optician.createMany({
+    const opticians = await prisma.optician.createMany({
       data: [
         {
           name: `Dr. ${branch.name.split(" ")[0]} Moyo`,
@@ -219,14 +255,170 @@ async function main() {
       ],
       skipDuplicates: true,
     });
+
+    // Add working hours for each optician
+    const branchOpticians = await prisma.optician.findMany({
+      where: { branchId: branch.id },
+    });
+
+    for (const optician of branchOpticians) {
+      // Standard working hours: Mon-Fri 8am-5pm, Sat 8am-1pm, Sun off
+      const workingHours = [
+        // Monday
+        {
+          opticianId: optician.id,
+          dayOfWeek: 1,
+          startTime: "08:00",
+          endTime: "17:00",
+          isAvailable: true,
+        },
+        // Tuesday
+        {
+          opticianId: optician.id,
+          dayOfWeek: 2,
+          startTime: "08:00",
+          endTime: "17:00",
+          isAvailable: true,
+        },
+        // Wednesday
+        {
+          opticianId: optician.id,
+          dayOfWeek: 3,
+          startTime: "08:00",
+          endTime: "17:00",
+          isAvailable: true,
+        },
+        // Thursday
+        {
+          opticianId: optician.id,
+          dayOfWeek: 4,
+          startTime: "08:00",
+          endTime: "17:00",
+          isAvailable: true,
+        },
+        // Friday
+        {
+          opticianId: optician.id,
+          dayOfWeek: 5,
+          startTime: "08:00",
+          endTime: "17:00",
+          isAvailable: true,
+        },
+        // Saturday
+        {
+          opticianId: optician.id,
+          dayOfWeek: 6,
+          startTime: "08:00",
+          endTime: "13:00",
+          isAvailable: true,
+        },
+        // Sunday - off
+        {
+          opticianId: optician.id,
+          dayOfWeek: 0,
+          startTime: "09:00",
+          endTime: "17:00",
+          isAvailable: false,
+        },
+      ];
+
+      await prisma.opticianWorkingHours.createMany({
+        data: workingHours,
+        skipDuplicates: true,
+      });
+
+      // Add sample time-off for one optician per branch
+      if (optician.name.includes("Moyo")) {
+        // Add vacation for next month
+        const nextMonth = new Date();
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        const vacationStart = new Date(nextMonth);
+        vacationStart.setDate(1);
+        const vacationEnd = new Date(vacationStart);
+        vacationEnd.setDate(vacationStart.getDate() + 7); // 1 week vacation
+
+        await prisma.opticianTimeOff.create({
+          data: {
+            opticianId: optician.id,
+            startDate: vacationStart,
+            endDate: vacationEnd,
+            reason: "Annual Vacation",
+            isAllDay: true,
+          },
+        });
+
+        // Add training day for next week
+        const nextWeek = new Date();
+        nextWeek.setDate(nextWeek.getDate() + 7);
+        const trainingStart = new Date(nextWeek);
+        trainingStart.setHours(9, 0, 0, 0);
+        const trainingEnd = new Date(trainingStart);
+        trainingEnd.setHours(17, 0, 0, 0);
+
+        await prisma.opticianTimeOff.create({
+          data: {
+            opticianId: optician.id,
+            startDate: trainingStart,
+            endDate: trainingEnd,
+            reason: "Professional Development Training",
+            isAllDay: true,
+          },
+        });
+      }
+    }
+  }
+
+  // Create sample appointments to test availability
+  const sampleService = await prisma.service.findFirst();
+  const sampleBranch = await prisma.branch.findFirst();
+  const sampleOptician = await prisma.optician.findFirst();
+
+  if (sampleService && sampleBranch && sampleOptician) {
+    // Create appointments for tomorrow at different times
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const appointments = [
+      {
+        patientName: "John Smith",
+        phone: "+263772123456",
+        email: "john.smith@example.com",
+        serviceId: sampleService.id,
+        branchId: sampleBranch.id,
+        opticianId: sampleOptician.id,
+        scheduledAt: new Date(tomorrow.setHours(9, 0, 0, 0)),
+        status: "confirmed" as const,
+      },
+      {
+        patientName: "Sarah Johnson",
+        phone: "+263773654321",
+        email: "sarah.j@example.com",
+        serviceId: sampleService.id,
+        branchId: sampleBranch.id,
+        opticianId: sampleOptician.id,
+        scheduledAt: new Date(tomorrow.setHours(11, 0, 0, 0)),
+        status: "confirmed" as const,
+      },
+    ];
+
+    await prisma.appointment.createMany({
+      data: appointments,
+      skipDuplicates: true,
+    });
   }
 
   const opticiansCount = await prisma.optician.count();
+  const workingHoursCount = await prisma.opticianWorkingHours.count();
+  const timeOffCount = await prisma.opticianTimeOff.count();
+  const appointmentsCount = await prisma.appointment.count();
 
   console.log("Database seeded successfully!");
   console.log(`Created ${branches.count} branches`);
   console.log(`Created ${services.count} services`);
   console.log(`Created ${opticiansCount} opticians`);
+  console.log(`Created ${workingHoursCount} working hours entries`);
+  console.log(`Created ${timeOffCount} time off entries`);
+  console.log(`Created ${appointmentsCount} sample appointments`);
 }
 
 main()

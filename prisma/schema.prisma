@@ -53,6 +53,8 @@ model Optician {
   branch      Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
   
   appointments Appointment[]
+  workingHours OpticianWorkingHours[]
+  timeOff      OpticianTimeOff[]
   
   @@map("opticians")
 }
@@ -83,6 +85,40 @@ model Appointment {
   updatedAt   DateTime @updatedAt
   
   @@map("appointments")
+}
+
+// New models for advanced optician availability
+model OpticianWorkingHours {
+  id          String   @id @default(cuid())
+  opticianId  String
+  optician    Optician @relation(fields: [opticianId], references: [id], onDelete: Cascade)
+  
+  dayOfWeek   Int      // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime   String   // Format: "HH:MM" (24-hour)
+  endTime     String   // Format: "HH:MM" (24-hour)
+  isAvailable Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([opticianId, dayOfWeek])
+  @@map("optician_working_hours")
+}
+
+model OpticianTimeOff {
+  id          String   @id @default(cuid())
+  opticianId  String
+  optician    Optician @relation(fields: [opticianId], references: [id], onDelete: Cascade)
+  
+  startDate   DateTime
+  endDate     DateTime
+  reason      String?  // e.g., "Vacation", "Sick Leave", "Training"
+  isAllDay    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("optician_time_off")
 }
 
 enum AppointmentStatus {

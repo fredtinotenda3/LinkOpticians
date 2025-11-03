@@ -1,460 +1,423 @@
 ﻿===============================
- C:\Users\fredt\Desktop\LinkOpticians\components\AdminAppointmentTable.tsx
+ C:\Users\fredt\Desktop\LinkOpticians\types\index.ts
 ===============================
 `$lang
-"use client";
+export interface AppointmentCreateData {
+  patientName: string;
+  phone: string;
+  email?: string;
+  serviceId: string;
+  branchId: string;
+  opticianId?: string;
+  scheduledAt: Date;
+  notes?: string;
+}
 
-import { useState, useMemo, useEffect } from "react";
+export interface AppointmentUpdateData {
+  patientName?: string;
+  phone?: string;
+  email?: string;
+  serviceId?: string;
+  branchId?: string;
+  opticianId?: string;
+  scheduledAt?: Date;
+  status?: AppointmentStatus;
+  notes?: string;
+}
 
-interface Appointment {
+export type AppointmentStatus =
+  | "pending"
+  | "confirmed"
+  | "completed"
+  | "cancelled"
+  | "no_show";
+
+export interface Service {
+  id: string;
+  name: string;
+  description?: string | null;
+  duration: number;
+  price?: number | null;
+  isActive: boolean;
+}
+
+export interface Branch {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  operatingHours: string;
+}
+
+export interface Optician {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  specialty?: string | null;
+  isActive: boolean;
+  branchId: string;
+  branch: Branch;
+}
+
+// New types for appointment service
+export interface AppointmentWithRelations {
+  id: string;
+  patientName: string;
+  phone: string;
+  email: string | null;
+  serviceId: string;
+  branchId: string;
+  opticianId: string | null;
+  scheduledAt: Date;
+  status: AppointmentStatus;
+  notes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  service: Service;
+  branch: Branch;
+  optician: Optician | null;
+}
+
+// Add this new type for the admin table
+export interface AppointmentForAdmin {
   id: string;
   patientName: string;
   phone: string;
   email: string | null;
   service: { name: string };
   branch: { name: string; id: string };
-  optician: { id: string; name: string; email: string } | null;
+  optician: {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    specialty: string | null;
+    isActive: boolean;
+    branchId: string;
+  } | null;
   scheduledAt: Date;
-  status: string;
+  status: AppointmentStatus;
   notes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-interface OpticianForSelect {
+export interface ServiceResult<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
+export interface OperatingHours {
+  start: string;
+  end: string;
+}
+
+// Add these to your existing types/index.ts file
+
+export interface OpticianForAdmin {
   id: string;
   name: string;
   email: string;
+  phone: string;
+  specialty: string | null;
+  isActive: boolean;
   branchId: string;
-  branchName: string;
+  branch: {
+    id: string;
+    name: string;
+    address: string;
+  };
 }
 
-interface AdminAppointmentTableProps {
-  initialAppointments: Appointment[];
+export interface BranchForSelect {
+  id: string;
+  name: string;
+  address: string;
 }
 
-interface EditAppointmentForm {
+export interface EditOpticianForm {
+  name: string;
+  email: string;
+  phone: string;
+  specialty: string;
+  branchId: string;
+  isActive: boolean;
+}
+
+// New types for advanced optician availability
+export interface OpticianWorkingHours {
+  id: string;
+  opticianId: string;
+  dayOfWeek: number; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime: string; // Format: "HH:MM" (24-hour)
+  endTime: string; // Format: "HH:MM" (24-hour)
+  isAvailable: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface OpticianTimeOff {
+  id: string;
+  opticianId: string;
+  startDate: Date;
+  endDate: Date;
+  reason?: string | null;
+  isAllDay: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CreateWorkingHoursData {
+  opticianId: string;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  isAvailable?: boolean;
+}
+
+export interface CreateTimeOffData {
+  opticianId: string;
+  startDate: Date;
+  endDate: Date;
+  reason?: string;
+  isAllDay?: boolean;
+}
+
+export interface AvailabilityCheckParams {
+  branchId: string;
+  serviceId: string;
+  date: Date;
+  opticianId?: string;
+  includeWorkingHours?: boolean;
+  includeTimeOff?: boolean;
+}
+
+export interface TimeSlot {
+  start: Date;
+  end: Date;
+  isAvailable: boolean;
+  reason?: string;
+}
+
+export interface DayAvailability {
+  date: Date;
+  timeSlots: TimeSlot[];
+  isAvailable: boolean;
+}
+
+```
+
+===============================
+ C:\Users\fredt\Desktop\LinkOpticians\types\index.ts
+===============================
+`$lang
+export interface AppointmentCreateData {
+  patientName: string;
+  phone: string;
+  email?: string;
+  serviceId: string;
+  branchId: string;
+  opticianId?: string;
+  scheduledAt: Date;
+  notes?: string;
+}
+
+export interface AppointmentUpdateData {
   patientName?: string;
   phone?: string;
   email?: string;
-  status?: string;
-  notes?: string;
+  serviceId?: string;
+  branchId?: string;
   opticianId?: string;
+  scheduledAt?: Date;
+  status?: AppointmentStatus;
+  notes?: string;
 }
 
-export function AdminAppointmentTable({
-  initialAppointments,
-}: AdminAppointmentTableProps) {
-  const [appointments, setAppointments] =
-    useState<Appointment[]>(initialAppointments);
-  const [opticians, setOpticians] = useState<OpticianForSelect[]>([]);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState<EditAppointmentForm>({});
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [branchFilter, setBranchFilter] = useState("all");
+export type AppointmentStatus =
+  | "pending"
+  | "confirmed"
+  | "completed"
+  | "cancelled"
+  | "no_show";
 
-  // Fetch opticians on component mount
-  useEffect(() => {
-    const fetchOpticians = async () => {
-      try {
-        const response = await fetch("/api/opticians");
-        if (response.ok) {
-          const data = await response.json();
-          setOpticians(data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch opticians:", error);
-      }
-    };
+export interface Service {
+  id: string;
+  name: string;
+  description?: string | null;
+  duration: number;
+  price?: number | null;
+  isActive: boolean;
+}
 
-    fetchOpticians();
-  }, []);
+export interface Branch {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  operatingHours: string;
+}
 
-  // Filter appointments based on search and filters
-  const filteredAppointments = useMemo(() => {
-    return appointments.filter((appointment) => {
-      const matchesSearch =
-        appointment.patientName
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        appointment.phone.includes(searchTerm) ||
-        appointment.service.name
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        appointment.branch.name
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        appointment.optician?.name
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
+export interface Optician {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  specialty?: string | null;
+  isActive: boolean;
+  branchId: string;
+  branch: Branch;
+}
 
-      const matchesStatus =
-        statusFilter === "all" || appointment.status === statusFilter;
-      const matchesBranch =
-        branchFilter === "all" || appointment.branch.name === branchFilter;
+// New types for appointment service
+export interface AppointmentWithRelations {
+  id: string;
+  patientName: string;
+  phone: string;
+  email: string | null;
+  serviceId: string;
+  branchId: string;
+  opticianId: string | null;
+  scheduledAt: Date;
+  status: AppointmentStatus;
+  notes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  service: Service;
+  branch: Branch;
+  optician: Optician | null;
+}
 
-      return matchesSearch && matchesStatus && matchesBranch;
-    });
-  }, [appointments, searchTerm, statusFilter, branchFilter]);
+// Add this new type for the admin table
+export interface AppointmentForAdmin {
+  id: string;
+  patientName: string;
+  phone: string;
+  email: string | null;
+  service: { name: string };
+  branch: { name: string; id: string };
+  optician: {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    specialty: string | null;
+    isActive: boolean;
+    branchId: string;
+  } | null;
+  scheduledAt: Date;
+  status: AppointmentStatus;
+  notes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-  // Get unique branches for filter
-  const uniqueBranches = useMemo(() => {
-    return [...new Set(appointments.map((apt) => apt.branch.name))];
-  }, [appointments]);
+export interface ServiceResult<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
 
-  const formatDateTime = (date: Date) => {
-    return date.toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+export interface OperatingHours {
+  start: string;
+  end: string;
+}
+
+// Add these to your existing types/index.ts file
+
+export interface OpticianForAdmin {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  specialty: string | null;
+  isActive: boolean;
+  branchId: string;
+  branch: {
+    id: string;
+    name: string;
+    address: string;
   };
+}
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "confirmed":
-        return "bg-green-100 text-green-800";
-      case "completed":
-        return "bg-blue-100 text-blue-800";
-      case "cancelled":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
+export interface BranchForSelect {
+  id: string;
+  name: string;
+  address: string;
+}
 
-  const handleStatusChange = async (
-    appointmentId: string,
-    newStatus: string
-  ) => {
-    try {
-      const response = await fetch(`/api/appointments/${appointmentId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
+export interface EditOpticianForm {
+  name: string;
+  email: string;
+  phone: string;
+  specialty: string;
+  branchId: string;
+  isActive: boolean;
+}
 
-      if (response.ok) {
-        const updatedAppointment = await response.json();
-        setAppointments((prev) =>
-          prev.map((apt) =>
-            apt.id === appointmentId ? updatedAppointment : apt
-          )
-        );
-      }
-    } catch (error) {
-      console.error("Error updating status:", error);
-    }
-  };
+// New types for advanced optician availability
+export interface OpticianWorkingHours {
+  id: string;
+  opticianId: string;
+  dayOfWeek: number; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime: string; // Format: "HH:MM" (24-hour)
+  endTime: string; // Format: "HH:MM" (24-hour)
+  isAvailable: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-  const handleDelete = async (appointmentId: string) => {
-    if (!confirm("Are you sure you want to delete this appointment?")) return;
+export interface OpticianTimeOff {
+  id: string;
+  opticianId: string;
+  startDate: Date;
+  endDate: Date;
+  reason?: string | null;
+  isAllDay: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-    try {
-      const response = await fetch(`/api/appointments/${appointmentId}`, {
-        method: "DELETE",
-      });
+export interface CreateWorkingHoursData {
+  opticianId: string;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  isAvailable?: boolean;
+}
 
-      if (response.ok) {
-        setAppointments((prev) =>
-          prev.filter((apt) => apt.id !== appointmentId)
-        );
-      }
-    } catch (error) {
-      console.error("Error deleting appointment:", error);
-    }
-  };
+export interface CreateTimeOffData {
+  opticianId: string;
+  startDate: Date;
+  endDate: Date;
+  reason?: string;
+  isAllDay?: boolean;
+}
 
-  const startEdit = (appointment: Appointment) => {
-    setEditingId(appointment.id);
-    setEditForm({
-      patientName: appointment.patientName,
-      phone: appointment.phone,
-      status: appointment.status,
-      notes: appointment.notes || "",
-      opticianId: appointment.optician?.id || "",
-    });
-  };
+export interface AvailabilityCheckParams {
+  branchId: string;
+  serviceId: string;
+  date: Date;
+  opticianId?: string;
+  includeWorkingHours?: boolean;
+  includeTimeOff?: boolean;
+}
 
-  const cancelEdit = () => {
-    setEditingId(null);
-    setEditForm({});
-  };
+export interface TimeSlot {
+  start: Date;
+  end: Date;
+  isAvailable: boolean;
+  reason?: string;
+}
 
-  const saveEdit = async (appointmentId: string) => {
-    try {
-      const response = await fetch(`/api/appointments/${appointmentId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editForm),
-      });
-
-      if (response.ok) {
-        const updatedAppointment = await response.json();
-        setAppointments((prev) =>
-          prev.map((apt) =>
-            apt.id === appointmentId ? updatedAppointment : apt
-          )
-        );
-        setEditingId(null);
-        setEditForm({});
-      }
-    } catch (error) {
-      console.error("Error updating appointment:", error);
-    }
-  };
-
-  // Get opticians for the current appointment's branch
-  const getOpticiansForBranch = (branchId: string) => {
-    return opticians.filter((optician) => optician.branchId === branchId);
-  };
-
-  return (
-    <div className="bg-white rounded-lg shadow-md">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <h2 className="text-xl font-semibold text-gray-900">
-            Appointments ({filteredAppointments.length})
-          </h2>
-
-          {/* Search and Filters */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* Search */}
-            <input
-              type="text"
-              placeholder="Search patients, phone, service, optician..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
-            />
-
-            {/* Status Filter */}
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="confirmed">Confirmed</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-
-            {/* Branch Filter */}
-            <select
-              value={branchFilter}
-              onChange={(e) => setBranchFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Branches</option>
-              {uniqueBranches.map((branch) => (
-                <option key={branch} value={branch}>
-                  {branch}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Patient
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Service
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Branch
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Optician
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Date & Time
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredAppointments.map((appointment) => (
-              <tr key={appointment.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {editingId === appointment.id ? (
-                    <div className="space-y-2">
-                      <input
-                        type="text"
-                        value={editForm.patientName || ""}
-                        onChange={(e) =>
-                          setEditForm((prev) => ({
-                            ...prev,
-                            patientName: e.target.value,
-                          }))
-                        }
-                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-                        placeholder="Patient Name"
-                      />
-                      <input
-                        type="text"
-                        value={editForm.phone || ""}
-                        onChange={(e) =>
-                          setEditForm((prev) => ({
-                            ...prev,
-                            phone: e.target.value,
-                          }))
-                        }
-                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-                        placeholder="Phone"
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {appointment.patientName}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {appointment.phone}
-                      </div>
-                      {appointment.email && (
-                        <div className="text-sm text-gray-500">
-                          {appointment.email}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    {appointment.service.name}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    {appointment.branch.name}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {editingId === appointment.id ? (
-                    <select
-                      value={editForm.opticianId || ""}
-                      onChange={(e) =>
-                        setEditForm((prev) => ({
-                          ...prev,
-                          opticianId: e.target.value,
-                        }))
-                      }
-                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-                    >
-                      <option value="">No Optician</option>
-                      {getOpticiansForBranch(appointment.branch.id).map(
-                        (optician) => (
-                          <option key={optician.id} value={optician.id}>
-                            {optician.name}
-                          </option>
-                        )
-                      )}
-                    </select>
-                  ) : (
-                    <div className="text-sm text-gray-900">
-                      {appointment.optician?.name || "Not assigned"}
-                    </div>
-                  )}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    {formatDateTime(appointment.scheduledAt)}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {editingId === appointment.id ? (
-                    <select
-                      value={editForm.status || ""}
-                      onChange={(e) =>
-                        setEditForm((prev) => ({
-                          ...prev,
-                          status: e.target.value,
-                        }))
-                      }
-                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="confirmed">Confirmed</option>
-                      <option value="completed">Completed</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
-                  ) : (
-                    <span
-                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
-                        appointment.status
-                      )}`}
-                    >
-                      {appointment.status}
-                    </span>
-                  )}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                  {editingId === appointment.id ? (
-                    <>
-                      <button
-                        onClick={() => saveEdit(appointment.id)}
-                        className="text-green-600 hover:text-green-900"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={cancelEdit}
-                        className="text-gray-600 hover:text-gray-900"
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => startEdit(appointment)}
-                        className="text-blue-600 hover:text-blue-900"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(appointment.id)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {filteredAppointments.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
-            No appointments found matching your filters.
-          </div>
-        )}
-      </div>
-    </div>
-  );
+export interface DayAvailability {
+  date: Date;
+  timeSlots: TimeSlot[];
+  isAvailable: boolean;
 }
 
 ```

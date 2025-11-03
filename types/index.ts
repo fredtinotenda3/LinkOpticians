@@ -142,3 +142,64 @@ export interface EditOpticianForm {
   branchId: string;
   isActive: boolean;
 }
+
+// New types for advanced optician availability
+export interface OpticianWorkingHours {
+  id: string;
+  opticianId: string;
+  dayOfWeek: number; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime: string; // Format: "HH:MM" (24-hour)
+  endTime: string; // Format: "HH:MM" (24-hour)
+  isAvailable: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface OpticianTimeOff {
+  id: string;
+  opticianId: string;
+  startDate: Date;
+  endDate: Date;
+  reason?: string | null;
+  isAllDay: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CreateWorkingHoursData {
+  opticianId: string;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  isAvailable?: boolean;
+}
+
+export interface CreateTimeOffData {
+  opticianId: string;
+  startDate: Date;
+  endDate: Date;
+  reason?: string;
+  isAllDay?: boolean;
+}
+
+export interface AvailabilityCheckParams {
+  branchId: string;
+  serviceId: string;
+  date: Date;
+  opticianId?: string;
+  includeWorkingHours?: boolean;
+  includeTimeOff?: boolean;
+}
+
+export interface TimeSlot {
+  start: Date;
+  end: Date;
+  isAvailable: boolean;
+  reason?: string;
+}
+
+export interface DayAvailability {
+  date: Date;
+  timeSlots: TimeSlot[];
+  isAvailable: boolean;
+}

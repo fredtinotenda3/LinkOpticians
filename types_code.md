@@ -1,120 +1,212 @@
 ﻿===============================
-C:\Users\fredt\Desktop\LinkOpticians\types\index.ts
+ C:\Users\fredt\Desktop\LinkOpticians\types\index.ts
 ===============================
 `$lang
 export interface AppointmentCreateData {
-patientName: string;
-phone: string;
-email?: string;
-serviceId: string;
-branchId: string;
-opticianId?: string;
-scheduledAt: Date;
-notes?: string;
+  patientName: string;
+  phone: string;
+  email?: string;
+  serviceId: string;
+  branchId: string;
+  opticianId?: string;
+  scheduledAt: Date;
+  notes?: string;
 }
 
 export interface AppointmentUpdateData {
-patientName?: string;
-phone?: string;
-email?: string;
-serviceId?: string;
-branchId?: string;
-opticianId?: string;
-scheduledAt?: Date;
-status?: AppointmentStatus;
-notes?: string;
+  patientName?: string;
+  phone?: string;
+  email?: string;
+  serviceId?: string;
+  branchId?: string;
+  opticianId?: string;
+  scheduledAt?: Date;
+  status?: AppointmentStatus;
+  notes?: string;
 }
 
 export type AppointmentStatus =
-| "pending"
-| "confirmed"
-| "completed"
-| "cancelled"
-| "no_show";
+  | "pending"
+  | "confirmed"
+  | "completed"
+  | "cancelled"
+  | "no_show";
 
 export interface Service {
-id: string;
-name: string;
-description?: string | null;
-duration: number;
-price?: number | null;
-isActive: boolean;
+  id: string;
+  name: string;
+  description?: string | null;
+  duration: number;
+  price?: number | null;
+  isActive: boolean;
 }
 
 export interface Branch {
-id: string;
-name: string;
-address: string;
-phone: string;
-email: string;
-operatingHours: string;
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  operatingHours: string;
 }
 
 export interface Optician {
-id: string;
-name: string;
-email: string;
-phone: string;
-specialty?: string | null;
-isActive: boolean;
-branchId: string;
-branch: Branch;
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  specialty?: string | null;
+  isActive: boolean;
+  branchId: string;
+  branch: Branch;
 }
 
 // New types for appointment service
 export interface AppointmentWithRelations {
-id: string;
-patientName: string;
-phone: string;
-email: string | null;
-serviceId: string;
-branchId: string;
-opticianId: string | null;
-scheduledAt: Date;
-status: AppointmentStatus;
-notes: string | null;
-createdAt: Date;
-updatedAt: Date;
-service: Service;
-branch: Branch;
-optician: Optician | null;
+  id: string;
+  patientName: string;
+  phone: string;
+  email: string | null;
+  serviceId: string;
+  branchId: string;
+  opticianId: string | null;
+  scheduledAt: Date;
+  status: AppointmentStatus;
+  notes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  service: Service;
+  branch: Branch;
+  optician: Optician | null;
 }
 
 // Add this new type for the admin table
 export interface AppointmentForAdmin {
-id: string;
-patientName: string;
-phone: string;
-email: string | null;
-service: { name: string };
-branch: { name: string; id: string };
-optician: {
-id: string;
-name: string;
-email: string;
-phone: string;
-specialty: string | null;
-isActive: boolean;
-branchId: string;
-} | null;
-scheduledAt: Date;
-status: AppointmentStatus;
-notes: string | null;
-createdAt: Date;
-updatedAt: Date;
+  id: string;
+  patientName: string;
+  phone: string;
+  email: string | null;
+  service: { name: string };
+  branch: { name: string; id: string };
+  optician: {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    specialty: string | null;
+    isActive: boolean;
+    branchId: string;
+  } | null;
+  scheduledAt: Date;
+  status: AppointmentStatus;
+  notes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ServiceResult<T> {
-success: boolean;
-data?: T;
-error?: string;
+  success: boolean;
+  data?: T;
+  error?: string;
 }
 
 export interface OperatingHours {
-start: string;
-end: string;
+  start: string;
+  end: string;
+}
+
+// Add these to your existing types/index.ts file
+
+export interface OpticianForAdmin {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  specialty: string | null;
+  isActive: boolean;
+  branchId: string;
+  branch: {
+    id: string;
+    name: string;
+    address: string;
+  };
+}
+
+export interface BranchForSelect {
+  id: string;
+  name: string;
+  address: string;
+}
+
+export interface EditOpticianForm {
+  name: string;
+  email: string;
+  phone: string;
+  specialty: string;
+  branchId: string;
+  isActive: boolean;
+}
+
+// New types for advanced optician availability
+export interface OpticianWorkingHours {
+  id: string;
+  opticianId: string;
+  dayOfWeek: number; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime: string; // Format: "HH:MM" (24-hour)
+  endTime: string; // Format: "HH:MM" (24-hour)
+  isAvailable: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface OpticianTimeOff {
+  id: string;
+  opticianId: string;
+  startDate: Date;
+  endDate: Date;
+  reason?: string | null;
+  isAllDay: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CreateWorkingHoursData {
+  opticianId: string;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  isAvailable?: boolean;
+}
+
+export interface CreateTimeOffData {
+  opticianId: string;
+  startDate: Date;
+  endDate: Date;
+  reason?: string;
+  isAllDay?: boolean;
+}
+
+export interface AvailabilityCheckParams {
+  branchId: string;
+  serviceId: string;
+  date: Date;
+  opticianId?: string;
+  includeWorkingHours?: boolean;
+  includeTimeOff?: boolean;
+}
+
+export interface TimeSlot {
+  start: Date;
+  end: Date;
+  isAvailable: boolean;
+  reason?: string;
+}
+
+export interface DayAvailability {
+  date: Date;
+  timeSlots: TimeSlot[];
+  isAvailable: boolean;
 }
 
 ```
 
-```
