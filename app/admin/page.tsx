@@ -7,6 +7,7 @@ async function getAppointments() {
     include: {
       service: true,
       branch: true,
+      optician: true, // Include optician data
     },
     orderBy: {
       scheduledAt: "asc",

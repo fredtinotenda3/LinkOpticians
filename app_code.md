@@ -1,5 +1,5 @@
 ﻿===============================
-  app\admin\layout.tsx
+ C:\Users\fredt\Desktop\LinkOpticians\app\admin\layout.tsx
 ===============================
 `$lang
 "use client";
@@ -101,7 +101,7 @@ export default function AdminLayout({
 ```
 
 ===============================
-  app\admin\page.tsx
+ C:\Users\fredt\Desktop\LinkOpticians\app\admin\page.tsx
 ===============================
 `$lang
 import { prisma } from "@/lib/prisma";
@@ -216,7 +216,7 @@ export default async function AdminDashboard() {
 ```
 
 ===============================
-  app\api\appointments\[id]\route.ts
+ C:\Users\fredt\Desktop\LinkOpticians\app\api\appointments\[id]\route.ts
 ===============================
 `$lang
 import { NextRequest, NextResponse } from "next/server";
@@ -334,7 +334,7 @@ export async function DELETE(
 ```
 
 ===============================
-  app\api\appointments\route.ts
+ C:\Users\fredt\Desktop\LinkOpticians\app\api\appointments\route.ts
 ===============================
 `$lang
 import { NextRequest, NextResponse } from "next/server";
@@ -449,7 +449,7 @@ export async function GET(request: NextRequest) {
 ```
 
 ===============================
-  app\api\availability\route.ts
+ C:\Users\fredt\Desktop\LinkOpticians\app\api\availability\route.ts
 ===============================
 `$lang
 import { NextRequest, NextResponse } from "next/server";
@@ -527,7 +527,7 @@ export async function GET(request: NextRequest) {
 ```
 
 ===============================
-  app\api\debug\route.ts
+ C:\Users\fredt\Desktop\LinkOpticians\app\api\debug\route.ts
 ===============================
 `$lang
 import { NextResponse } from "next/server";
@@ -565,7 +565,7 @@ export async function GET() {
 ```
 
 ===============================
-  app\api\hello\route.ts
+ C:\Users\fredt\Desktop\LinkOpticians\app\api\hello\route.ts
 ===============================
 `$lang
 import { NextResponse } from "next/server";
@@ -582,7 +582,7 @@ export async function GET() {
 ```
 
 ===============================
-  app\api\test\route.ts
+ C:\Users\fredt\Desktop\LinkOpticians\app\api\test\route.ts
 ===============================
 `$lang
 import { NextResponse } from "next/server";
@@ -614,18 +614,19 @@ export async function GET() {
 ```
 
 ===============================
-  app\book\branch\page.tsx
+ C:\Users\fredt\Desktop\LinkOpticians\app\book\branch\page.tsx
 ===============================
 `$lang
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { Branch, Service } from "@/types";
 
-async function getBranches() {
+async function getBranches(): Promise<Branch[]> {
   return await prisma.branch.findMany();
 }
 
-async function getService(serviceId: string) {
+async function getService(serviceId: string): Promise<Service | null> {
   return await prisma.service.findUnique({
     where: { id: serviceId },
   });
@@ -636,7 +637,6 @@ export default async function BranchSelection({
 }: {
   searchParams: Promise<{ serviceId: string }>;
 }) {
-  // Await the searchParams Promise
   const params = await searchParams;
   const serviceId = params.serviceId;
 
@@ -666,32 +666,23 @@ export default async function BranchSelection({
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {branches.map(
-            (branch: {
-              id: string;
-              name: string;
-              address: string;
-              phone: string;
-              email: string;
-              operatingHours: string;
-            }) => (
-              <Link
-                key={branch.id}
-                href={`/book/date?serviceId=${serviceId}&branchId=${branch.id}`}
-                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border border-gray-200"
-              >
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  {branch.name}
-                </h3>
-                <p className="text-gray-600 mb-3">{branch.address}</p>
-                <div className="space-y-2 text-sm text-gray-500">
-                  <p>📞 {branch.phone}</p>
-                  <p>📧 {branch.email}</p>
-                  <p>🕒 {branch.operatingHours}</p>
-                </div>
-              </Link>
-            )
-          )}
+          {branches.map((branch: Branch) => (
+            <Link
+              key={branch.id}
+              href={`/book/optician?serviceId=${serviceId}&branchId=${branch.id}`}
+              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border border-gray-200"
+            >
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                {branch.name}
+              </h3>
+              <p className="text-gray-600 mb-3">{branch.address}</p>
+              <div className="space-y-2 text-sm text-gray-500">
+                <p>📞 {branch.phone}</p>
+                <p>📧 {branch.email}</p>
+                <p>🕒 {branch.operatingHours}</p>
+              </div>
+            </Link>
+          ))}
         </div>
 
         <div className="text-center mt-8">
@@ -710,19 +701,46 @@ export default async function BranchSelection({
 ```
 
 ===============================
-  app\book\confirmation\page.tsx
+ C:\Users\fredt\Desktop\LinkOpticians\app\book\confirmation\page.tsx
 ===============================
 `$lang
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
-async function getAppointment(id: string) {
+interface AppointmentWithDetails {
+  id: string;
+  patientName: string;
+  phone: string;
+  email: string | null;
+  scheduledAt: Date;
+  notes: string | null;
+  service: {
+    id: string;
+    name: string;
+  };
+  branch: {
+    id: string;
+    name: string;
+    phone: string;
+    address: string;
+  };
+  optician: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+}
+
+async function getAppointment(
+  id: string
+): Promise<AppointmentWithDetails | null> {
   return await prisma.appointment.findUnique({
     where: { id },
     include: {
       service: true,
       branch: true,
+      optician: true,
     },
   });
 }
@@ -732,7 +750,6 @@ export default async function Confirmation({
 }: {
   searchParams: Promise<{ appointmentId: string }>;
 }) {
-  // Await the searchParams Promise
   const params = await searchParams;
   const appointmentId = params.appointmentId;
 
@@ -812,6 +829,14 @@ export default async function Confirmation({
                 <span className="text-gray-600">Branch:</span>
                 <span className="font-medium">{appointment.branch.name}</span>
               </div>
+              {appointment.optician && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Optician:</span>
+                  <span className="font-medium">
+                    {appointment.optician.name}
+                  </span>
+                </div>
+              )}
               <div className="flex justify-between">
                 <span className="text-gray-600">Date & Time:</span>
                 <span className="font-medium">
@@ -825,6 +850,14 @@ export default async function Confirmation({
               <div className="flex justify-between">
                 <span className="text-gray-600">Phone:</span>
                 <span className="font-medium">{appointment.phone}</span>
+              </div>
+              <div className="mt-4 pt-4 border-t border-blue-200">
+                <p className="text-sm text-blue-700">
+                  📍 {appointment.branch.address}
+                </p>
+                <p className="text-sm text-blue-700">
+                  📞 {appointment.branch.phone}
+                </p>
               </div>
             </div>
           </div>
@@ -853,7 +886,7 @@ export default async function Confirmation({
 ```
 
 ===============================
-  app\book\date\page.tsx
+ C:\Users\fredt\Desktop\LinkOpticians\app\book\date\page.tsx
 ===============================
 `$lang
 "use client";
@@ -875,6 +908,7 @@ function DateSelectionContent() {
 
   const serviceId = searchParams.get("serviceId");
   const branchId = searchParams.get("branchId");
+  const opticianId = searchParams.get("opticianId");
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
@@ -899,12 +933,18 @@ function DateSelectionContent() {
         console.log("Fetching availability for:", {
           branchId,
           serviceId,
+          opticianId,
           date: date.toISOString(),
         });
 
-        const response = await fetch(
-          `/api/availability?branchId=${branchId}&serviceId=${serviceId}&date=${date.toISOString()}`
-        );
+        const params = new URLSearchParams({
+          branchId,
+          serviceId,
+          date: date.toISOString(),
+          ...(opticianId && { opticianId }),
+        });
+
+        const response = await fetch(`/api/availability?${params}`);
 
         console.log("Response status:", response.status);
 
@@ -924,7 +964,7 @@ function DateSelectionContent() {
         setLoading(false);
       }
     },
-    [serviceId, branchId]
+    [serviceId, branchId, opticianId]
   );
 
   useEffect(() => {
@@ -961,9 +1001,14 @@ function DateSelectionContent() {
   const handleTimeSelect = (slot: string) => {
     if (!serviceId || !branchId) return;
 
-    router.push(
-      `/book/details?serviceId=${serviceId}&branchId=${branchId}&scheduledAt=${slot}`
-    );
+    const params = new URLSearchParams({
+      serviceId,
+      branchId,
+      scheduledAt: slot,
+      ...(opticianId && { opticianId }),
+    });
+
+    router.push(`/book/details?${params}`);
   };
 
   if (!serviceId || !branchId) {
@@ -983,6 +1028,11 @@ function DateSelectionContent() {
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Select Date & Time
           </h1>
+          {opticianId && (
+            <p className="text-sm text-gray-600">
+              Availability shown for your selected optician
+            </p>
+          )}
         </div>
 
         {/* Date Selection */}
@@ -1044,10 +1094,10 @@ function DateSelectionContent() {
 
         <div className="text-center mt-8">
           <Link
-            href={`/book/branch?serviceId=${serviceId}`}
+            href={`/book/optician?serviceId=${serviceId}&branchId=${branchId}`}
             className="text-blue-600 hover:text-blue-800 font-medium"
           >
-            ← Back to Branches
+            ← Back to Opticians
           </Link>
         </div>
       </div>
@@ -1078,7 +1128,7 @@ export default function DateSelection() {
 ```
 
 ===============================
-  app\book\details\page.tsx
+ C:\Users\fredt\Desktop\LinkOpticians\app\book\details\page.tsx
 ===============================
 `$lang
 "use client";
@@ -1094,6 +1144,7 @@ function BookingDetailsContent() {
 
   const serviceId = searchParams.get("serviceId");
   const branchId = searchParams.get("branchId");
+  const opticianId = searchParams.get("opticianId");
   const scheduledAt = searchParams.get("scheduledAt");
 
   const [formData, setFormData] = useState({
@@ -1126,6 +1177,7 @@ function BookingDetailsContent() {
           ...formData,
           serviceId,
           branchId,
+          opticianId: opticianId || undefined,
           scheduledAt,
         }),
       });
@@ -1200,6 +1252,11 @@ function BookingDetailsContent() {
             Scheduled for:{" "}
             <span className="font-medium">{formatDateTime(scheduledAt)}</span>
           </p>
+          {opticianId && (
+            <p className="text-sm text-gray-500 mt-2">
+              With your selected optician
+            </p>
+          )}
         </div>
 
         <form
@@ -1290,7 +1347,9 @@ function BookingDetailsContent() {
 
           <div className="mt-6 flex gap-4">
             <Link
-              href={`/book/date?serviceId=${serviceId}&branchId=${branchId}`}
+              href={`/book/date?serviceId=${serviceId}&branchId=${branchId}${
+                opticianId ? `&opticianId=${opticianId}` : ""
+              }`}
               className="flex-1 bg-gray-500 text-white py-3 px-4 rounded-md text-center font-medium hover:bg-gray-600 transition-colors"
             >
               Back
@@ -1332,7 +1391,145 @@ export default function BookingDetails() {
 ```
 
 ===============================
-  app\book\service\page.tsx
+ C:\Users\fredt\Desktop\LinkOpticians\app\book\optician\page.tsx
+===============================
+`$lang
+import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+import { Optician, Service, Branch } from "@/types";
+
+async function getOpticians(branchId: string): Promise<Optician[]> {
+  const opticians = await prisma.optician.findMany({
+    where: {
+      branchId,
+      isActive: true,
+    },
+    include: {
+      branch: true,
+    },
+  });
+
+  return opticians as Optician[];
+}
+
+async function getService(serviceId: string): Promise<Service | null> {
+  return await prisma.service.findUnique({
+    where: { id: serviceId },
+  });
+}
+
+async function getBranch(branchId: string): Promise<Branch | null> {
+  return await prisma.branch.findUnique({
+    where: { id: branchId },
+  });
+}
+
+export default async function OpticianSelection({
+  searchParams,
+}: {
+  searchParams: Promise<{ serviceId: string; branchId: string }>;
+}) {
+  const params = await searchParams;
+  const serviceId = params.serviceId;
+  const branchId = params.branchId;
+
+  if (!serviceId || !branchId) {
+    redirect("/book/service");
+  }
+
+  const [opticians, service, branch] = await Promise.all([
+    getOpticians(branchId),
+    getService(serviceId),
+    getBranch(branchId),
+  ]);
+
+  if (!service || !branch) {
+    redirect("/book/service");
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="container mx-auto px-4 max-w-4xl">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Select an Optician
+          </h1>
+          <p className="text-gray-600 mb-4">
+            For: <span className="font-semibold">{service.name}</span> at{" "}
+            <span className="font-semibold">{branch.name}</span>
+          </p>
+          <p className="text-sm text-gray-500">
+            Choose your preferred eye care professional
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {opticians.map((optician: Optician) => (
+            <Link
+              key={optician.id}
+              href={`/book/date?serviceId=${serviceId}&branchId=${branchId}&opticianId=${optician.id}`}
+              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border border-gray-200"
+            >
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                {optician.name}
+              </h3>
+              <div className="space-y-2 text-sm text-gray-600">
+                <p className="flex items-center">
+                  <span className="mr-2">📧</span>
+                  {optician.email}
+                </p>
+                <p className="flex items-center">
+                  <span className="mr-2">📞</span>
+                  {optician.phone}
+                </p>
+                {optician.specialty && (
+                  <p className="flex items-center">
+                    <span className="mr-2">🎯</span>
+                    Specialty: {optician.specialty}
+                  </p>
+                )}
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <p className="text-xs text-gray-500">
+                  Available at: {optician.branch.name}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {opticians.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-gray-500 mb-4">
+              No opticians available at this branch for the selected service.
+            </p>
+            <Link
+              href={`/book/branch?serviceId=${serviceId}`}
+              className="text-blue-600 hover:text-blue-800 font-medium"
+            >
+              ← Choose a different branch
+            </Link>
+          </div>
+        )}
+
+        <div className="text-center mt-8">
+          <Link
+            href={`/book/branch?serviceId=${serviceId}`}
+            className="text-blue-600 hover:text-blue-800 font-medium"
+          >
+            ← Back to Branches
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+```
+
+===============================
+ C:\Users\fredt\Desktop\LinkOpticians\app\book\service\page.tsx
 ===============================
 `$lang
 import Link from "next/link";
@@ -1407,7 +1604,7 @@ export default async function ServiceSelection() {
 ```
 
 ===============================
-  app\globals.css
+ C:\Users\fredt\Desktop\LinkOpticians\app\globals.css
 ===============================
 `$lang
 @import "tailwindcss";
@@ -1440,7 +1637,7 @@ body {
 ```
 
 ===============================
-  app\layout.tsx
+ C:\Users\fredt\Desktop\LinkOpticians\app\layout.tsx
 ===============================
 `$lang
 import type { Metadata } from "next";
@@ -1481,7 +1678,7 @@ export default function RootLayout({
 ```
 
 ===============================
-  app\page.tsx
+ C:\Users\fredt\Desktop\LinkOpticians\app\page.tsx
 ===============================
 `$lang
 import Link from "next/link";

@@ -1,5 +1,5 @@
 ﻿===============================
-  prisma\schema.prisma
+ C:\Users\fredt\Desktop\LinkOpticians\prisma\schema.prisma
 ===============================
 `$lang
 generator client {
@@ -10,7 +10,6 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 
 model Branch {
   id          String   @id @default(cuid())
@@ -23,6 +22,7 @@ model Branch {
   updatedAt   DateTime @updatedAt
   
   appointments Appointment[]
+  opticians    Optician[]
   
   @@map("branches")
 }
@@ -42,6 +42,25 @@ model Service {
   @@map("services")
 }
 
+model Optician {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String
+  specialty   String?  // e.g., "Eye Examinations", "Contact Lenses", etc.
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relationships
+  branchId    String
+  branch      Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  
+  appointments Appointment[]
+  
+  @@map("opticians")
+}
+
 model Appointment {
   id          String   @id @default(cuid())
   patientName String
@@ -50,10 +69,13 @@ model Appointment {
   
   // Relationships
   serviceId   String
-  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   
   branchId    String
-  branch      Branch  @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  branch      Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  
+  opticianId  String?
+  optician    Optician? @relation(fields: [opticianId], references: [id], onDelete: SetNull)
   
   // Appointment details
   scheduledAt DateTime
@@ -77,7 +99,7 @@ enum AppointmentStatus {
 ```
 
 ===============================
-  prisma\seed.ts
+ C:\Users\fredt\Desktop\LinkOpticians\prisma\seed.ts
 ===============================
 `$lang
 import { PrismaClient } from "@prisma/client";
@@ -167,9 +189,44 @@ async function main() {
     skipDuplicates: true,
   });
 
+  // Create opticians for each branch
+  const allBranches = await prisma.branch.findMany();
+
+  for (const branch of allBranches) {
+    await prisma.optician.createMany({
+      data: [
+        {
+          name: `Dr. ${branch.name.split(" ")[0]} Moyo`,
+          email: `dr.moyo@${branch.email.split("@")[1]}`,
+          phone: branch.phone,
+          specialty: "Eye Examinations",
+          branchId: branch.id,
+        },
+        {
+          name: `Dr. ${branch.name.split(" ")[0]} Ndlovu`,
+          email: `dr.ndlovu@${branch.email.split("@")[1]}`,
+          phone: branch.phone,
+          specialty: "Contact Lenses",
+          branchId: branch.id,
+        },
+        {
+          name: `Optician ${branch.name.split(" ")[0]} Chikowore`,
+          email: `optician.chikowore@${branch.email.split("@")[1]}`,
+          phone: branch.phone,
+          specialty: "Spectacles Dispensing",
+          branchId: branch.id,
+        },
+      ],
+      skipDuplicates: true,
+    });
+  }
+
+  const opticiansCount = await prisma.optician.count();
+
   console.log("Database seeded successfully!");
   console.log(`Created ${branches.count} branches`);
   console.log(`Created ${services.count} services`);
+  console.log(`Created ${opticiansCount} opticians`);
 }
 
 main()

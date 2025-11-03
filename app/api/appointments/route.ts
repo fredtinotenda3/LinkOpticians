@@ -10,6 +10,7 @@ const createAppointmentSchema = z.object({
   email: z.string().email().optional().or(z.literal("")),
   serviceId: z.string().cuid(),
   branchId: z.string().cuid(),
+  opticianId: z.string().cuid().optional().or(z.literal("")), // Add opticianId to schema
   scheduledAt: z.string().datetime(),
   notes: z.string().optional(),
 });
@@ -27,10 +28,15 @@ export async function POST(request: NextRequest) {
     }
 
     const { data } = validationResult;
-    const result = await appointmentService.createAppointment({
+
+    // Prepare appointment data including opticianId if provided
+    const appointmentData = {
       ...data,
       scheduledAt: new Date(data.scheduledAt),
-    });
+      opticianId: data.opticianId || undefined, // Convert empty string to undefined
+    };
+
+    const result = await appointmentService.createAppointment(appointmentData);
 
     if (!result.success) {
       return NextResponse.json({ error: result.error }, { status: 400 });
@@ -39,7 +45,7 @@ export async function POST(request: NextRequest) {
     // Send real SMS notification after successful appointment creation
     if (result.success && result.data) {
       try {
-        // Get service and branch details for the SMS
+        // Get service, branch, and optician details for the SMS
         const service = await prisma.service.findUnique({
           where: { id: data.serviceId },
         });
@@ -48,12 +54,25 @@ export async function POST(request: NextRequest) {
           where: { id: data.branchId },
         });
 
+        const optician = data.opticianId
+          ? await prisma.optician.findUnique({
+              where: { id: data.opticianId },
+            })
+          : null;
+
         if (service && branch) {
-          const smsMessage = `Hi ${data.patientName}! Your ${
+          let smsMessage = `Hi ${data.patientName}! Your ${
             service.name
           } appointment at ${branch.name} is confirmed for ${new Date(
             data.scheduledAt
-          ).toLocaleString()}. Thank you for choosing Link Opticians!`;
+          ).toLocaleString()}.`;
+
+          // Include optician info in SMS if available
+          if (optician) {
+            smsMessage += ` Your optician: ${optician.name}.`;
+          }
+
+          smsMessage += " Thank you for choosing Link Opticians!";
 
           await sendSMS(data.phone, smsMessage);
         }

@@ -6,6 +6,7 @@ const availabilitySchema = z.object({
   branchId: z.string().min(1, "Branch ID is required"),
   serviceId: z.string().min(1, "Service ID is required"),
   date: z.string().datetime(),
+  opticianId: z.string().optional(), // Add opticianId to schema
 });
 
 export async function GET(request: NextRequest) {
@@ -14,13 +15,20 @@ export async function GET(request: NextRequest) {
     const branchId = searchParams.get("branchId");
     const serviceId = searchParams.get("serviceId");
     const date = searchParams.get("date");
+    const opticianId = searchParams.get("opticianId"); // Get opticianId from query params
 
-    console.log("Availability check params:", { branchId, serviceId, date });
+    console.log("Availability check params:", {
+      branchId,
+      serviceId,
+      date,
+      opticianId,
+    });
 
     const validationResult = availabilitySchema.safeParse({
       branchId,
       serviceId,
       date,
+      opticianId: opticianId || undefined, // Convert null to undefined
     });
 
     if (!validationResult.success) {
@@ -39,7 +47,8 @@ export async function GET(request: NextRequest) {
     const result = await appointmentService.checkAvailability(
       data.branchId,
       data.serviceId,
-      new Date(data.date)
+      new Date(data.date),
+      data.opticianId // Pass opticianId to service
     );
 
     console.log("Availability result:", result);

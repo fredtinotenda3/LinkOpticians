@@ -1,312 +1,771 @@
 ﻿===============================
-  lib\prisma.ts
+ C:\Users\fredt\Desktop\LinkOpticians\components\AdminAppointmentTable.tsx
 ===============================
 `$lang
-import { PrismaClient } from "@prisma/client";
+"use client";
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
+import { useState, useMemo } from "react";
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient();
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
-
-```
-
-===============================
-  lib\services\appointment-service.ts
-===============================
-`$lang
-import { prisma } from "@/lib/prisma";
-import { AppointmentCreateData, AppointmentUpdateData } from "@/types";
-
-export class AppointmentService {
-  // Create new appointment
-  async createAppointment(data: AppointmentCreateData) {
-    try {
-      const appointment = await prisma.appointment.create({
-        data: {
-          patientName: data.patientName,
-          phone: data.phone,
-          email: data.email,
-          serviceId: data.serviceId,
-          branchId: data.branchId,
-          scheduledAt: data.scheduledAt,
-          notes: data.notes,
-          status: "pending",
-        },
-        include: {
-          service: true,
-          branch: true,
-        },
-      });
-
-      return { success: true, data: appointment };
-    } catch (error) {
-      console.error("Error creating appointment:", error);
-      return { success: false, error: "Failed to create appointment" };
-    }
-  }
-
-  // Get appointment by ID
-  async getAppointment(id: string) {
-    try {
-      const appointment = await prisma.appointment.findUnique({
-        where: { id },
-        include: {
-          service: true,
-          branch: true,
-        },
-      });
-
-      if (!appointment) {
-        return { success: false, error: "Appointment not found" };
-      }
-
-      return { success: true, data: appointment };
-    } catch (error) {
-      console.error("Error fetching appointment:", error);
-      return { success: false, error: "Failed to fetch appointment" };
-    }
-  }
-
-  // Update appointment
-  async updateAppointment(id: string, data: AppointmentUpdateData) {
-    try {
-      const appointment = await prisma.appointment.update({
-        where: { id },
-        data,
-        include: {
-          service: true,
-          branch: true,
-        },
-      });
-
-      return { success: true, data: appointment };
-    } catch (error) {
-      console.error("Error updating appointment:", error);
-      return { success: false, error: "Failed to update appointment" };
-    }
-  }
-
-  // Get appointments by date range
-  async getAppointmentsByDateRange(
-    startDate: Date,
-    endDate: Date,
-    branchId?: string
-  ) {
-    try {
-      // Use a type-safe approach without Prisma namespace
-      const whereClause = {
-        scheduledAt: {
-          gte: startDate,
-          lte: endDate,
-        },
-        ...(branchId && { branchId }),
-      };
-
-      const appointments = await prisma.appointment.findMany({
-        where: whereClause,
-        include: {
-          service: true,
-          branch: true,
-        },
-        orderBy: {
-          scheduledAt: "asc",
-        },
-      });
-
-      return { success: true, data: appointments };
-    } catch (error) {
-      console.error("Error fetching appointments:", error);
-      return { success: false, error: "Failed to fetch appointments" };
-    }
-  }
-
-  // Check availability
-  // Check availability
-  async checkAvailability(branchId: string, serviceId: string, date: Date) {
-    try {
-      console.log("Checking availability for:", { branchId, serviceId, date });
-
-      const service = await prisma.service.findUnique({
-        where: { id: serviceId },
-      });
-
-      if (!service) {
-        console.log("Service not found:", serviceId);
-        return { success: false, error: "Service not found" };
-      }
-
-      console.log("Found service:", service);
-
-      // Get start and end of the day
-      const startOfDay = new Date(date);
-      startOfDay.setHours(0, 0, 0, 0);
-
-      const endOfDay = new Date(date);
-      endOfDay.setHours(23, 59, 59, 999);
-
-      console.log("Date range:", { startOfDay, endOfDay });
-
-      // Get existing appointments for that day
-      const existingAppointments = await prisma.appointment.findMany({
-        where: {
-          branchId,
-          scheduledAt: {
-            gte: startOfDay,
-            lte: endOfDay,
-          },
-          status: {
-            in: ["pending", "confirmed"],
-          },
-        },
-        select: {
-          scheduledAt: true,
-          service: {
-            select: {
-              duration: true,
-            },
-          },
-        },
-      });
-
-      console.log("Existing appointments:", existingAppointments.length);
-
-      // Generate available time slots
-      const availableSlots = this.generateTimeSlots(
-        date,
-        service.duration,
-        existingAppointments
-      );
-
-      console.log("Available slots:", availableSlots.length);
-
-      return { success: true, data: availableSlots };
-    } catch (error) {
-      console.error("Error checking availability:", error);
-      return { success: false, error: "Failed to check availability" };
-    }
-  }
-
-  private generateTimeSlots(
-    date: Date,
-    duration: number,
-    existingAppointments: Array<{
-      scheduledAt: Date;
-      service: { duration: number };
-    }>
-  ) {
-    const slots: Date[] = [];
-    const startTime = 8 * 60; // 8:00 AM in minutes
-    const endTime = 17 * 60; // 5:00 PM in minutes
-    const slotDuration = 30; // 30-minute intervals
-
-    for (
-      let time = startTime;
-      time <= endTime - duration;
-      time += slotDuration
-    ) {
-      const slotStart = new Date(date);
-      slotStart.setHours(Math.floor(time / 60), time % 60, 0, 0);
-
-      const slotEnd = new Date(slotStart);
-      slotEnd.setMinutes(slotEnd.getMinutes() + duration);
-
-      // Check if slot conflicts with existing appointments
-      const hasConflict = existingAppointments.some((appointment) => {
-        const appointmentStart = new Date(appointment.scheduledAt);
-        const appointmentEnd = new Date(appointmentStart);
-        appointmentEnd.setMinutes(
-          appointmentEnd.getMinutes() + appointment.service.duration
-        );
-
-        return slotStart < appointmentEnd && slotEnd > appointmentStart;
-      });
-
-      if (!hasConflict) {
-        slots.push(slotStart);
-      }
-    }
-
-    return slots;
-  }
+interface Appointment {
+  id: string;
+  patientName: string;
+  phone: string;
+  email: string | null;
+  service: { name: string };
+  branch: { name: string };
+  scheduledAt: Date;
+  status: string;
+  notes: string | null;
 }
 
-export const appointmentService = new AppointmentService();
+interface AdminAppointmentTableProps {
+  initialAppointments: Appointment[];
+}
+
+export function AdminAppointmentTable({
+  initialAppointments,
+}: AdminAppointmentTableProps) {
+  const [appointments, setAppointments] =
+    useState<Appointment[]>(initialAppointments);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<Partial<Appointment>>({});
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [branchFilter, setBranchFilter] = useState("all");
+
+  // Filter appointments based on search and filters
+  const filteredAppointments = useMemo(() => {
+    return appointments.filter((appointment) => {
+      const matchesSearch =
+        appointment.patientName
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        appointment.phone.includes(searchTerm) ||
+        appointment.service.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        appointment.branch.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+
+      const matchesStatus =
+        statusFilter === "all" || appointment.status === statusFilter;
+      const matchesBranch =
+        branchFilter === "all" || appointment.branch.name === branchFilter;
+
+      return matchesSearch && matchesStatus && matchesBranch;
+    });
+  }, [appointments, searchTerm, statusFilter, branchFilter]);
+
+  // Get unique branches for filter
+  const uniqueBranches = useMemo(() => {
+    return [...new Set(appointments.map((apt) => apt.branch.name))];
+  }, [appointments]);
+
+  const formatDateTime = (date: Date) => {
+    return date.toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "confirmed":
+        return "bg-green-100 text-green-800";
+      case "completed":
+        return "bg-blue-100 text-blue-800";
+      case "cancelled":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const handleStatusChange = async (
+    appointmentId: string,
+    newStatus: string
+  ) => {
+    try {
+      const response = await fetch(`/api/appointments/${appointmentId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        const updatedAppointment = await response.json();
+        setAppointments((prev) =>
+          prev.map((apt) =>
+            apt.id === appointmentId ? updatedAppointment : apt
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
+
+  const handleDelete = async (appointmentId: string) => {
+    if (!confirm("Are you sure you want to delete this appointment?")) return;
+
+    try {
+      const response = await fetch(`/api/appointments/${appointmentId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setAppointments((prev) =>
+          prev.filter((apt) => apt.id !== appointmentId)
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting appointment:", error);
+    }
+  };
+
+  const startEdit = (appointment: Appointment) => {
+    setEditingId(appointment.id);
+    setEditForm({
+      patientName: appointment.patientName,
+      phone: appointment.phone,
+      status: appointment.status,
+      notes: appointment.notes,
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditForm({});
+  };
+
+  const saveEdit = async (appointmentId: string) => {
+    try {
+      const response = await fetch(`/api/appointments/${appointmentId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editForm),
+      });
+
+      if (response.ok) {
+        const updatedAppointment = await response.json();
+        setAppointments((prev) =>
+          prev.map((apt) =>
+            apt.id === appointmentId ? updatedAppointment : apt
+          )
+        );
+        setEditingId(null);
+        setEditForm({});
+      }
+    } catch (error) {
+      console.error("Error updating appointment:", error);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-md">
+      <div className="px-6 py-4 border-b border-gray-200">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <h2 className="text-xl font-semibold text-gray-900">
+            Appointments ({filteredAppointments.length})
+          </h2>
+
+          {/* Search and Filters */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* Search */}
+            <input
+              type="text"
+              placeholder="Search patients, phone, service..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
+            />
+
+            {/* Status Filter */}
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+
+            {/* Branch Filter */}
+            <select
+              value={branchFilter}
+              onChange={(e) => setBranchFilter(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">All Branches</option>
+              {uniqueBranches.map((branch) => (
+                <option key={branch} value={branch}>
+                  {branch}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Patient
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Service
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Branch
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Date & Time
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {filteredAppointments.map((appointment) => (
+              <tr key={appointment.id}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {editingId === appointment.id ? (
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        value={editForm.patientName || ""}
+                        onChange={(e) =>
+                          setEditForm((prev) => ({
+                            ...prev,
+                            patientName: e.target.value,
+                          }))
+                        }
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                        placeholder="Patient Name"
+                      />
+                      <input
+                        type="text"
+                        value={editForm.phone || ""}
+                        onChange={(e) =>
+                          setEditForm((prev) => ({
+                            ...prev,
+                            phone: e.target.value,
+                          }))
+                        }
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                        placeholder="Phone"
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {appointment.patientName}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {appointment.phone}
+                      </div>
+                      {appointment.email && (
+                        <div className="text-sm text-gray-500">
+                          {appointment.email}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">
+                    {appointment.service.name}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">
+                    {appointment.branch.name}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">
+                    {formatDateTime(appointment.scheduledAt)}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {editingId === appointment.id ? (
+                    <select
+                      value={editForm.status || ""}
+                      onChange={(e) =>
+                        setEditForm((prev) => ({
+                          ...prev,
+                          status: e.target.value,
+                        }))
+                      }
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="confirmed">Confirmed</option>
+                      <option value="completed">Completed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  ) : (
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
+                        appointment.status
+                      )}`}
+                    >
+                      {appointment.status}
+                    </span>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                  {editingId === appointment.id ? (
+                    <>
+                      <button
+                        onClick={() => saveEdit(appointment.id)}
+                        className="text-green-600 hover:text-green-900"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={cancelEdit}
+                        className="text-gray-600 hover:text-gray-900"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => startEdit(appointment)}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(appointment.id)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {filteredAppointments.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            No appointments found matching your filters.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 ```
 
 ===============================
-  lib\twilio.ts
+ C:\Users\fredt\Desktop\LinkOpticians\components\AdminAppointmentTable.tsx
 ===============================
 `$lang
-import twilio from "twilio";
+"use client";
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilioPhone = process.env.TWILIO_PHONE_NUMBER;
+import { useState, useMemo } from "react";
 
-const client = twilio(accountSid, authToken);
+interface Appointment {
+  id: string;
+  patientName: string;
+  phone: string;
+  email: string | null;
+  service: { name: string };
+  branch: { name: string };
+  scheduledAt: Date;
+  status: string;
+  notes: string | null;
+}
 
-export async function sendSMS(to: string, message: string) {
-  try {
-    // Format Zimbabwe numbers properly
-    let formattedTo = to.trim();
+interface AdminAppointmentTableProps {
+  initialAppointments: Appointment[];
+}
 
-    // Remove any spaces, dashes, etc.
-    formattedTo = formattedTo.replace(/[\s\-\(\)]/g, "");
+export function AdminAppointmentTable({
+  initialAppointments,
+}: AdminAppointmentTableProps) {
+  const [appointments, setAppointments] =
+    useState<Appointment[]>(initialAppointments);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<Partial<Appointment>>({});
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [branchFilter, setBranchFilter] = useState("all");
 
-    // Ensure it starts with +263 for Zimbabwe numbers
-    if (formattedTo.startsWith("0")) {
-      // Convert 078... to +26378...
-      formattedTo = "+263" + formattedTo.slice(1);
-    } else if (!formattedTo.startsWith("+")) {
-      // Add + if missing
-      formattedTo = "+" + formattedTo;
-    }
+  // Filter appointments based on search and filters
+  const filteredAppointments = useMemo(() => {
+    return appointments.filter((appointment) => {
+      const matchesSearch =
+        appointment.patientName
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        appointment.phone.includes(searchTerm) ||
+        appointment.service.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        appointment.branch.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
 
-    // Ensure it's a valid Zimbabwe number format
-    if (!formattedTo.startsWith("+263")) {
-      console.warn("⚠️  Number may not be Zimbabwe format:", formattedTo);
-    }
+      const matchesStatus =
+        statusFilter === "all" || appointment.status === statusFilter;
+      const matchesBranch =
+        branchFilter === "all" || appointment.branch.name === branchFilter;
 
-    console.log(`📱 Attempting to send SMS to: ${formattedTo}`);
-    console.log(`💬 Message: ${message}`);
-
-    const result = await client.messages.create({
-      body: message,
-      from: twilioPhone,
-      to: formattedTo,
+      return matchesSearch && matchesStatus && matchesBranch;
     });
+  }, [appointments, searchTerm, statusFilter, branchFilter]);
 
-    console.log("✅ SMS sent successfully:", result.sid);
-    return { success: true, messageId: result.sid };
-  } catch (error: unknown) {
-    console.error("❌ SMS error:", error);
+  // Get unique branches for filter
+  const uniqueBranches = useMemo(() => {
+    return [...new Set(appointments.map((apt) => apt.branch.name))];
+  }, [appointments]);
 
-    // Provide more specific error messages
-    let errorMessage = "Failed to send SMS";
-    if (error instanceof Error) {
-      if ("code" in error) {
-        const errorCode = (error as { code?: number }).code;
-        if (errorCode === 21211) {
-          errorMessage = "Invalid phone number format";
-        } else if (errorCode === 21408) {
-          errorMessage = "Twilio account not authorized to send to this region";
-        } else if (errorCode === 21610) {
-          errorMessage = "Phone number is not SMS capable";
-        }
-      }
+  const formatDateTime = (date: Date) => {
+    return date.toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "confirmed":
+        return "bg-green-100 text-green-800";
+      case "completed":
+        return "bg-blue-100 text-blue-800";
+      case "cancelled":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
+  };
 
-    return {
-      success: false,
-      error: errorMessage,
-      details: error instanceof Error ? error.message : "Unknown error",
-    };
-  }
+  const handleStatusChange = async (
+    appointmentId: string,
+    newStatus: string
+  ) => {
+    try {
+      const response = await fetch(`/api/appointments/${appointmentId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        const updatedAppointment = await response.json();
+        setAppointments((prev) =>
+          prev.map((apt) =>
+            apt.id === appointmentId ? updatedAppointment : apt
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
+
+  const handleDelete = async (appointmentId: string) => {
+    if (!confirm("Are you sure you want to delete this appointment?")) return;
+
+    try {
+      const response = await fetch(`/api/appointments/${appointmentId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setAppointments((prev) =>
+          prev.filter((apt) => apt.id !== appointmentId)
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting appointment:", error);
+    }
+  };
+
+  const startEdit = (appointment: Appointment) => {
+    setEditingId(appointment.id);
+    setEditForm({
+      patientName: appointment.patientName,
+      phone: appointment.phone,
+      status: appointment.status,
+      notes: appointment.notes,
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditForm({});
+  };
+
+  const saveEdit = async (appointmentId: string) => {
+    try {
+      const response = await fetch(`/api/appointments/${appointmentId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editForm),
+      });
+
+      if (response.ok) {
+        const updatedAppointment = await response.json();
+        setAppointments((prev) =>
+          prev.map((apt) =>
+            apt.id === appointmentId ? updatedAppointment : apt
+          )
+        );
+        setEditingId(null);
+        setEditForm({});
+      }
+    } catch (error) {
+      console.error("Error updating appointment:", error);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-md">
+      <div className="px-6 py-4 border-b border-gray-200">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <h2 className="text-xl font-semibold text-gray-900">
+            Appointments ({filteredAppointments.length})
+          </h2>
+
+          {/* Search and Filters */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* Search */}
+            <input
+              type="text"
+              placeholder="Search patients, phone, service..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
+            />
+
+            {/* Status Filter */}
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+
+            {/* Branch Filter */}
+            <select
+              value={branchFilter}
+              onChange={(e) => setBranchFilter(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">All Branches</option>
+              {uniqueBranches.map((branch) => (
+                <option key={branch} value={branch}>
+                  {branch}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Patient
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Service
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Branch
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Date & Time
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {filteredAppointments.map((appointment) => (
+              <tr key={appointment.id}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {editingId === appointment.id ? (
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        value={editForm.patientName || ""}
+                        onChange={(e) =>
+                          setEditForm((prev) => ({
+                            ...prev,
+                            patientName: e.target.value,
+                          }))
+                        }
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                        placeholder="Patient Name"
+                      />
+                      <input
+                        type="text"
+                        value={editForm.phone || ""}
+                        onChange={(e) =>
+                          setEditForm((prev) => ({
+                            ...prev,
+                            phone: e.target.value,
+                          }))
+                        }
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                        placeholder="Phone"
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {appointment.patientName}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {appointment.phone}
+                      </div>
+                      {appointment.email && (
+                        <div className="text-sm text-gray-500">
+                          {appointment.email}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">
+                    {appointment.service.name}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">
+                    {appointment.branch.name}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">
+                    {formatDateTime(appointment.scheduledAt)}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {editingId === appointment.id ? (
+                    <select
+                      value={editForm.status || ""}
+                      onChange={(e) =>
+                        setEditForm((prev) => ({
+                          ...prev,
+                          status: e.target.value,
+                        }))
+                      }
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="confirmed">Confirmed</option>
+                      <option value="completed">Completed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  ) : (
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
+                        appointment.status
+                      )}`}
+                    >
+                      {appointment.status}
+                    </span>
+                  )}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                  {editingId === appointment.id ? (
+                    <>
+                      <button
+                        onClick={() => saveEdit(appointment.id)}
+                        className="text-green-600 hover:text-green-900"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={cancelEdit}
+                        className="text-gray-600 hover:text-gray-900"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => startEdit(appointment)}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(appointment.id)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {filteredAppointments.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            No appointments found matching your filters.
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 ```

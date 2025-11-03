@@ -1,5 +1,5 @@
 ﻿===============================
-  components\AdminAppointmentTable.tsx
+ C:\Users\fredt\Desktop\LinkOpticians\components\AdminAppointmentTable.tsx
 ===============================
 `$lang
 "use client";
