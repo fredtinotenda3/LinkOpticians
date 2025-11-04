@@ -1,3 +1,5 @@
+// UPDATED: components/AdminOpticianTable.tsx
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -246,12 +248,33 @@ export function AdminOpticianTable({
           <h2 className="text-xl font-semibold text-gray-900">
             Optician Management ({activeOpticians.length} active)
           </h2>
-          <button
-            onClick={() => setShowCreateForm(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-          >
-            Add Optician
-          </button>
+          <div className="flex gap-3">
+            <Link
+              href="/admin/bulk-management"
+              className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors flex items-center gap-2"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
+              </svg>
+              Bulk Management
+            </Link>
+            <button
+              onClick={() => setShowCreateForm(true)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Add Optician
+            </button>
+          </div>
         </div>
       </div>
 

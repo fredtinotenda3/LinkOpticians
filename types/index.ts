@@ -203,3 +203,127 @@ export interface DayAvailability {
   timeSlots: TimeSlot[];
   isAvailable: boolean;
 }
+
+// ADD TO: types/index.ts
+
+// Bulk operation types
+export interface BulkOpticianCreateData {
+  opticians: Omit<EditOpticianForm, "isActive">[]; // Multiple opticians to create
+}
+
+export interface BulkOpticianUpdateData {
+  updates: Array<{
+    id: string;
+    data: Partial<EditOpticianForm>;
+  }>;
+}
+
+export interface BulkWorkingHoursUpdate {
+  opticianId: string;
+  workingHours: Array<{
+    dayOfWeek: number;
+    startTime: string;
+    endTime: string;
+    isAvailable: boolean;
+  }>;
+}
+
+export interface BulkTimeOffCreate {
+  opticianIds: string[]; // Multiple opticians
+  startDate: Date;
+  endDate: Date;
+  reason?: string;
+  isAllDay?: boolean;
+}
+
+export interface BulkOperationError {
+  index?: number;
+  id?: string;
+  error: string;
+}
+
+export interface BulkOperationResult {
+  success: boolean;
+  processed: number;
+  succeeded: number;
+  failed: number;
+  errors?: BulkOperationError[];
+  data?: unknown;
+}
+
+export interface ImportOpticianData {
+  name: string;
+  email: string;
+  phone: string;
+  specialty?: string;
+  branchName: string; // Reference by name instead of ID for imports
+  branchId?: string; // Will be resolved during import
+}
+
+export interface ImportError {
+  row: number;
+  error: string;
+  data: Record<string, unknown>;
+}
+
+export interface ImportResult {
+  total: number;
+  created: number;
+  updated: number;
+  errors: ImportError[];
+}
+
+// CSV/Excel import types
+export interface CsvImportRow {
+  name: string;
+  email: string;
+  phone: string;
+  specialty?: string;
+  branchName: string;
+  [key: string]: unknown;
+}
+
+export interface FileImportData {
+  fileName: string;
+  fileType: "csv" | "json";
+  data: CsvImportRow[];
+}
+
+// Bulk schedule management
+export interface ScheduleEntry {
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  isAvailable: boolean;
+}
+
+export interface BulkScheduleUpdate {
+  opticianIds: string[];
+  schedule: ScheduleEntry[];
+}
+
+// Mass status update
+export interface BulkStatusUpdate {
+  opticianIds: string[];
+  isActive: boolean;
+}
+
+// Bulk deletion
+export interface BulkDeleteData {
+  opticianIds: string[];
+  permanent?: boolean;
+}
+
+// Template types for download
+export interface ImportTemplate {
+  headers: string[];
+  sampleData: Record<string, string>[];
+}
+
+// Batch operation progress
+export interface BatchOperationProgress {
+  total: number;
+  completed: number;
+  current?: string;
+  status: "idle" | "processing" | "completed" | "error";
+}

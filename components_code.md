@@ -1122,8 +1122,43 @@ export function OpticianAvailabilityManager({
     "working-hours"
   );
   const [opticianDetails, setOpticianDetails] = useState(optician);
+  const [loading, setLoading] = useState(!optician.branch); // Load if branch is missing
 
-  // Refresh optician details when updates occur
+  // Refresh optician details when updates occur or if branch is missing
+  useEffect(() => {
+    const loadOpticianDetails = async () => {
+      if (!optician.branch) {
+        setLoading(true);
+        try {
+          const response = await fetch(`/api/opticians?id=${optician.id}`);
+          if (response.ok) {
+            const updatedOptician = await response.json();
+            setOpticianDetails(updatedOptician);
+          }
+        } catch (error) {
+          console.error("Failed to refresh optician details:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadOpticianDetails();
+  }, [optician.id, optician.branch]);
+
+  const getCurrentAvailability = () => {
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const timeString = now.toTimeString().slice(0, 5);
+
+    // This is a simplified check - in a real app, you'd call the API
+    return {
+      isAvailable: true,
+      status: "Available",
+      nextAvailable: "Now",
+    };
+  };
+
   const handleUpdate = async () => {
     try {
       const response = await fetch(`/api/opticians?id=${optician.id}`);
@@ -1137,20 +1172,21 @@ export function OpticianAvailabilityManager({
     }
   };
 
-  const getCurrentAvailability = () => {
-    const now = new Date();
-    const dayOfWeek = now.getDay();
-    const timeString = now.toTimeString().slice(0, 5); // "HH:MM" format
-
-    // This is a simplified check - in a real app, you'd call the API
-    return {
-      isAvailable: true,
-      status: "Available",
-      nextAvailable: "Now",
-    };
-  };
-
   const availability = getCurrentAvailability();
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+          <div className="space-y-3">
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-md">
@@ -1162,7 +1198,7 @@ export function OpticianAvailabilityManager({
               {opticianDetails.name}
             </h2>
             <p className="text-sm text-gray-600 mt-1">
-              {opticianDetails.branch.name} •{" "}
+              {opticianDetails.branch?.name || "Branch not assigned"} •{" "}
               {opticianDetails.specialty || "General Optician"}
             </p>
             <div className="flex items-center gap-4 mt-2">
@@ -1273,7 +1309,7 @@ export function OpticianAvailabilityManager({
           </div>
           <div className="text-center">
             <div className="text-2xl font-semibold text-gray-900">
-              {opticianDetails.branch.name}
+              {opticianDetails.branch?.name || "N/A"}
             </div>
             <div className="text-gray-500">Branch</div>
           </div>

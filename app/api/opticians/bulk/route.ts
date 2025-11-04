@@ -122,7 +122,7 @@ async function handleBulkCreate(body: unknown): Promise<NextResponse> {
         continue;
       }
 
-      // Check for duplicate email - FIXED: Use findFirst with email filter
+      // Check for duplicate email - FIXED: Use findFirst with where clause
       const existingOptician = await prisma.optician.findFirst({
         where: {
           email: opticianData.email,
