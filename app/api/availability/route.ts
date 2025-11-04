@@ -179,6 +179,7 @@ export async function POST(request: NextRequest) {
     // If optician is specified, get their working hours and time off for context
     let opticianDetails = null;
     if (data.opticianId) {
+      // FIXED: Use the correct include syntax with regenerated Prisma client
       const optician = await prisma.optician.findUnique({
         where: { id: data.opticianId },
         include: {
