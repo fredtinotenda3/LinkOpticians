@@ -24,23 +24,51 @@ const updateOpticianSchema = z.object({
   isActive: z.boolean().optional(),
 });
 
+// In your /api/opticians route, update the GET handler for single optician
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const branchId = searchParams.get("branchId");
+    const id = searchParams.get("id"); // Add this to handle single optician fetch
 
-    // Build where clause with proper typing
+    // If fetching a single optician
+    if (id) {
+      const optician = await prisma.optician.findUnique({
+        where: { id },
+        include: {
+          branch: {
+            select: {
+              id: true,
+              name: true,
+              address: true,
+              phone: true,
+              email: true,
+              operatingHours: true,
+            },
+          },
+        },
+      });
+
+      if (!optician) {
+        return NextResponse.json(
+          { error: "Optician not found" },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json(optician);
+    }
+
+    // Rest of your existing code for multiple opticians...
     const whereClause: {
       isActive?: boolean;
       branchId?: string;
     } = {};
 
-    // Only filter by active status if not specified otherwise
     if (!searchParams.has("includeInactive")) {
       whereClause.isActive = true;
     }
 
-    // Filter by branch if provided
     if (branchId) {
       whereClause.branchId = branchId;
     }

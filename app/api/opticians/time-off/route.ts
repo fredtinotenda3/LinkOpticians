@@ -1,54 +1,29 @@
+// In your /api/opticians/time-off route
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
-// Validation schemas
+// Updated validation schemas to handle datetime-local format
 const timeOffSchema = z.object({
   opticianId: z.string().cuid("Invalid optician ID"),
-  startDate: z.string().datetime("Invalid start date"),
-  endDate: z.string().datetime("Invalid end date"),
+  startDate: z.string().min(1, "Start date is required"),
+  endDate: z.string().min(1, "End date is required"),
   reason: z.string().optional(),
   isAllDay: z.boolean().default(true),
 });
 
 const updateTimeOffSchema = z.object({
-  startDate: z.string().datetime("Invalid start date").optional(),
-  endDate: z.string().datetime("Invalid end date").optional(),
+  startDate: z.string().min(1, "Start date is required").optional(),
+  endDate: z.string().min(1, "End date is required").optional(),
   reason: z.string().optional(),
   isAllDay: z.boolean().optional(),
 });
 
-// Interface for appointment in conflicting appointments
-interface ConflictingAppointment {
-  id: string;
-  scheduledAt: Date;
-  patientName: string;
-  phone: string;
-}
-
-// Interface for Prisma appointment result
-interface AppointmentResult {
-  id: string;
-  scheduledAt: Date;
-  patientName: string;
-  phone: string;
-}
-
-// Interface for time off where clause
-interface TimeOffWhereClause {
-  opticianId: string;
-  OR?: Array<
-    | {
-        startDate: { lte: Date };
-        endDate: { gte: Date };
-      }
-    | {
-        startDate: { gte: Date; lte: Date };
-      }
-    | {
-        endDate: { gte: Date; lte: Date };
-      }
-  >;
+// Helper function to convert datetime-local string to Date object
+function parseDateTimeLocal(dateTimeString: string): Date {
+  // datetime-local format: "YYYY-MM-DDTHH:MM"
+  // Convert to ISO format that JavaScript Date can parse
+  return new Date(dateTimeString + ":00.000Z");
 }
 
 export async function GET(request: NextRequest) {
@@ -78,20 +53,17 @@ export async function GET(request: NextRequest) {
     }
 
     // Build where clause
-    const whereClause: TimeOffWhereClause = { opticianId };
+    const whereClause: any = { opticianId };
 
     if (startDate && endDate) {
       whereClause.OR = [
-        // Time off that overlaps with the date range
         {
           startDate: { lte: new Date(endDate) },
           endDate: { gte: new Date(startDate) },
         },
-        // Time off that starts within the date range
         {
           startDate: { gte: new Date(startDate), lte: new Date(endDate) },
         },
-        // Time off that ends within the date range
         {
           endDate: { gte: new Date(startDate), lte: new Date(endDate) },
         },
@@ -117,8 +89,11 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
+    console.log("Time-off POST request body:", body);
+
     const validationResult = timeOffSchema.safeParse(body);
     if (!validationResult.success) {
+      console.log("Validation errors:", validationResult.error.issues);
       return NextResponse.json(
         {
           error: "Invalid data",
@@ -142,10 +117,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate dates
-    const startDate = new Date(data.startDate);
-    const endDate = new Date(data.endDate);
+    // Parse dates from datetime-local format
+    const startDate = parseDateTimeLocal(data.startDate);
+    const endDate = parseDateTimeLocal(data.endDate);
 
+    console.log("Parsed dates:", { startDate, endDate });
+
+    // Validate dates
     if (endDate < startDate) {
       return NextResponse.json(
         { error: "End date cannot be before start date" },
@@ -158,17 +136,14 @@ export async function POST(request: NextRequest) {
       where: {
         opticianId: data.opticianId,
         OR: [
-          // New time off starts during existing time off
           {
             startDate: { lte: startDate },
             endDate: { gte: startDate },
           },
-          // New time off ends during existing time off
           {
             startDate: { lte: endDate },
             endDate: { gte: endDate },
           },
-          // New time off completely contains existing time off
           {
             startDate: { gte: startDate },
             endDate: { lte: endDate },
@@ -191,7 +166,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for conflicting appointments - FIXED: Remove patient include
+    // Check for conflicting appointments
     const conflictingAppointments = await prisma.appointment.findMany({
       where: {
         opticianId: data.opticianId,
@@ -203,21 +178,18 @@ export async function POST(request: NextRequest) {
           in: ["pending", "confirmed"],
         },
       },
-      // REMOVED: patient include since patient data is directly on appointment
     });
 
     if (conflictingAppointments.length > 0) {
       return NextResponse.json(
         {
           error: "Cannot schedule time off due to conflicting appointments",
-          conflictingAppointments: conflictingAppointments.map(
-            (apt: AppointmentResult) => ({
-              id: apt.id,
-              scheduledAt: apt.scheduledAt,
-              patientName: apt.patientName, // Directly from appointment
-              phone: apt.phone, // Directly from appointment
-            })
-          ),
+          conflictingAppointments: conflictingAppointments.map((apt) => ({
+            id: apt.id,
+            scheduledAt: apt.scheduledAt,
+            patientName: apt.patientName,
+            phone: apt.phone,
+          })),
         },
         { status: 409 }
       );
@@ -285,13 +257,15 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Validate dates if provided
+    // Parse dates if provided
     let startDate = existingTimeOff.startDate;
     let endDate = existingTimeOff.endDate;
 
     if (data.startDate || data.endDate) {
-      startDate = data.startDate ? new Date(data.startDate) : startDate;
-      endDate = data.endDate ? new Date(data.endDate) : endDate;
+      startDate = data.startDate
+        ? parseDateTimeLocal(data.startDate)
+        : startDate;
+      endDate = data.endDate ? parseDateTimeLocal(data.endDate) : endDate;
 
       if (endDate < startDate) {
         return NextResponse.json(
@@ -339,7 +313,7 @@ export async function PUT(request: NextRequest) {
       }
     }
 
-    // Check for conflicting appointments if dates changed - FIXED: Remove patient include
+    // Check for conflicting appointments if dates changed
     if ((data.startDate || data.endDate) && existingTimeOff.opticianId) {
       const conflictingAppointments = await prisma.appointment.findMany({
         where: {
@@ -352,20 +326,17 @@ export async function PUT(request: NextRequest) {
             in: ["pending", "confirmed"],
           },
         },
-        // REMOVED: patient include since patient data is directly on appointment
       });
 
       if (conflictingAppointments.length > 0) {
         return NextResponse.json(
           {
             error: "Cannot update time off due to conflicting appointments",
-            conflictingAppointments: conflictingAppointments.map(
-              (apt: AppointmentResult) => ({
-                id: apt.id,
-                scheduledAt: apt.scheduledAt,
-                patientName: apt.patientName, // Directly from appointment
-              })
-            ),
+            conflictingAppointments: conflictingAppointments.map((apt) => ({
+              id: apt.id,
+              scheduledAt: apt.scheduledAt,
+              patientName: apt.patientName,
+            })),
           },
           { status: 409 }
         );
@@ -376,8 +347,10 @@ export async function PUT(request: NextRequest) {
       where: { id },
       data: {
         ...data,
-        startDate: data.startDate ? new Date(data.startDate) : undefined,
-        endDate: data.endDate ? new Date(data.endDate) : undefined,
+        startDate: data.startDate
+          ? parseDateTimeLocal(data.startDate)
+          : undefined,
+        endDate: data.endDate ? parseDateTimeLocal(data.endDate) : undefined,
       },
     });
 

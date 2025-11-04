@@ -3,26 +3,34 @@ import { appointmentService } from "@/lib/services/appointment-service";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { sendSMS } from "@/lib/twilio";
+import { AppointmentCreateData, AppointmentWithRelations } from "@/types";
 
 const createAppointmentSchema = z.object({
   patientName: z.string().min(2, "Name must be at least 2 characters"),
   phone: z.string().min(10, "Phone number must be at least 10 characters"),
   email: z.string().email().optional().or(z.literal("")),
-  serviceId: z.string().cuid(),
-  branchId: z.string().cuid(),
-  opticianId: z.string().cuid().optional().or(z.literal("")), // Add opticianId to schema
-  scheduledAt: z.string().datetime(),
+  serviceId: z.string().cuid("Invalid service ID"),
+  branchId: z.string().cuid("Invalid branch ID"),
+  opticianId: z
+    .string()
+    .cuid("Invalid optician ID")
+    .optional()
+    .or(z.literal("")),
+  scheduledAt: z.string().datetime("Invalid date time"),
   notes: z.string().optional(),
 });
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json();
 
     const validationResult = createAppointmentSchema.safeParse(body);
     if (!validationResult.success) {
       return NextResponse.json(
-        { error: "Invalid data", details: validationResult.error.issues },
+        {
+          error: "Invalid data",
+          details: validationResult.error.issues,
+        },
         { status: 400 }
       );
     }
@@ -30,7 +38,7 @@ export async function POST(request: NextRequest) {
     const { data } = validationResult;
 
     // Prepare appointment data including opticianId if provided
-    const appointmentData = {
+    const appointmentData: AppointmentCreateData = {
       ...data,
       scheduledAt: new Date(data.scheduledAt),
       opticianId: data.opticianId || undefined, // Convert empty string to undefined
@@ -92,7 +100,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const { searchParams } = new URL(request.url);
     const startDate = searchParams.get("startDate");

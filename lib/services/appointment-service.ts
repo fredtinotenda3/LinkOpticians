@@ -8,6 +8,7 @@ import {
   AvailabilityCheckParams,
   TimeSlot,
   DayAvailability,
+  AppointmentUpdateData,
 } from "@/types";
 
 // Interface for time off where clause
@@ -20,6 +21,7 @@ interface TimeOffWhereClause {
 }
 
 export const appointmentService = {
+  // FIXED: Correct signature for createAppointment
   async createAppointment(
     data: AppointmentCreateData
   ): Promise<ServiceResult<AppointmentWithRelations>> {
@@ -90,6 +92,163 @@ export const appointmentService = {
         success: false,
         error: "Failed to create appointment",
       };
+    }
+  },
+
+  // ADDED: Missing updateAppointment method
+  async updateAppointment(
+    appointmentId: string,
+    updateData: AppointmentUpdateData
+  ): Promise<ServiceResult<AppointmentWithRelations>> {
+    try {
+      // Get current appointment
+      const currentAppointment = await prisma.appointment.findUnique({
+        where: { id: appointmentId },
+        include: {
+          service: true,
+          branch: true,
+          optician: true,
+        },
+      });
+
+      if (!currentAppointment) {
+        return { success: false, error: "Appointment not found" };
+      }
+
+      // If date/time, optician, or branch is being changed, check availability
+      if (
+        updateData.scheduledAt ||
+        updateData.opticianId !== undefined ||
+        updateData.branchId
+      ) {
+        const scheduledAt =
+          updateData.scheduledAt || currentAppointment.scheduledAt;
+        const opticianId =
+          updateData.opticianId !== undefined
+            ? updateData.opticianId
+            : currentAppointment.opticianId;
+        const branchId = updateData.branchId || currentAppointment.branchId;
+        const serviceId = updateData.serviceId || currentAppointment.serviceId;
+
+        // Check availability for the new time slot (excluding current appointment)
+        const isAvailable = await this.isTimeSlotAvailable(
+          scheduledAt,
+          serviceId,
+          branchId,
+          opticianId,
+          appointmentId // exclude current appointment
+        );
+
+        if (!isAvailable) {
+          return {
+            success: false,
+            error: "The selected time slot is no longer available",
+          };
+        }
+      }
+
+      // Update the appointment
+      const updatedAppointment = await prisma.appointment.update({
+        where: { id: appointmentId },
+        data: {
+          ...updateData,
+          // Handle opticianId properly - convert empty string to null
+          opticianId:
+            updateData.opticianId === "" ? null : updateData.opticianId,
+        },
+        include: {
+          service: true,
+          branch: true,
+          optician: {
+            include: {
+              branch: true,
+            },
+          },
+        },
+      });
+
+      return {
+        success: true,
+        data: updatedAppointment as AppointmentWithRelations,
+      };
+    } catch (error) {
+      console.error("Error updating appointment:", error);
+      return {
+        success: false,
+        error: "Failed to update appointment",
+      };
+    }
+  },
+
+  // ADDED: Helper method for availability checking during updates
+  async isTimeSlotAvailable(
+    scheduledAt: Date,
+    serviceId: string,
+    branchId: string,
+    opticianId: string | null | undefined,
+    excludeAppointmentId?: string
+  ): Promise<boolean> {
+    try {
+      // Get service duration
+      const service = await prisma.service.findUnique({
+        where: { id: serviceId },
+      });
+
+      if (!service) {
+        return false;
+      }
+
+      const appointmentEnd = new Date(scheduledAt);
+      appointmentEnd.setMinutes(appointmentEnd.getMinutes() + service.duration);
+
+      // Build where clause for conflict checking
+      const whereClause: any = {
+        scheduledAt: {
+          lt: appointmentEnd,
+        },
+        status: {
+          in: ["pending", "confirmed"],
+        },
+        serviceId,
+        branchId,
+        id: excludeAppointmentId ? { not: excludeAppointmentId } : undefined,
+      };
+
+      // Check branch-level conflicts
+      const branchConflicts = await prisma.appointment.findFirst({
+        where: {
+          ...whereClause,
+          scheduledAt: {
+            gte: scheduledAt,
+          },
+        },
+      });
+
+      if (branchConflicts) {
+        return false;
+      }
+
+      // If optician is specified, check optician-level conflicts
+      if (opticianId) {
+        const opticianConflicts = await prisma.appointment.findFirst({
+          where: {
+            ...whereClause,
+            opticianId,
+            scheduledAt: {
+              gte: scheduledAt,
+            },
+          },
+        });
+
+        if (opticianConflicts) {
+          return false;
+        }
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Error checking time slot availability:", error);
+      return false;
     }
   },
 
