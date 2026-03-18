@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
+  <!-- Eye outline - matches your website's green-500 color -->
+  <path
+    d="M50 20C30 20 15 35 10 40C15 45 30 60 50 60C70 60 85 45 90 40C85 35 70 20 50 20Z"
+    stroke="#24ae7c"
+    stroke-width="6"
+    fill="none"
+  />
+  <!-- Iris - same green for consistency -->
+  <circle cx="50" cy="40" r="15" fill="#24ae7c" />
+  <!-- Pupil - dark color for contrast -->
+  <circle cx="50" cy="40" r="7" fill="#0B3C49" />
+</svg>
