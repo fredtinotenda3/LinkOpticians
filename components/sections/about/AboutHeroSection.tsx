@@ -43,10 +43,10 @@ export const AboutHeroSection = ({
       </div>
 
       <div className="relative mx-auto max-w-7xl px-[5%] py-24 w-full">
-        <div className="max-w-2xl space-y-7">
+        <div className="max-w-2xl mx-auto space-y-7 text-center flex flex-col items-center">
 
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-xs text-white/40">
+          <nav className="flex items-center justify-center gap-1.5 text-xs text-white/40">
             <Link href="/" className="hover:text-white/70 transition-colors duration-200 flex items-center gap-1">
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -78,12 +78,12 @@ export const AboutHeroSection = ({
           </h1>
 
           {/* Description */}
-          <p className="text-lg text-white/65 max-w-lg leading-relaxed">
+          <p className="text-lg text-white/65 max-w-lg leading-relaxed text-center mx-auto">
             {description}
           </p>
 
           {/* Stats — glassmorphism cards */}
-          <div className="flex flex-wrap gap-3 pt-2">
+          <div className="flex flex-wrap gap-3 pt-2 justify-center">
             {stats.map((stat, index) => (
               <div
                 key={index}
