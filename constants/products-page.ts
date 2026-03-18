@@ -3,70 +3,79 @@ import { PRODUCTS_DATA, PRODUCT_CATEGORIES } from "./products";
 
 export const PRODUCTS_PAGE_CONFIG = {
   hero: {
-    title: "See the world",
-    titleHighlight: "in style",
-    description: "Frames, sunglasses, and contact lenses from leading brands. Expert fitting at all locations.",
-    badge: "PREMIUM EYEWEAR • SINCE 2008",
+    // S.I. 63 s.6(2): factual, not misleading, dignified, no reference to efficiency
+    title: "Eyewear",
+    titleHighlight: "dispensing services",
+    description: "Spectacle frames, sunglasses, and contact lenses available at our registered premises. Dispensed by registered optometrists and dispensing opticians.",
+    badge: "REGISTERED OPTOMETRY PRACTICE • EST. 2008",
     categories: PRODUCT_CATEGORIES
   },
 
+  // S.I. 63 s.6: brand names are factual statements, not claims of superiority
   brands: [
     "Ray-Ban", "Oakley", "Persol", "Vogue", "Arnette", "Oliver Peoples"
   ],
 
   frames: {
     id: "frames",
-    subtitle: "COLLECTION",
-    title: "Frames for every",
-    titleHighlight: "face",
-    viewAllText: "View all frames",
+    subtitle: "SPECTACLE FRAMES",
+    // S.I. 63 s.6(2): no efficiency claims — factual description only
+    title: "Spectacle frames",
+    titleHighlight: "available",
+    viewAllText: "View frame options",
     viewAllLink: "/products/frames",
     products: PRODUCTS_DATA.filter(p => p.category === 'frames').slice(0, 4)
   },
 
   sunglasses: {
     id: "sunglasses",
-    subtitle: "PROTECTION + STYLE",
-    title: "Premium",
-    titleHighlight: "sunglasses",
+    subtitle: "PROTECTIVE EYEWEAR",
+    // S.I. 63 Second Schedule Part I s.5: dispensing optician may advise on protective eyewear
+    title: "Protective",
+    titleHighlight: "eyewear",
     products: PRODUCTS_DATA.filter(p => p.category === 'sunglasses').slice(0, 4)
   },
 
   contactLenses: {
     id: "contact-lenses",
     subtitle: "CONTACT LENSES",
-    title: "Freedom from",
-    titleHighlight: "frames",
-    description: "Daily, monthly, toric, multifocal — we carry all major brands. Professional fitting and training included.",
+    // S.I. 63 Second Schedule Part II s.12: optometrist assesses suitability and fits contact lenses
+    title: "Contact lens",
+    titleHighlight: "fitting services",
+    description: "Contact lens options available following assessment of suitability by a registered optometrist. Daily, monthly, toric, and multifocal lenses dispensed at registered premises.",
     image: "/assets/images/contact-lenses-hero.jpg",
-    imageAlt: "Contact lenses",
+    imageAlt: "Contact lenses dispensed at Link Opticians",
     products: PRODUCTS_DATA.filter(p => p.category === 'contact-lenses').slice(0, 4),
-    buttonText: "Book contact lens fitting",
+    // S.I. 63 s.7: directional information is permitted
+    buttonText: "Book contact lens assessment",
     buttonLink: "/book?service=contact-lenses"
   },
 
   lensTechnology: {
-    subtitle: "LENS TECHNOLOGY",
-    title: "More than just",
-    titleHighlight: "prescriptions",
-    description: "Advanced lens options for every lifestyle — all manufactured in our on-site laboratory.",
+    subtitle: "LENS OPTIONS",
+    // S.I. 63 s.6(2): factual description of available lens types, no efficiency claims
+    title: "Lens options",
+    titleHighlight: "available",
+    description: "Lens options manufactured at our on-site laboratory. Consultation with a registered optometrist required to determine appropriate lens type.",
     features: [
       {
         icon: "💻",
-        title: "Blue light protection",
-        description: "Reduce eye strain from screens. Ideal for office workers and students.",
+        // S.I. 63 Second Schedule Part I s.5: dispensing optician may advise on screen eyewear
+        title: "Blue light filtering lenses",
+        description: "Lenses with blue light filtering properties. Availability subject to consultation.",
         bgColor: "bg-blue-500/20"
       },
       {
         icon: "☀️",
-        title: "Photochromic",
-        description: "Lenses that darken in sunlight. One pair for indoors and out.",
+        title: "Photochromic lenses",
+        description: "Lenses that adapt to light conditions. Availability subject to consultation.",
         bgColor: "bg-amber-500/20"
       },
       {
         icon: "🔄",
-        title: "Progressive",
-        description: "Seamless distance to near vision. No more switching glasses.",
+        // S.I. 63 Second Schedule Part I s.3: dispensing optician may advise on progressive lenses
+        title: "Progressive lenses",
+        description: "Multifocal lenses for distance and near vision correction. Dispensed following prescription.",
         bgColor: "bg-green-500/20"
       }
     ]
@@ -74,40 +83,44 @@ export const PRODUCTS_PAGE_CONFIG = {
 
   accessories: {
     id: "accessories",
-    subtitle: "ACCESSORIES",
-    title: "Care for your",
-    titleHighlight: "eyewear",
+    subtitle: "EYEWEAR ACCESSORIES",
+    title: "Eyewear care",
+    titleHighlight: "accessories",
     products: PRODUCTS_DATA.filter(p => p.category === 'accessories').slice(0, 4)
   },
 
   cta: {
-    title: "Can't decide?",
-    description: "Visit any clinic to try frames in person. Our optical assistants are happy to help.",
+    // S.I. 63 s.7(b): directional information to premises is permitted
+    title: "Visit our registered premises",
+    description: "Spectacle frames and eyewear available for viewing at all clinic locations. Dispensing subject to valid prescription.",
     primaryButtonText: "Find a clinic",
     primaryButtonHref: "/locations",
-    secondaryButtonText: "Book an appointment",
+    secondaryButtonText: "Book appointment",
     secondaryButtonHref: "/book",
     bgGradient: "from-green-600 to-green-700"
   },
 
   disclaimer: {
-    text: "All products require a valid prescription. Consultation with our optometrists recommended for proper fitting. Most medical aids accepted."
+    // S.I. 63 s.6(2) and Second Schedule: factual compliance notice
+    text: "All optical appliances are dispensed subject to a valid prescription issued by a registered optometrist or ophthalmologist. The sale of optical appliances to correct a defect of sight may only be effected by or under the supervision of a registered dispensing optician. Medical aid claims processed according to individual plan coverage. Link Opticians is registered with the Pharmacists Council of Zimbabwe."
   }
 };
 
 // Product detail page config
 export const PRODUCT_DETAIL_CONFIG = {
   consultation: {
-    title: "Consultation recommended",
-    description: "Professional fitting ensures proper comfort and vision. Our optometrists are here to help."
+    // S.I. 63 s.18 and Second Schedule: duties of registered members
+    title: "Registered optometrist consultation required",
+    description: "Optical appliances are dispensed following assessment by a registered optometrist or dispensing optician. A valid prescription is required for corrective lenses."
   },
   related: {
-    subtitle: "YOU MAY ALSO LIKE",
-    title: "Related products"
+    subtitle: "ALSO AVAILABLE",
+    title: "Related items"
   },
   cta: {
-    title: "Ready to find your fit?",
-    description: "Visit any clinic to try our full collection. No appointment needed for browsing.",
+    // S.I. 63 s.7(b): directional signs to premises are permitted
+    title: "Visit our registered premises",
+    description: "View our full range at any clinic location. Dispensing subject to valid prescription and registered practitioner assessment.",
     primaryButtonText: "Find a clinic",
     primaryButtonHref: "/locations",
     secondaryButtonText: "Book appointment",
