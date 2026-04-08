@@ -19,50 +19,55 @@ export const ClinicsGridSection = ({
 }: ClinicsGridSectionProps) => {
 
   const getBadge = (id: string) => {
-    if (id === "robinson-house") return { text: "Main Clinic", color: "" };
-    if (id === "kensington")     return { text: "Suburban",   color: "" };
-    if (id === "honey-dew")      return { text: "Mall Location", color: "" };
+    if (id === "robinson-house") return { text: "Main Clinic", color: "sky" };
+    if (id === "kensington")     return { text: "Suburban",   color: "sky" };
+    if (id === "honey-dew")      return { text: "Premier Mall", color: "sky" };
     return undefined;
   };
 
   return (
-    <section className="relative py-28 bg-dark-300 overflow-hidden" id="harare">
+    <section className="relative py-32 bg-[#000d1a] overflow-hidden" id="harare">
 
-      {/* Background glow */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full bg-green-500/4 blur-[140px] pointer-events-none" />
+      {/* Deep Ocean Ambient Glow */}
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] rounded-full bg-sky-500/5 blur-[160px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-[5%]">
 
-        {/* ── Section header ───────────────────────────────────────────── */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
-          <div className="space-y-3 max-w-xl">
-            <div className="inline-flex items-center gap-2">
-              <span className="w-6 h-px bg-green-500" />
-              <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">
+        {/* ── Section Header ───────────────────────────────────────────── */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-20">
+          <div className="space-y-6 max-w-2xl">
+            <div className="flex items-center gap-3">
+              <span className="w-10 h-[2px] bg-sky-500" />
+              <span className="text-sky-500 text-[10px] font-black tracking-[0.4em] uppercase">
                 {subtitle}
               </span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+            
+            <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter italic uppercase">
               {title}
               <br />
-              <span className="text-green-400">{titleHighlight}</span>
+              <span className="text-sky-500 not-italic">{titleHighlight}</span>
             </h2>
-            <p className="text-white/50 text-base leading-relaxed">
+            
+            <p className="text-white/40 text-lg md:text-xl font-medium italic max-w-xl">
               {description}
             </p>
           </div>
 
-          {/* Clinic count pill */}
-          <div className="shrink-0 inline-flex items-center gap-2 px-4 py-2.5 bg-dark-400 border border-dark-500 rounded-full">
-            <span className="size-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-white/60 text-xs font-medium">
-              {clinics.length} clinics in Harare
+          {/* Status Indicator Pill */}
+          <div className="shrink-0 inline-flex items-center gap-3 px-6 py-3 bg-white/[0.03] border border-white/10 rounded-2xl backdrop-blur-xl">
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
+              <span className="relative inline-flex size-2 rounded-full bg-sky-500" />
+            </span>
+            <span className="text-white/60 text-[11px] font-black uppercase tracking-widest">
+              {clinics.length} Premium Harare Clinics
             </span>
           </div>
         </div>
 
-        {/* ── Grid ─────────────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* ── Clinics Grid ─────────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {clinics.map((clinic) => (
             <ClinicCard
               key={clinic.id}

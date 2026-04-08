@@ -15,42 +15,34 @@ export const HOME_TESTIMONIALS: Testimonial[] = [
   {
     id: "amai-tembo",
     image: "/assets/images/testimonial-farmer.jpg",
-    quote: "I can see my grandchildren clearly now. The mobile unit came to our village and changed my life.",
+    quote: "The mobile unit came to our village in Chipinge. I can see clearly now—the care was truly professional.",
     name: "Amai Tembo",
-    location: "Chipinge rural",
+    location: "Chipinge District",
     rating: 5,
-    service: "Mobile Unit",
-    date: "2024"
-  },
-  {
-    id: "mr-dube",
-    image: "/assets/images/testimonial-teacher.jpg",
-    quote: "The school screening program caught my vision problem early. Now I can teach without headaches.",
-    name: "Mr. Dube",
-    location: "Harare",
-    rating: 5,
-    service: "School Screening",
-    date: "2024"
   },
   {
     id: "tendai-m",
-    image: "/assets/images/testimonial-business.jpg",
-    quote: "Professional service, affordable prices, and they accept my medical aid. Highly recommended.",
+    image: "/assets/images/testimonial-teacher.jpg",
+    quote: "Very professional service in Chiredzi. They accepted my medical aid immediately and the glasses were ready fast.",
     name: "Tendai M.",
-    location: "Chiredzi",
+    location: "Chiredzi Branch",
     rating: 5,
-    service: "Eye Examination",
-    date: "2024"
+  },
+  {
+    id: "mr-dube",
+    image: "/assets/images/testimonial-business.jpg",
+    quote: "Excellent clinical care at the Kensington clinic. The lead optometrist explained everything so clearly.",
+    name: "Mr. Dube",
+    location: "Kensington, Harare",
+    rating: 5,
   },
   {
     id: "sekuru-chigumba",
     image: "/assets/images/testimonial-senior.jpg",
-    quote: "After my cataract surgery consultation, I can finally read again. Thank you Link Opticians.",
+    quote: "The best eye care in Zimbabwe. The in-house lab made my specialty lenses perfectly. Highly recommended.",
     name: "Sekuru Chigumba",
-    location: "Kensington",
+    location: "Harare CBD",
     rating: 5,
-    service: "Cataract Consultation",
-    date: "2024"
   }
 ];
 

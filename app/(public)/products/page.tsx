@@ -1,4 +1,3 @@
-// app/(public)/products/page.tsx
 import {
   ProductsHeroSection,
   BrandsStripSection,
@@ -13,18 +12,20 @@ import { PRODUCTS_PAGE_CONFIG } from "@/constants/products-page";
 
 export default function ProductsPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#000d1a]">
       <ProductsHeroSection {...PRODUCTS_PAGE_CONFIG.hero} />
       <BrandsStripSection brands={PRODUCTS_PAGE_CONFIG.brands} />
       
+      {/* Frames Section with custom badge color */}
       <ProductCategorySection 
         {...PRODUCTS_PAGE_CONFIG.frames} 
-        badge={{ text: "Frame option", color: "bg-white/20" }}
+        badge={{ text: "Frame option", color: "bg-white/10" }}
       />
       
+      {/* Sunglasses Section with custom badge color */}
       <ProductCategorySection 
         {...PRODUCTS_PAGE_CONFIG.sunglasses} 
-        badge={{ text: "UV400", color: "bg-amber-500/80" }}
+        badge={{ text: "UV400", color: "bg-sky-500/20" }}
       />
       
       <ContactLensesSection {...PRODUCTS_PAGE_CONFIG.contactLenses} />

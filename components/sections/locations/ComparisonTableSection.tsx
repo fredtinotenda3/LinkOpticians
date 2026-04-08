@@ -23,36 +23,36 @@ export const ComparisonTableSection = ({
   rows,
 }: ComparisonTableSectionProps) => {
   return (
-    <section className="relative py-28 bg-dark-300 overflow-hidden">
+    <section className="relative py-32 bg-[#000d1a] overflow-hidden">
 
-      {/* Background glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-green-500/4 blur-[120px] pointer-events-none" />
+      {/* Background Deep Ocean Glow */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-sky-500/5 blur-[140px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-[5%]">
 
-        {/* ── Section header ───────────────────────────────────────────── */}
-        <div className="text-center mb-14 space-y-3">
-          <div className="inline-flex items-center justify-center gap-2">
-            <span className="w-6 h-px bg-green-500" />
-            <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">
+        {/* ── Section Header ───────────────────────────────────────────── */}
+        <div className="text-center mb-20 space-y-4">
+          <div className="inline-flex items-center justify-center gap-4">
+            <span className="w-10 h-px bg-sky-500" />
+            <span className="text-sky-500 text-[10px] font-black tracking-[0.5em] uppercase">
               {subtitle}
             </span>
-            <span className="w-6 h-px bg-green-500" />
+            <span className="w-10 h-px bg-sky-500" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+          <h2 className="text-5xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-none">
             {title}
           </h2>
         </div>
 
-        {/* ── Table — desktop ──────────────────────────────────────────── */}
-        <div className="hidden md:block rounded-2xl overflow-hidden border border-dark-500">
+        {/* ── Desktop Table ──────────────────────────────────────────── */}
+        <div className="hidden md:block rounded-[32px] overflow-hidden border border-white/5 bg-white/[0.01] backdrop-blur-sm">
 
           {/* Header row */}
-          <div className="grid grid-cols-5 bg-dark-400 border-b border-dark-500">
+          <div className="grid grid-cols-5 bg-white/[0.03] border-b border-white/5">
             {headers.map((header, i) => (
               <div
                 key={i}
-                className="px-6 py-4 text-xs font-bold text-white/50 uppercase tracking-[0.2em]"
+                className="px-8 py-6 text-[10px] font-black text-white/30 uppercase tracking-[0.25em]"
               >
                 {header}
               </div>
@@ -63,45 +63,47 @@ export const ComparisonTableSection = ({
           {rows.map((row, rowIndex) => (
             <div
               key={rowIndex}
-              className={`grid grid-cols-5 border-b border-dark-500 last:border-0 transition-colors duration-200 hover:bg-dark-400/50 ${
-                rowIndex % 2 === 0 ? "bg-dark-400" : "bg-dark-300"
+              className={`grid grid-cols-5 border-b border-white/5 last:border-0 transition-all duration-300 hover:bg-white/[0.03] group ${
+                rowIndex % 2 === 0 ? "bg-transparent" : "bg-white/[0.01]"
               }`}
             >
-              {/* Clinic name */}
-              <div className="px-6 py-5 flex items-center gap-2.5">
-                <span className="size-2 rounded-full bg-green-500 shrink-0" />
-                <span className="text-white text-sm font-semibold">{row.name}</span>
+              {/* Clinic Name */}
+              <div className="px-8 py-7 flex items-center gap-4">
+                <span className="size-2 rounded-full bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.6)] shrink-0" />
+                <span className="text-white text-sm font-black italic uppercase tracking-tight group-hover:text-sky-400 transition-colors">
+                  {row.name}
+                </span>
               </div>
 
               {/* Hours */}
-              <div className="px-6 py-5 flex items-center">
-                <span className="text-white/55 text-sm">{row.hours}</span>
+              <div className="px-8 py-7 flex items-center">
+                <span className="text-white/40 text-[11px] font-medium italic">{row.hours}</span>
               </div>
 
-              {/* Phone */}
-              <div className="px-6 py-5 flex items-center">
+              {/* WhatsApp / Phone */}
+              <div className="px-8 py-7 flex items-center">
                 <a
-                  href={`tel:${row.phone.replace(/\D/g, "")}`}
-                  className="text-green-400 hover:text-green-300 text-sm font-medium transition-colors duration-200"
+                  href={`https://wa.me/${row.phone.replace(/\D/g, "")}`}
+                  className="text-white/60 hover:text-sky-400 text-[11px] font-black uppercase tracking-widest transition-colors duration-300"
                 >
                   {row.phone}
                 </a>
               </div>
 
               {/* Parking */}
-              <div className="px-6 py-5 flex items-center">
-                <span className="text-white/55 text-sm">{row.parking}</span>
+              <div className="px-8 py-7 flex items-center">
+                <span className="text-white/40 text-[11px] font-medium italic">{row.parking}</span>
               </div>
 
-              {/* Book */}
-              <div className="px-6 py-5 flex items-center">
+              {/* Booking Action */}
+              <div className="px-8 py-7 flex items-center">
                 <Link
                   href={row.bookLink}
-                  className="group inline-flex items-center gap-1.5 bg-green-500/15 hover:bg-green-500 border border-green-500/30 hover:border-green-500 text-green-400 hover:text-white text-xs font-semibold px-4 py-2 rounded-full transition-all duration-300"
+                  className="group/btn inline-flex items-center gap-2 bg-sky-500/10 hover:bg-sky-500 border border-sky-500/20 hover:border-sky-500 text-sky-400 hover:text-white text-[9px] font-black uppercase tracking-widest px-6 py-2.5 rounded-xl transition-all duration-500"
                 >
                   Book
-                  <svg className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  <svg className="w-3.5 h-3.5 transition-transform duration-500 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
               </div>
@@ -109,39 +111,36 @@ export const ComparisonTableSection = ({
           ))}
         </div>
 
-        {/* ── Mobile cards — shown instead of table ────────────────────── */}
-        <div className="md:hidden space-y-4">
+        {/* ── Mobile Cards ────────────────────── */}
+        <div className="md:hidden space-y-6">
           {rows.map((row, i) => (
-            <div key={i} className="rounded-2xl bg-dark-400 border border-dark-500 p-5 space-y-4">
+            <div key={i} className="rounded-[24px] bg-white/[0.02] border border-white/5 p-8 space-y-6">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="size-2 rounded-full bg-green-500" />
-                  <span className="text-white font-bold text-sm">{row.name}</span>
+                <div className="flex items-center gap-3">
+                  <span className="size-2 rounded-full bg-sky-500" />
+                  <span className="text-white font-black italic uppercase tracking-tight text-lg">{row.name}</span>
                 </div>
                 <Link
                   href={row.bookLink}
-                  className="inline-flex items-center gap-1 bg-green-500 text-white text-xs font-semibold px-3.5 py-1.5 rounded-full"
+                  className="inline-flex items-center gap-2 bg-sky-500 text-white text-[9px] font-black uppercase tracking-widest px-5 py-2.5 rounded-xl"
                 >
                   Book
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
                 </Link>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <p className="text-white/35 text-[10px] font-semibold uppercase tracking-wider mb-0.5">Hours</p>
-                  <p className="text-white/70 text-xs">{row.hours}</p>
+                  <p className="text-white/20 text-[9px] font-black uppercase tracking-widest mb-1.5">Availability</p>
+                  <p className="text-white/60 text-xs font-medium italic leading-relaxed">{row.hours}</p>
                 </div>
                 <div>
-                  <p className="text-white/35 text-[10px] font-semibold uppercase tracking-wider mb-0.5">Phone</p>
-                  <a href={`tel:${row.phone.replace(/\D/g, "")}`} className="text-green-400 text-xs font-medium">
+                  <p className="text-white/20 text-[9px] font-black uppercase tracking-widest mb-1.5">Contact</p>
+                  <a href={`https://wa.me/${row.phone.replace(/\D/g, "")}`} className="text-sky-400 text-xs font-black uppercase tracking-tight">
                     {row.phone}
                   </a>
                 </div>
-                <div className="col-span-2">
-                  <p className="text-white/35 text-[10px] font-semibold uppercase tracking-wider mb-0.5">Parking</p>
-                  <p className="text-white/70 text-xs">{row.parking}</p>
+                <div className="col-span-2 pt-2">
+                  <p className="text-white/20 text-[9px] font-black uppercase tracking-widest mb-1.5">Logistics</p>
+                  <p className="text-white/60 text-xs font-medium italic">{row.parking}</p>
                 </div>
               </div>
             </div>

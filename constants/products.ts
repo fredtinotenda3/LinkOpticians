@@ -1,7 +1,9 @@
-// constants/products.ts - 
+// constants/products.ts
+
 export interface Product {
   id: string;
   name: string;
+  brand: string;
   category: 'frames' | 'sunglasses' | 'contact-lenses' | 'accessories' | 'lenses';
   type: string;
   description: string;
@@ -12,202 +14,144 @@ export interface Product {
   availability: string[];
 }
 
+/**
+ * PRODUCTS_DATA
+ * A flat array to support .filter() operations in the page configurations.
+ * Aligned with S.I. 63 of 2024 compliance for factual representations.
+ */
 export const PRODUCTS_DATA: Product[] = [
-  // FRAMES
+  // ─── LUXURY SUNGLASSES ──────────────────────────────────────────
   {
-    id: "frame-basic",
-    name: "Basic Frames",
-    category: "frames",
-    type: "Frame option",
-    description: "Frame options available",
-    features: ["Frame option"],
-    materials: ["Frame materials available"],
-    image: "/assets/images/products/frame-basic.png",
-    tags: ["frames"],
-    availability: ["Available"]
+    id: "sunglass-gucci",
+    name: "Gucci GG1220S",
+    brand: "Gucci",
+    category: "sunglasses",
+    type: "Luxury Eyewear",
+    description: "Iconic aviator silhouette with gold-tone finish and signature web detailing.",
+    features: ["UV400 Protection", "Designer Case Included", "Italian Craftsmanship"],
+    image: "/assets/images/products/gucci-aviator.jpg",
+    tags: ["luxury", "sunglasses", "gucci"],
+    availability: ["Harare", "Honeydew", "Chiredzi"]
   },
   {
-    id: "frame-design",
-    name: "Frame Options",
-    category: "frames",
-    type: "Frame option",
-    description: "Frame options available",
-    features: ["Frame option"],
-    materials: ["Frame materials available"],
-    image: "/assets/images/products/frame-designer.png",
-    tags: ["frames"],
-    availability: ["Available"]
+    id: "sunglass-armani",
+    name: "Giorgio Armani AR8135",
+    brand: "Giorgio Armani",
+    category: "sunglasses",
+    type: "Luxury Eyewear",
+    description: "Sophisticated rectangular frames for the modern professional.",
+    features: ["Polarized Lenses", "Hand-finished Acetate"],
+    image: "/assets/images/products/armani-rect.jpg",
+    tags: ["luxury", "sunglasses", "armani"],
+    availability: ["Harare", "Kensington"]
   },
   {
-    id: "frame-special",
-    name: "Specialty Frames",
-    category: "frames",
-    type: "Frame option",
-    description: "Frame options available",
-    features: ["Frame option"],
-    materials: ["Frame materials available"],
-    image: "/assets/images/products/frame-special.png",
-    tags: ["frames"],
-    availability: ["Available"]
+    id: "sunglass-police",
+    name: "Police Origins Lite",
+    brand: "Police",
+    category: "sunglasses",
+    type: "Active Lifestyle",
+    description: "Urban design featuring polarized lenses and a lightweight metal chassis.",
+    features: ["Impact Resistance", "Lightweight Alloy", "Polarized Tech"],
+    image: "/assets/images/products/police-lite.jpg",
+    tags: ["active", "sunglasses", "police"],
+    availability: ["All Branches"]
   },
 
-  // SUNGLASSES
+  // ─── SPECTACLE FRAMES ───────────────────────────────────────────
   {
-    id: "sunglass-basic",
-    name: "Sunglasses",
-    category: "sunglasses",
-    type: "Sunglass option",
-    description: "Sunglass options available",
-    features: ["Sunglass option"],
-    materials: ["Sunglass materials available"],
-    image: "/assets/images/products/sunglass-basic.png",
-    tags: ["sunglasses"],
-    availability: ["Available"]
+    id: "frame-felicia",
+    name: "Felicia Signature Series",
+    brand: "Felicia",
+    category: "frames",
+    type: "Premium Frames",
+    description: "Elegant feminine designs with crystal embellishments and rose gold accents.",
+    features: ["Hypoallergenic", "Adjustable Nose Pads"],
+    image: "/assets/images/products/felicia-frame.jpg",
+    tags: ["frames", "felicia"],
+    availability: ["All Branches"]
   },
   {
-    id: "sunglass-design",
-    name: "Sunglass Options",
-    category: "sunglasses",
-    type: "Sunglass option",
-    description: "Sunglass options available",
-    features: ["Sunglass option"],
-    materials: ["Sunglass materials available"],
-    image: "/assets/images/products/sunglass-designer.png",
-    tags: ["sunglasses"],
-    availability: ["Available"]
-  },
-  {
-    id: "sunglass-prescription",
-    name: "Prescription Sunglasses",
-    category: "sunglasses",
-    type: "Sunglass option",
-    description: "Sunglass options available",
-    features: ["Sunglass option"],
-    materials: ["Sunglass materials available"],
-    image: "/assets/images/products/sunglass-prescription.png",
-    tags: ["sunglasses"],
-    availability: ["Available"]
+    id: "frame-vision-pro",
+    name: "Vision Pro Titanium",
+    brand: "Vision Plus",
+    category: "frames",
+    type: "Optical Frames",
+    description: "Minimalist rimless design constructed from aerospace-grade titanium.",
+    features: ["Memory Metal", "Ultra-Lightweight", "Corrosion Resistant"],
+    image: "/assets/images/products/titanium-frame.jpg",
+    tags: ["frames", "titanium", "vision-plus"],
+    availability: ["Harare", "Kensington", "Chiredzi"]
   },
 
-  // CONTACT LENSES
+  // ─── CLINICAL LENSES (VISION PLUS TECH) ─────────────────────────
+  {
+    id: "lens-digital-hd",
+    name: "Vision Plus HD Digital",
+    brand: "Vision Plus",
+    category: "lenses",
+    type: "Clinical Tech",
+    description: "High-definition digital surfacing for maximized peripheral clarity.",
+    features: ["Blue Light Filter", "Anti-Reflective", "Easy-Clean Coating"],
+    image: "/assets/images/products/lens-tech-1.png",
+    tags: ["lenses", "vision-plus", "clinical"],
+    availability: ["Manufactured in Link Lab"]
+  },
+  {
+    id: "lens-photochromic",
+    name: "Adaptive Light Lenses",
+    brand: "Link Opticians",
+    category: "lenses",
+    type: "Photochromic Tech",
+    description: "Lenses that intelligently adapt to changing UV levels, darkening outdoors.",
+    features: ["Rapid Transition", "Indoor Clarity", "UV Protection"],
+    image: "/assets/images/products/lens-tech-2.png",
+    tags: ["lenses", "transition", "clinical"],
+    availability: ["All Branches"]
+  },
+
+  // ─── CONTACT LENSES ─────────────────────────────────────────────
   {
     id: "contact-daily",
-    name: "Contact Lens Options",
+    name: "Vision-Link Daily Disposables",
+    brand: "Vision Plus",
     category: "contact-lenses",
-    type: "Contact lens option",
-    description: "Contact lens options available",
-    features: ["Contact lens option"],
+    type: "Daily Disposable",
+    description: "High-moisture content daily lenses for all-day comfort and oxygen breathability.",
+    features: ["UV Blocker", "Hydra-Balance Tech", "Soft Hydrogel"],
     image: "/assets/images/products/contact-daily.png",
-    tags: ["contact lenses"],
-    availability: ["Available"]
-  },
-  {
-    id: "contact-monthly",
-    name: "Contact Lens Options",
-    category: "contact-lenses",
-    type: "Contact lens option",
-    description: "Contact lens options available",
-    features: ["Contact lens option"],
-    image: "/assets/images/products/contact-monthly.png",
-    tags: ["contact lenses"],
-    availability: ["Available"]
-  },
-  {
-    id: "contact-special",
-    name: "Specialty Contact Lenses",
-    category: "contact-lenses",
-    type: "Contact lens option",
-    description: "Contact lens options available",
-    features: ["Contact lens option"],
-    image: "/assets/images/products/contact-special.png",
-    tags: ["contact lenses"],
-    availability: ["Available"]
+    tags: ["contacts", "daily", "clinical"],
+    availability: ["Following Optometrist Assessment"]
   },
 
-  // LENSES
+  // ─── ACCESSORIES ────────────────────────────────────────────────
   {
-    id: "lens-single",
-    name: "Lens Options",
-    category: "lenses",
-    type: "Lens option",
-    description: "Lens options available",
-    features: ["Lens option"],
-    image: "/assets/images/products/lens-single.png",
-    tags: ["lenses"],
-    availability: ["Manufactured"]
-  },
-  {
-    id: "lens-progressive",
-    name: "Lens Options",
-    category: "lenses",
-    type: "Lens option",
-    description: "Lens options available",
-    features: ["Lens option"],
-    image: "/assets/images/products/lens-progressive.png",
-    tags: ["lenses"],
-    availability: ["Manufactured"]
-  },
-  {
-    id: "lens-addons",
-    name: "Lens Options",
-    category: "lenses",
-    type: "Lens option",
-    description: "Lens options available",
-    features: ["Lens option"],
-    image: "/assets/images/products/lens-addons.png",
-    tags: ["lenses"],
-    availability: ["Manufactured"]
-  },
-
-  // ACCESSORIES
-  {
-    id: "accessory-solutions",
-    name: "Accessory Options",
+    id: "acc-premium-kit",
+    name: "Precision Lens Care Kit",
+    brand: "Link Opticians",
     category: "accessories",
-    type: "Accessory",
-    description: "Accessory options available",
-    features: ["Accessory option"],
-    image: "/assets/images/products/accessory-solutions.png",
-    tags: ["accessories"],
-    availability: ["Available"]
-  },
-  {
-    id: "accessory-cases",
-    name: "Accessory Options",
-    category: "accessories",
-    type: "Accessory",
-    description: "Accessory options available",
-    features: ["Accessory option"],
-    image: "/assets/images/products/accessory-cases.png",
-    tags: ["accessories"],
-    availability: ["Available"]
-  },
-  {
-    id: "accessory-readers",
-    name: "Accessory Options",
-    category: "accessories",
-    type: "Accessory",
-    description: "Accessory options available",
-    features: ["Accessory option"],
-    image: "/assets/images/products/accessory-readers.png",
-    tags: ["accessories"],
-    availability: ["Available"]
+    type: "Maintenance",
+    description: "Comprehensive care kit for all high-index and anti-reflective lenses.",
+    features: ["Microfiber Cloth", "pH-Balanced Spray", "Travel Case"],
+    image: "/assets/images/products/care-kit.png",
+    tags: ["accessories", "care-kit"],
+    availability: ["In-Store Only"]
   }
 ];
 
 export const PRODUCT_CATEGORIES = [
   { id: "all", label: "All Products", icon: "📦" },
-  { id: "frames", label: "Frames", icon: "👓" },
+  { id: "luxury", label: "Luxury Collection", icon: "💎" },
+  { id: "frames", label: "Optical Frames", icon: "👓" },
   { id: "sunglasses", label: "Sunglasses", icon: "🕶️" },
-  { id: "contact-lenses", label: "Contact Lenses", icon: "🧿" },
-  { id: "lenses", label: "Lenses", icon: "🔍" },
-  { id: "accessories", label: "Accessories", icon: "🧰" }
+  { id: "lenses", label: "Lens Tech", icon: "🔍" },
+  { id: "contact-lenses", label: "Contact Lenses", icon: "👁️" }
 ];
 
 export const PRODUCT_FEATURES = [
-  "Lens manufacturing services available",
-  "Medical aid coverage information available",
-  "Payment options available",
-  "Frame repair services available",
-  "Warranty information available"
+  "In-House Lens Manufacturing (Vision Plus Lab)",
+  "Full Medical Aid Support (CIMAS, PSMAS, etc.)",
+  "Interest-Free Payment Plans (Harare & Honeydew)",
+  "Professional Eye Examinations on Premises",
+  "Authorized Retailer for Global Luxury Brands"
 ];

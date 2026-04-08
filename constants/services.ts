@@ -163,36 +163,36 @@ export interface ServiceItem {
 
 export const HOME_SERVICES: ServiceItem[] = [
   {
-    id: "eye-exams",
+    id: "comprehensive-exams",
     image: "/assets/images/service-exam.jpg",
-    title: "Eye exams",
-    description: "Comprehensive vision testing",
+    title: "Clinical Examinations",
+    description: "Advanced diagnostic testing and ocular health assessments.",
     href: "/services",
-    category: "exams"
-  },
-  {
-    id: "glasses",
-    image: "/assets/images/service-glasses.jpg",
-    title: "Glasses",
-    description: "Wide selection of frames",
-    href: "/products",
-    category: "products"
-  },
-  {
-    id: "contact-lenses",
-    image: "/assets/images/service-contact.jpg",
-    title: "Contact lenses",
-    description: "Daily, monthly, and specialty",
-    href: "/services",
-    category: "contacts"
+    category: "Diagnostics"
   },
   {
     id: "on-site-lab",
     image: "/assets/images/service-lab.jpg",
-    title: "On-site lab",
-    description: "Same-day lens manufacturing",
+    title: "Precision In-House Lab",
+    description: "State-of-the-art lens surfacing and same-day fitting services.",
     href: "/services",
-    category: "lab"
+    category: "Manufacturing"
+  },
+  {
+    id: "glasses",
+    image: "/assets/images/service-glasses.jpg",
+    title: "Premium Eyewear",
+    description: "Curated frames and high-index therapeutic lens options.",
+    href: "/products",
+    category: "Products"
+  },
+  {
+    id: "contact-lenses",
+    image: "/assets/images/service-contact.jpg",
+    title: "Specialty Contact Lenses",
+    description: "Scleral, multifocal, and therapeutic fitting solutions.",
+    href: "/services",
+    category: "Specialized"
   }
 ];
 

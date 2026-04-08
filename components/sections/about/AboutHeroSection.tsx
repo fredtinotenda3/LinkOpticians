@@ -25,83 +25,82 @@ export const AboutHeroSection = ({
   stats,
 }: AboutHeroSectionProps) => {
   return (
-    <section className="relative min-h-[70vh] w-full overflow-hidden flex items-center">
-
-      {/* Background */}
+    <section className="relative min-h-[85vh] w-full overflow-hidden flex items-center">
+      
+      {/* Background - Layered for depth */}
       <div className="absolute inset-0">
         <Image
           src="/assets/images/about-hero.jpg"
-          alt="Link Opticians founding team"
+          alt="Link Opticians History"
           fill
-          className="object-cover"
+          className="object-cover scale-105 animate-subtle-zoom"
           priority
           quality={95}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-dark-300/60 via-transparent to-transparent" />
-        <div className="absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_50%,rgba(0,0,0,0.4)_100%)]" />
+        {/* Deep Ocean Blue Overlay: Heavy on the left for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#000B18] via-[#000B18]/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#000B18] via-transparent to-transparent opacity-80" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-[5%] py-24 w-full">
-        <div className="max-w-2xl mx-auto space-y-7 text-center flex flex-col items-center">
-
+      <div className="relative mx-auto max-w-7xl px-[5%] py-20 w-full">
+        <div className="max-w-3xl space-y-8 animate-fade-in-up">
+          
           {/* Breadcrumb */}
-          <nav className="flex items-center justify-center gap-1.5 text-xs text-white/40">
-            <Link href="/" className="hover:text-white/70 transition-colors duration-200 flex items-center gap-1">
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              Home
-            </Link>
-            <svg className="w-3 h-3 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-            <span className="text-white/70">About</span>
+          <nav className="flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] uppercase text-white/30">
+            <Link href="/" className="hover:text-blue-400 transition-colors">Home</Link>
+            <span className="opacity-50">/</span>
+            <span className="text-blue-500">About Our Mission</span>
           </nav>
 
-          {/* Badge */}
-          <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/20">
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex size-2 rounded-full bg-green-500" />
-            </span>
-            <span className="text-sm font-bold tracking-wider text-white">{badge}</span>
-            <span className="text-white/30 text-xs">·</span>
-            <span className="text-xs text-white/60">{badgeSubtext}</span>
+          {/* Established Badge */}
+          <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10 shadow-2xl">
+            <div className="relative flex size-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75" />
+              <span className="relative inline-flex size-2 rounded-full bg-blue-500" />
+            </div>
+            <span className="text-[10px] font-black tracking-[0.2em] text-white uppercase">{badge}</span>
+            <div className="w-px h-3 bg-white/20" />
+            <span className="text-[10px] font-medium text-white/50 uppercase tracking-wider">{badgeSubtext}</span>
           </div>
 
           {/* Headline */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-tight">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[0.85] tracking-tighter">
             {title}
-            <br />
-            <span className="text-green-400">{titleHighlight}</span>
+            <span className="block text-blue-500 mt-2">{titleHighlight}</span>
           </h1>
 
           {/* Description */}
-          <p className="text-lg text-white/65 max-w-lg leading-relaxed text-center mx-auto">
+          <p className="text-lg md:text-xl text-white/50 max-w-xl leading-relaxed font-light">
             {description}
           </p>
 
-          {/* Stats — glassmorphism cards */}
-          <div className="flex flex-wrap gap-3 pt-2 justify-center">
+          {/* Stats Grid - High contrast glassmorphism */}
+          <div className="flex flex-wrap gap-4 pt-6">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="px-5 py-3 bg-white/8 backdrop-blur-sm border border-white/12 rounded-2xl"
+                className="min-w-[140px] p-6 bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-[2rem] hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-500 group"
               >
-                <p className="text-2xl font-bold text-white leading-none">{stat.value}</p>
-                <p className="text-white/45 text-xs mt-0.5">{stat.label}</p>
+                <p className="text-3xl font-bold text-white group-hover:text-blue-400 transition-colors duration-500">
+                  {stat.value}
+                </p>
+                <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mt-2">
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>
-
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-white/30 text-[10px] tracking-[0.2em] uppercase">
-        <span>Scroll</span>
-        <div className="w-px h-10 bg-gradient-to-b from-white/30 to-transparent animate-scroll-line" />
+      {/* Modern Scroll Indicator */}
+      <div className="absolute bottom-12 left-[5%] hidden md:flex items-center gap-6">
+        <div className="flex flex-col items-center gap-2">
+            <div className="w-[1px] h-12 bg-gradient-to-b from-blue-500 to-transparent animate-pulse" />
+        </div>
+        <span className="text-white/20 text-[9px] font-bold tracking-[0.4em] uppercase vertical-text">
+            Explore 16 Years
+        </span>
       </div>
 
     </section>

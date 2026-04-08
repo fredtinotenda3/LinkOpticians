@@ -35,7 +35,7 @@ export const BookingFAQSection = ({
         {parts[0]}
         <a
           href={`tel:${phone.replace(/\D/g, "")}`}
-          className="text-green-400 hover:text-green-300 transition-colors underline underline-offset-2"
+          className="text-blue-400 hover:text-blue-300 transition-colors font-bold underline underline-offset-4 decoration-blue-500/30"
         >
           {phone}
         </a>
@@ -45,60 +45,60 @@ export const BookingFAQSection = ({
   };
 
   return (
-    <section className="relative py-28 bg-dark-400 overflow-hidden">
+    <section className="relative py-32 bg-[#000B18] overflow-hidden">
 
-      {/* Background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] rounded-full bg-green-500/5 blur-[100px] pointer-events-none" />
+      {/* Background glow — Atmospheric Depth */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-blue-600/[0.04] blur-[120px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-3xl px-[5%]">
 
         {/* ── Section header ───────────────────────────────────────────── */}
-        <div className="text-center mb-14 space-y-3">
-          <div className="inline-flex items-center justify-center gap-2">
-            <span className="w-6 h-px bg-green-500" />
-            <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">
+        <div className="text-center mb-16 space-y-4">
+          <div className="inline-flex items-center justify-center gap-4">
+            <span className="w-10 h-px bg-blue-500/30" />
+            <span className="text-blue-500 text-[10px] font-black tracking-[0.4em] uppercase">
               {subtitle}
             </span>
-            <span className="w-6 h-px bg-green-500" />
+            <span className="w-10 h-px bg-blue-500/30" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tighter leading-tight">
             {title}
           </h2>
         </div>
 
         {/* ── Accordion ────────────────────────────────────────────────── */}
-        <div className="space-y-3">
+        <div className="space-y-4">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={index}
-                className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                className={`rounded-[2rem] border transition-all duration-500 overflow-hidden backdrop-blur-md ${
                   isOpen
-                    ? "bg-dark-300 border-green-500/40 shadow-[0_4px_24px_rgba(36,174,124,0.08)]"
-                    : "bg-dark-300 border-dark-500 hover:border-dark-600"
+                    ? "bg-white/[0.04] border-blue-500/30 shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
+                    : "bg-white/[0.02] border-white/5 hover:border-white/10"
                 }`}
               >
                 {/* Question */}
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full flex items-center justify-between gap-4 p-6 text-left"
+                  className="w-full flex items-center justify-between gap-6 p-7 text-left"
                   aria-expanded={isOpen}
                 >
-                  <h3 className={`font-semibold text-sm md:text-base leading-snug transition-colors duration-300 ${
-                    isOpen ? "text-green-400" : "text-white"
+                  <h3 className={`font-bold text-sm md:text-base tracking-tight transition-colors duration-500 ${
+                    isOpen ? "text-blue-400" : "text-white"
                   }`}>
                     {faq.question}
                   </h3>
 
                   {/* Animated +/× icon */}
-                  <div className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-300 ${
+                  <div className={`shrink-0 w-8 h-8 rounded-xl flex items-center justify-center border transition-all duration-500 ${
                     isOpen
-                      ? "bg-green-500/20 border-green-500/40 text-green-400"
-                      : "bg-dark-400 border-dark-500 text-white/40"
+                      ? "bg-blue-500/20 border-blue-500/40 text-blue-400"
+                      : "bg-white/5 border-white/5 text-white/20"
                   }`}>
                     <svg
-                      className={`w-3.5 h-3.5 transition-transform duration-300 ${isOpen ? "rotate-45" : "rotate-0"}`}
+                      className={`w-4 h-4 transition-transform duration-500 ${isOpen ? "rotate-45" : "rotate-0"}`}
                       fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m-8-8h16" />
@@ -108,12 +108,12 @@ export const BookingFAQSection = ({
 
                 {/* Answer — smooth reveal */}
                 <div
-                  className={`transition-all duration-300 ease-in-out ${
+                  className={`transition-all duration-500 ease-in-out ${
                     isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
                   }`}
                 >
-                  <div className="px-6 pb-6 pt-0 border-t border-dark-500">
-                    <p className="text-white/55 text-sm leading-relaxed pt-4">
+                  <div className="px-8 pb-8 pt-0 border-t border-white/5">
+                    <p className="text-white/40 text-sm leading-relaxed pt-6 font-light italic">
                       {formatAnswer(faq.answer, faq.phone)}
                     </p>
                   </div>
@@ -124,17 +124,17 @@ export const BookingFAQSection = ({
         </div>
 
         {/* ── CTA ──────────────────────────────────────────────────────── */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-16">
           <Link
             href={moreButtonLink}
-            className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-dark-500 text-white/60 hover:text-white hover:border-green-500/50 text-sm font-medium transition-all duration-300"
+            className="group inline-flex items-center gap-3 px-8 py-4 rounded-full border border-white/10 bg-white/[0.02] text-white/50 hover:text-white hover:border-blue-500/40 text-[11px] font-black uppercase tracking-widest transition-all duration-500"
           >
             {moreButtonText}
             <svg
-              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+              className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1.5 text-blue-500"
               fill="none" stroke="currentColor" viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
         </div>

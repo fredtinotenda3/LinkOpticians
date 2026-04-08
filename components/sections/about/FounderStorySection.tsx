@@ -32,16 +32,17 @@ export const FounderStorySection = ({
   milestones,
 }: FounderStorySectionProps) => {
   return (
-    <section className="relative py-28 bg-dark-300 overflow-hidden">
-
-      <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-green-500/5 blur-[120px] pointer-events-none" />
+    <section className="relative py-28 bg-[#000B18] overflow-hidden">
+      
+      {/* Brand-aligned subtle glow */}
+      <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-blue-500/5 blur-[120px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-[5%]">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
 
           {/* ── Image side ─────────────────────────────────────────────── */}
           <div className="relative order-2 lg:order-1">
-            <div className="relative rounded-3xl overflow-hidden border border-dark-500 aspect-[4/5] max-w-[480px] mx-auto lg:mx-0">
+            <div className="relative rounded-[2.5rem] overflow-hidden border border-white/5 aspect-[4/5] max-w-[480px] mx-auto lg:mx-0 shadow-2xl">
               <Image
                 src={image}
                 alt={imageAlt}
@@ -49,67 +50,71 @@ export const FounderStorySection = ({
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-dark-300/50 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#000B18]/80 via-transparent to-transparent" />
             </div>
 
-            {/* Floating caption card */}
-            <div className="absolute bottom-5 left-5 right-5 md:right-auto md:max-w-[240px] flex items-center gap-3 bg-dark-400/95 backdrop-blur-md border border-dark-500 rounded-2xl px-5 py-4 shadow-2xl">
-              <div className="w-9 h-9 rounded-xl bg-green-500/15 flex items-center justify-center text-green-400 shrink-0">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {/* Floating caption card - Updated to Blue/Deep Ocean Theme */}
+            <div className="absolute bottom-8 left-8 right-8 md:right-auto md:max-w-[260px] flex items-center gap-4 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl px-6 py-5 shadow-2xl">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
               <div>
-                <p className="text-white text-sm font-semibold leading-tight">{caption}</p>
-                <p className="text-green-400 text-xs mt-0.5">{captionSubtext}</p>
+                <p className="text-white text-sm font-bold leading-tight">{caption}</p>
+                <p className="text-blue-400 text-[10px] font-black uppercase tracking-widest mt-1">{captionSubtext}</p>
               </div>
             </div>
 
-            {/* Corner accent */}
-            <div className="absolute -top-4 -left-4 w-20 h-20 rounded-2xl border-2 border-green-500/20 pointer-events-none" />
+            {/* Subtle decorative frame */}
+            <div className="absolute -top-6 -left-6 w-32 h-32 rounded-3xl border border-blue-500/10 -z-10" />
           </div>
 
           {/* ── Content side ───────────────────────────────────────────── */}
-          <div className="space-y-8 order-1 lg:order-2">
+          <div className="space-y-10 order-1 lg:order-2">
 
             {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2">
-              <span className="w-6 h-px bg-green-500" />
-              <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">
-                Founder's Story
+            <div className="flex items-center gap-4">
+              <div className="h-[1px] w-8 bg-blue-500/50" />
+              <span className="text-blue-500 text-[10px] font-black tracking-[0.4em] uppercase">
+                The Founder&apos;s Vision
               </span>
             </div>
 
             {/* Title */}
-            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+            <h2 className="text-4xl md:text-6xl font-bold text-white leading-[1.1] tracking-tighter">
               {title}
-              <br />
-              <span className="text-green-400">{titleHighlight}</span>
+              <span className="block text-blue-500 mt-2">{titleHighlight}</span>
             </h2>
 
             {/* Description */}
-            <p className="text-white/60 text-lg leading-relaxed">
+            <p className="text-white/50 text-lg leading-relaxed font-light">
               {description}
             </p>
 
-            {/* Blockquote — refined */}
-            <div className="relative pl-6 py-2">
-              <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-green-500 rounded-full" />
-              <svg className="w-6 h-6 text-green-500/30 mb-2" fill="currentColor" viewBox="0 0 32 32">
+            {/* Blockquote — Clean & Modern */}
+            <div className="relative pl-8 py-4 bg-white/[0.02] rounded-r-3xl border-l-2 border-blue-500">
+              <svg className="w-8 h-8 text-blue-500/10 absolute top-4 left-4" fill="currentColor" viewBox="0 0 32 32">
                 <path d="M10 8C6.686 8 4 10.686 4 14v10h10V14H7.5c0-1.38 1.12-2.5 2.5-2.5V8zm14 0c-3.314 0-6 2.686-6 6v10h10V14h-6.5c0-1.38 1.12-2.5 2.5-2.5V8z" />
               </svg>
-              <p className="text-white/75 text-base leading-relaxed italic">
+              <p className="text-white/80 text-xl leading-relaxed italic font-serif relative z-10">
                 {quote}
               </p>
-              <footer className="text-white/40 text-xs mt-3 font-medium">— {quoteAuthor}</footer>
+              <footer className="text-blue-400 text-[10px] mt-4 font-black uppercase tracking-[0.2em]">
+                — {quoteAuthor}
+              </footer>
             </div>
 
             {/* Milestones — info cards */}
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-dark-500">
+            <div className="grid grid-cols-2 gap-4 pt-4">
               {milestones.map((milestone, index) => (
-                <div key={index} className="p-4 rounded-2xl bg-dark-400 border border-dark-500 hover:border-green-500/30 transition-colors duration-300">
-                  <p className="text-xl font-bold text-white leading-none mb-1">{milestone.year}</p>
-                  <p className="text-white/45 text-xs leading-snug">{milestone.text}</p>
+                <div key={index} className="p-6 rounded-[1.5rem] bg-white/[0.03] border border-white/5 hover:border-blue-500/40 transition-all duration-500 group">
+                  <p className="text-2xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
+                    {milestone.year}
+                  </p>
+                  <p className="text-white/40 text-xs leading-relaxed font-medium">
+                    {milestone.text}
+                  </p>
                 </div>
               ))}
             </div>

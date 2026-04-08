@@ -21,32 +21,32 @@ export default async function Home({ searchParams }: SearchParamProps) {
     <div className="min-h-screen">
       {isAdmin && <PasskeyModal />}
 
-      {/* Hero Section */}
+      {/* 1. Impact: Immediate visual hook */}
       <HeroSection />
 
-      {/* Brand Strip - Partner logos */}
+      {/* 2. Convenience: Vital info immediately for returning patients */}
+      <LocationsBarSection />
+
+      {/* 3. Authority: Global brands you carry build instant medical trust */}
       <BrandStrip />
 
-      {/* Stories Carousel */}
-      <StoriesSection />
-
-      {/* Mission Section */}
-      <MissionSection />
-
-        {/* Services Grid */}
+      {/* 4. Practicality: "Can you solve my problem?" */}
       <ServicesGridSection />
 
-      {/* Community Banner */}
-      <CommunityBannerSection />
+      {/* 5. Values: Why choose Link over a generic shop? */}
+      <MissionSection />
 
-      {/* Testimonials */}
+      {/* 6. Human Connection: Emotional engagement */}
+      <StoriesSection />
+
+      {/* 7. Social Proof: Real Zimbabwean voices */}
       <TestimonialsSection />
 
-      {/* Final CTA */}
-      <FinalCTASection />
+      {/* 8. Scale: Your impact in Harare, Chiredzi, etc. */}
+      <CommunityBannerSection />
 
-      {/* Locations Bar */}
-      <LocationsBarSection />
+      {/* 9. Conversion: The final push */}
+      <FinalCTASection />
     </div>
   );
 }

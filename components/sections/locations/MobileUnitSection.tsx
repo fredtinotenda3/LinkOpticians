@@ -56,74 +56,74 @@ export const MobileUnitSection = ({
   return (
     <>
       {/* ── Mobile Unit Hero ─────────────────────────────────────────── */}
-      <section id="mobile-unit" className="relative min-h-[75vh] w-full overflow-hidden flex items-center">
+      <section id="mobile-unit" className="relative min-h-[85vh] w-full overflow-hidden flex items-center bg-[#000d1a]">
 
         <div className="absolute inset-0">
           <Image
             src="/assets/images/mobile-unit-hero.jpg"
             alt="Link Opticians mobile eye care unit serving rural community"
             fill
-            className="object-cover"
+            priority
+            className="object-cover opacity-60 scale-105"
           />
-          {/* Lighter gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/88 via-black/55 to-black/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-dark-400/60 via-transparent to-transparent" />
-          <div className="absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_50%,rgba(0,0,0,0.4)_100%)]" />
+          {/* Cinematic Deep Ocean Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#000d1a] via-[#000d1a]/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#000d1a] via-transparent to-transparent" />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-[5%] py-24 w-full">
-          <div className="max-w-2xl space-y-7">
+        <div className="relative mx-auto max-w-7xl px-[5%] py-32 w-full">
+          <div className="max-w-3xl space-y-10">
 
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2.5 bg-green-500/15 backdrop-blur-md px-5 py-2.5 rounded-full border border-green-500/30">
-              <span className="relative flex size-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex size-2 rounded-full bg-green-500" />
+            {/* Status Badge */}
+            <div className="inline-flex items-center gap-3 bg-white/[0.03] backdrop-blur-xl px-6 py-3 rounded-2xl border border-white/10">
+              <span className="relative flex size-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
+                <span className="relative inline-flex size-2.5 rounded-full bg-sky-500" />
               </span>
-              <span className="text-sm font-semibold text-green-400 tracking-wide">{badge}</span>
+              <span className="text-[10px] font-black text-sky-400 tracking-[0.3em] uppercase">{badge}</span>
             </div>
 
-            {/* Headline */}
-            <h2 className="text-5xl md:text-6xl font-bold text-white leading-[0.95] tracking-tight">
+            {/* Hero Headline */}
+            <h2 className="text-6xl md:text-8xl font-black text-white leading-[0.85] tracking-tighter italic uppercase">
               {title}
               <br />
-              <span className="text-green-400">{titleHighlight}</span>
+              <span className="text-sky-500">{titleHighlight}</span>
             </h2>
 
-            {/* Description */}
-            <p className="text-lg text-white/65 max-w-lg leading-relaxed">
+            {/* Performance Description */}
+            <p className="text-xl text-white/40 max-w-xl italic font-medium leading-relaxed">
               {description}
             </p>
 
-            {/* Stats — contained cards */}
-            <div className="grid grid-cols-3 gap-3">
+            {/* Impact Metrics */}
+            <div className="grid grid-cols-3 gap-4 max-w-xl">
               {stats.map((stat, index) => (
-                <div key={index} className="p-4 rounded-2xl bg-white/8 backdrop-blur-sm border border-white/12">
-                  <p className="text-2xl font-bold text-white leading-none mb-1">{stat.value}</p>
-                  <p className="text-white/45 text-xs leading-snug">{stat.label}</p>
+                <div key={index} className="p-6 rounded-[24px] bg-white/[0.02] border border-white/5 backdrop-blur-md group hover:border-sky-500/30 transition-all duration-500">
+                  <p className="text-3xl font-black text-white mb-1 tracking-tighter italic">{stat.value}</p>
+                  <p className="text-white/20 text-[9px] font-black uppercase tracking-widest leading-tight group-hover:text-sky-500/50 transition-colors">{stat.label}</p>
                 </div>
               ))}
             </div>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3">
+            {/* Action Group */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
               {buttons.map((button, index) => (
                 button.primary ? (
                   <Link
                     key={index}
                     href={button.href}
-                    className="group inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-400 text-white font-semibold text-base px-8 py-4 rounded-full shadow-[0_0_30px_rgba(36,174,124,0.35)] hover:shadow-[0_0_45px_rgba(36,174,124,0.5)] transition-all duration-300 hover:scale-[1.02]"
+                    className="group inline-flex items-center justify-center gap-3 bg-sky-500 hover:bg-sky-400 text-white font-black text-[11px] uppercase tracking-[0.2em] px-10 py-5 rounded-2xl shadow-[0_20px_40px_rgba(14,165,233,0.25)] transition-all duration-500 hover:-translate-y-1"
                   >
                     {button.text}
-                    <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    <svg className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </Link>
                 ) : (
                   <Link
                     key={index}
                     href={button.href}
-                    className="inline-flex items-center justify-center gap-2 border border-white/30 text-white/90 font-semibold text-base px-8 py-4 rounded-full bg-white/8 hover:bg-white/15 backdrop-blur-sm transition-all duration-300 hover:border-white/50"
+                    className="inline-flex items-center justify-center gap-3 border border-white/10 text-white/60 font-black text-[11px] uppercase tracking-[0.2em] px-10 py-5 rounded-2xl bg-white/[0.02] hover:bg-white/[0.05] hover:text-white backdrop-blur-sm transition-all duration-500"
                   >
                     {button.text}
                   </Link>
@@ -131,16 +131,14 @@ export const MobileUnitSection = ({
               ))}
             </div>
 
-            {/* Features — pill treatment */}
-            <div className="flex flex-wrap gap-2">
+            {/* Tech Specs / Features */}
+            <div className="flex flex-wrap gap-3">
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className="inline-flex items-center gap-2 bg-white/8 backdrop-blur-sm border border-white/12 text-white/75 text-xs font-medium px-3.5 py-2 rounded-full"
+                  className="inline-flex items-center gap-3 bg-white/[0.03] border border-white/5 text-white/30 text-[9px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl italic"
                 >
-                  <svg className="w-3.5 h-3.5 text-green-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <div className="size-1 rounded-full bg-sky-500" />
                   {feature.text}
                 </div>
               ))}
@@ -150,108 +148,124 @@ export const MobileUnitSection = ({
         </div>
       </section>
 
-      {/* ── Schedule Preview ─────────────────────────────────────────── */}
-      <section className="relative py-24 bg-dark-400 overflow-hidden">
+      {/* ── Schedule Grid ─────────────────────────────────────────── */}
+      <section className="relative py-32 bg-[#000d1a] border-t border-white/5 overflow-hidden">
 
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[600px] h-[300px] rounded-full bg-green-500/4 blur-[100px]" />
+        {/* Cinematic Backdrop */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+          <div className="w-[800px] h-[400px] rounded-full bg-sky-500/10 blur-[140px]" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-[5%]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
 
-            {/* Regular stops */}
-            <div className="space-y-5">
-              <div className="inline-flex items-center gap-2 mb-2">
-                <span className="w-6 h-px bg-green-500" />
-                <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">Coverage areas</span>
+            {/* Route Logistics */}
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <span className="w-10 h-[2px] bg-sky-500" />
+                  <span className="text-sky-500 text-[10px] font-black tracking-[0.4em] uppercase">Coverage</span>
+                </div>
+                <h3 className="text-4xl font-black text-white italic uppercase tracking-tighter">Strategic Route</h3>
               </div>
-              <h3 className="text-2xl font-bold text-white">Regular stops</h3>
-              <div className="space-y-3">
+
+              <div className="grid gap-4">
                 {schedulePreview.stops.map((stop) => (
                   <div
                     key={stop.name}
-                    className="flex items-center gap-4 p-4 rounded-2xl bg-dark-300 border border-dark-500 hover:border-green-500/30 transition-colors duration-300"
+                    className="group flex items-center gap-5 p-6 rounded-[24px] bg-white/[0.02] border border-white/5 hover:border-sky-500/30 transition-all duration-500"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-green-500/15 flex items-center justify-center text-green-400 shrink-0">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <div className="w-12 h-12 rounded-2xl bg-sky-500/10 flex items-center justify-center text-sky-500 shrink-0 group-hover:scale-110 transition-transform">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       </svg>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-white text-sm font-semibold">{stop.name}</p>
-                      <p className="text-white/40 text-xs mt-0.5">{stop.frequency}</p>
+                    <div className="flex-1">
+                      <p className="text-white text-lg font-black italic uppercase tracking-tight leading-none">{stop.name}</p>
+                      <p className="text-white/20 text-[10px] font-black uppercase tracking-widest mt-2">{stop.frequency}</p>
                     </div>
-                    <svg className="w-4 h-4 text-white/20 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <div className="text-white/10 group-hover:text-sky-500/50 transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Upcoming outreach + contact */}
-            <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 mb-2">
-                <span className="w-6 h-px bg-green-500" />
-                <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">Schedule</span>
+            {/* Outreach Intel + Dispatch */}
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <span className="w-10 h-[2px] bg-sky-500" />
+                  <span className="text-sky-500 text-[10px] font-black tracking-[0.4em] uppercase">Deployment</span>
+                </div>
+                <h3 className="text-4xl font-black text-white italic uppercase tracking-tighter">Next Deployment</h3>
               </div>
-              <h3 className="text-2xl font-bold text-white">Upcoming outreach</h3>
 
-              {/* Next outreach card */}
-              <div className="rounded-2xl bg-dark-300 border border-dark-500 p-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-green-500/15 flex items-center justify-center text-green-400 shrink-0">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-1">Next mobile clinic</p>
-                    <p className="text-2xl font-bold text-green-400 leading-none mb-1">
+              {/* Countdown Card */}
+              <div className="rounded-[40px] bg-white/[0.02] border border-white/5 p-10 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-8 text-sky-500/5 group-hover:text-sky-500/10 transition-colors">
+                   <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                   </svg>
+                </div>
+
+                <div className="relative space-y-8">
+                  <div className="space-y-2">
+                    <p className="text-sky-500 text-[10px] font-black uppercase tracking-[0.3em]">Confirmed Schedule</p>
+                    <p className="text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
                       {schedulePreview.nextOutreach.date}
                     </p>
-                    <p className="text-white/50 text-xs">
-                      {schedulePreview.nextOutreach.location} · {schedulePreview.nextOutreach.time}
-                    </p>
                   </div>
-                </div>
-                <div className="mt-5">
+                  
+                  <div className="flex items-center gap-6 py-8 border-y border-white/5">
+                    <div>
+                      <p className="text-white/20 text-[9px] font-black uppercase tracking-widest mb-1">Target Location</p>
+                      <p className="text-white font-black italic uppercase text-lg">{schedulePreview.nextOutreach.location}</p>
+                    </div>
+                    <div className="w-px h-10 bg-white/5" />
+                    <div>
+                      <p className="text-white/20 text-[9px] font-black uppercase tracking-widest mb-1">Clinic Hours</p>
+                      <p className="text-white font-black italic uppercase text-lg">{schedulePreview.nextOutreach.time}</p>
+                    </div>
+                  </div>
+
                   <Link
                     href="/community"
-                    className="group inline-flex items-center gap-2 text-green-400 hover:text-green-300 text-sm font-semibold transition-colors duration-200"
+                    className="inline-flex items-center gap-3 text-sky-500 hover:text-sky-400 font-black text-[11px] uppercase tracking-[0.2em] transition-all"
                   >
-                    View full schedule
-                    <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    Full Deployment Log
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </Link>
                 </div>
               </div>
 
-              {/* Contact card */}
-              <div className="rounded-2xl bg-dark-300 border border-dark-500 p-5">
-                <div className="flex items-center gap-4">
-                  <div className="relative shrink-0">
-                    <div className="w-10 h-10 rounded-xl bg-green-500/15 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
-                    </div>
-                    <span className="absolute -top-0.5 -right-0.5 size-2.5 rounded-full bg-green-500 border border-dark-300">
-                      <span className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75" />
-                    </span>
+              {/* Dispatch Contact */}
+              <div className="rounded-[24px] bg-sky-500 p-8 flex items-center justify-between group cursor-pointer shadow-[0_20px_40px_rgba(14,165,233,0.15)]">
+                <div className="flex items-center gap-6">
+                  <div className="size-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-white">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
                   </div>
                   <div>
-                    <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-0.5">Mobile unit contact</p>
+                    <p className="text-white/60 text-[9px] font-black uppercase tracking-widest mb-1">Mobile Dispatch (WhatsApp)</p>
                     <a
-                      href={`tel:${schedulePreview.contact.replace(/\D/g, "")}`}
-                      className="text-white font-bold text-lg hover:text-green-400 transition-colors duration-200"
+                      href={`https://wa.me/${schedulePreview.contact.replace(/\D/g, "")}`}
+                      className="text-white font-black text-2xl tracking-tighter"
                     >
                       {schedulePreview.contact}
                     </a>
                   </div>
+                </div>
+                <div className="size-10 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-white group-hover:text-sky-500 transition-all">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
                 </div>
               </div>
 

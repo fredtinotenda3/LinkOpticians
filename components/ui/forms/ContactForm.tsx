@@ -1,5 +1,4 @@
-// components\ui\forms\ContactForm.tsx - CORRECTED VERSION
-
+// components/ui/forms/ContactForm.tsx
 "use client";
 
 import { useState } from "react";
@@ -42,8 +41,9 @@ export const ContactForm = () => {
     setIsLoading(true);
     
     try {
+      // Simulate API call for the Harare-based business
       console.log("Contact form submitted:", data);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
       setIsSuccess(true);
       form.reset();
@@ -57,18 +57,22 @@ export const ContactForm = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {isSuccess && (
-        <div className="bg-green-500/10 border border-green-500 rounded-lg p-4">
-          <p className="text-green-500 font-medium">
-            Message received. We will respond during business hours.
-          </p>
+        <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-6 animate-in fade-in slide-in-from-top-4 duration-500">
+          <div className="flex items-center gap-3">
+            <div className="size-2 bg-blue-500 rounded-full animate-pulse" />
+            <p className="text-blue-400 font-bold text-sm">
+              Message received. Our team will respond shortly.
+            </p>
+          </div>
         </div>
       )}
       
-      <div className="p-4 bg-dark-300 rounded-lg mb-6">
-        <p className="text-sm text-dark-600">
-          <strong>Privacy Note:</strong> Your information is collected for contact purposes only.
+      <div className="p-4 bg-white/[0.03] border border-white/5 rounded-xl">
+        <p className="text-xs text-white/40 leading-relaxed">
+          <span className="text-blue-500 font-bold uppercase tracking-widest mr-2">Privacy Note:</span> 
+          Your information is securely processed for contact purposes only.
         </p>
       </div>
       
@@ -80,15 +84,15 @@ export const ContactForm = () => {
               control={form.control}
               name="name"
               label="Name"
-              placeholder="Enter name"
+              placeholder="Your full name"
             />
             
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               control={form.control}
               name="email"
-              label="Email Address (optional)"
-              placeholder="Enter email address"
+              label="Email Address (Optional)"
+              placeholder="email@example.com"
             />
           </div>
 
@@ -98,7 +102,7 @@ export const ContactForm = () => {
               control={form.control}
               name="phone"
               label="Phone Number"
-              placeholder="Enter phone number"
+              placeholder="+263 ..."
             />
             
             <CustomFormField
@@ -108,9 +112,9 @@ export const ContactForm = () => {
               label="Subject"
               placeholder="Select subject"
             >
-              <option value="">Select subject</option>
+              <option value="" className="bg-[#000B18]">Select a reason</option>
               {CONTACT_FORM_SUBJECTS.map((subject) => (
-                <option key={subject.value} value={subject.value}>
+                <option key={subject.value} value={subject.value} className="bg-[#000B18]">
                   {subject.label}
                 </option>
               ))}
@@ -121,12 +125,12 @@ export const ContactForm = () => {
             fieldType={FormFieldType.SELECT}
             control={form.control}
             name="appointmentType"
-            label="Appointment Type (optional)"
-            placeholder="Select appointment type"
+            label="Appointment Type (Optional)"
+            placeholder="Select type"
           >
-            <option value="">Select appointment type</option>
+            <option value="" className="bg-[#000B18]">General Inquiry</option>
             {APPOINTMENT_TYPES.map((type) => (
-              <option key={type.value} value={type.value}>
+              <option key={type.value} value={type.value} className="bg-[#000B18]">
                 {type.label}
               </option>
             ))}
@@ -137,16 +141,18 @@ export const ContactForm = () => {
             control={form.control}
             name="message"
             label="Message"
-            placeholder="Enter your message"
-            rows={6}
+            placeholder="How can we help you?"
+            rows={5}
           />
 
-          <SubmitButton isLoading={isLoading}>
-            Send Message
-          </SubmitButton>
+          <div className="pt-2">
+            <SubmitButton isLoading={isLoading} className="w-full h-14 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-[0.2em] transition-all">
+              Send Message
+            </SubmitButton>
+          </div>
 
-          <p className="text-center text-sm text-dark-600">
-            We respond to messages during business hours.
+          <p className="text-center text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">
+            Professional care • Response within business hours
           </p>
         </form>
       </Form>

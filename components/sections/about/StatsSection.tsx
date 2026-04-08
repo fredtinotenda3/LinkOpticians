@@ -7,26 +7,32 @@ interface StatsSectionProps {
 
 export const StatsSection = ({ stats }: StatsSectionProps) => {
   return (
-    <section className="relative py-20 bg-dark-300 overflow-hidden">
-
+    <section className="relative py-24 bg-[#000B18] overflow-hidden">
+      
+      {/* Brand-aligned subtle glow background */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[800px] h-[200px] rounded-full bg-green-500/5 blur-[100px]" />
+        <div className="w-[800px] h-[200px] rounded-full bg-blue-500/5 blur-[100px]" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-[5%]">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="group text-center p-6 rounded-2xl bg-dark-400 border border-dark-500 hover:border-green-500/30 transition-all duration-300 hover:shadow-[0_4px_24px_rgba(36,174,124,0.08)]"
+              className="group text-center p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/5 hover:border-blue-500/30 transition-all duration-500 hover:bg-white/[0.04]"
             >
-              <div className="text-4xl md:text-5xl font-bold text-green-400 mb-2 group-hover:scale-105 transition-transform duration-300">
+              {/* Stat Value - Using the brand Blue */}
+              <div className="text-4xl md:text-6xl font-bold text-blue-500 mb-3 tracking-tighter group-hover:scale-105 transition-transform duration-500">
                 {stat.value}
               </div>
-              <p className="text-white/40 text-xs font-semibold uppercase tracking-[0.2em]">
+              
+              {/* Stat Label */}
+              <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em]">
                 {stat.label}
               </p>
-              <div className="w-8 h-px bg-green-500/30 mx-auto mt-4 group-hover:w-16 transition-all duration-500" />
+              
+              {/* Decorative Animated Line */}
+              <div className="w-8 h-[1px] bg-blue-500/20 mx-auto mt-6 group-hover:w-20 group-hover:bg-blue-500 transition-all duration-700 ease-in-out" />
             </div>
           ))}
         </div>

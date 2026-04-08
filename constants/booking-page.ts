@@ -4,7 +4,7 @@ export const BOOKING_PAGE_CONFIG = {
   hero: {
     title: "Book your",
     titleHighlight: "appointment",
-    description: "We'll confirm within 24 hours. Most medical aids accepted.",
+    description: "Secure your consultation online. We'll confirm within 24 hours. Most medical aids accepted.",
     breadcrumb: "Book"
   },
 

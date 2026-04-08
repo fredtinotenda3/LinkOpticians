@@ -13,73 +13,66 @@ interface ServicesGridSectionProps {
 export const ServicesGridSection = ({
   title,
   titleHighlight,
-  subtitle,
   description,
+  subtitle,
   services,
 }: ServicesGridSectionProps) => {
 
+  // Logic: Prioritize core services for the main grid layout
   const orderedServices = [
     services.find((s) => s.category === "exams"),
     services.find((s) => s.category === "glasses"),
     services.find((s) => s.category === "contacts"),
-    services.find((s) => s.category === "specialized" && s.id === "pediatric"),
-    services.find((s) => s.category === "treatment" && s.id === "dry-eye"),
+    services.find((s) => s.id === "pediatric"),
+    services.find((s) => s.id === "dry-eye"), // Mapping 'dry-eye' id to senior care card
     services.find((s) => s.category === "emergency"),
   ].filter(Boolean) as Service[];
 
-  const getCardId = (service: Service) => {
-    if (service.category === "specialized" && service.id === "pediatric") return "children";
-    if (service.category === "treatment") return "seniors";
-    return service.category;
-  };
-
   return (
-    <section id="services" className="relative py-28 bg-dark-300 overflow-hidden">
-
-      {/* Background glow */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-green-500/4 blur-[140px] pointer-events-none" />
+    <section id="services" className="relative py-28 bg-[#000d1a] overflow-hidden">
+      
+      {/* Deep Ocean Glow instead of Green */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-sky-500/5 blur-[140px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-[5%]">
 
-        {/* ── Section header ───────────────────────────────────────────── */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
-          <div className="space-y-3 max-w-xl">
-            <div className="inline-flex items-center gap-2">
-              <span className="w-6 h-px bg-green-500" />
-              <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+          <div className="space-y-4 max-w-2xl">
+            <div className="inline-flex items-center gap-3">
+              <span className="w-8 h-[2px] bg-sky-500" />
+              <span className="text-sky-500 text-[10px] font-black tracking-[0.3em] uppercase">
                 {subtitle}
               </span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-              {title}
-              <br />
-              <span className="text-green-400">{titleHighlight}</span>
+            <h2 className="text-4xl md:text-6xl font-black text-white leading-[1.1]">
+              {title} <br />
+              <span className="text-sky-400">{titleHighlight}</span>
             </h2>
-            <p className="text-white/50 text-base leading-relaxed">
+            <p className="text-white/40 text-lg leading-relaxed max-w-xl">
               {description}
             </p>
           </div>
 
-          {/* Service count pill */}
-          <div className="shrink-0 inline-flex items-center gap-2 px-4 py-2.5 bg-dark-400 border border-dark-500 rounded-full">
-            <span className="size-2 rounded-full bg-green-500" />
-            <span className="text-white/60 text-xs font-medium">
-              {orderedServices.length} services available
+          <div className="shrink-0 inline-flex items-center gap-2.5 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full backdrop-blur-md">
+            <span className="size-2 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.6)]" />
+            <span className="text-white/70 text-[11px] font-bold uppercase tracking-wider">
+              {orderedServices.length} Specialties Available
             </span>
           </div>
         </div>
 
-        {/* ── Grid ─────────────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {orderedServices.map((service) => (
-            <ServiceCard
-              key={service.id}
-              service={service}
-              id={getCardId(service)}
+            <ServiceCard 
+              key={service.id} 
+              service={service} 
+              // ID logic for scroll anchors
+              id={service.id === "pediatric" ? "children" : service.id === "dry-eye" ? "seniors" : service.category}
             />
           ))}
         </div>
-
       </div>
     </section>
   );

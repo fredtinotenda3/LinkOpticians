@@ -5,7 +5,6 @@ import Link from "next/link";
 interface Category {
   id: string;
   label: string;
-  icon: string;
 }
 
 interface ProductsHeroSectionProps {
@@ -24,70 +23,70 @@ export const ProductsHeroSection = ({
   categories,
 }: ProductsHeroSectionProps) => {
   return (
-    <section className="relative min-h-[70vh] w-full overflow-hidden flex items-center">
+    <section className="relative min-h-[85vh] w-full overflow-hidden flex items-center">
 
-      {/* Background */}
+      {/* Background with cinematic overlay */}
       <div className="absolute inset-0">
         <Image
           src="/assets/images/products-hero.jpg"
-          alt="Eyewear collection available at Link Opticians"
+          alt="Premium eyewear collection at Link Opticians"
           fill
-          className="object-cover"
+          className="object-cover object-center scale-105"
           priority
-          quality={95}
+          quality={100}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-dark-300/60 via-transparent to-transparent" />
-        <div className="absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_50%,rgba(0,0,0,0.4)_100%)]" />
+        {/* Multi-layered gradient for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#000d1a]/95 via-[#000d1a]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#000d1a] via-transparent to-transparent" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-[5%] py-24 w-full">
-        <div className="max-w-2xl mx-auto space-y-7 text-center flex flex-col items-center">
+      <div className="relative mx-auto max-w-7xl px-[5%] py-32 w-full">
+        <div className="max-w-3xl space-y-10">
 
-          {/* Breadcrumb */}
-          <nav className="flex items-center justify-center gap-1.5 text-xs text-white/40">
-            <Link href="/" className="hover:text-white/70 transition-colors duration-200 flex items-center gap-1">
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
+          {/* Breadcrumb - Clean & Minimal */}
+          <nav className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+            <Link href="/" className="hover:text-sky-400 transition-colors duration-300">
               Home
             </Link>
-            <svg className="w-3 h-3 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-            <span className="text-white/70">Products</span>
+            <span className="size-1 rounded-full bg-white/20" />
+            <span className="text-white/80">Collections</span>
           </nav>
 
-          {/* Badge — with ping */}
-          <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/20">
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex size-2 rounded-full bg-green-500" />
-            </span>
-            <span className="text-sm font-medium tracking-wide text-white/90">{badge}</span>
+          {/* Headline - Deep Ocean & Sky Blue */}
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
+                <span className="relative inline-flex size-2 rounded-full bg-sky-500" />
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/90">{badge}</span>
+            </div>
+
+            <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter">
+              {title}
+              <br />
+              <span className="text-sky-400">{titleHighlight}</span>
+            </h1>
+
+            <p className="text-lg md:text-xl text-white/40 max-w-xl leading-relaxed font-medium">
+              {description}
+            </p>
           </div>
 
-          {/* Headline */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-tight">
-            {title}
-            <br />
-            <span className="text-green-400">{titleHighlight}</span>
-          </h1>
-
-          {/* Description — regulatory language */}
-          <p className="text-lg text-white/65 max-w-lg leading-relaxed text-center mx-auto">
-            {description}
-          </p>
-
-          {/* Category anchor pills */}
-          <div className="flex flex-wrap gap-2 pt-2 justify-center">
+          {/* Category Anchor Pills */}
+          <div className="flex flex-wrap gap-3">
             {categories.map((category) => (
               <a
                 key={category.id}
                 href={`#${category.id}`}
-                className="group inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/8 backdrop-blur-sm hover:bg-green-500 border border-white/15 hover:border-green-500 text-white/70 hover:text-white transition-all duration-300 text-xs font-semibold"
+                className="group flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:border-sky-500/50 hover:bg-sky-500/10 transition-all duration-500"
               >
-                {category.label}
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 group-hover:text-white">
+                  {category.label}
+                </span>
+                <svg className="size-3 text-white/20 group-hover:text-sky-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                </svg>
               </a>
             ))}
           </div>
@@ -95,10 +94,14 @@ export const ProductsHeroSection = ({
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-white/30 text-[10px] tracking-[0.2em] uppercase">
-        <span>Scroll</span>
-        <div className="w-px h-10 bg-gradient-to-b from-white/30 to-transparent animate-scroll-line" />
+      {/* Vertical Scroll Indicator */}
+      <div className="absolute bottom-12 right-[5%] hidden lg:flex flex-col items-center gap-4">
+        <span className="[writing-mode:vertical-lr] text-[10px] font-black uppercase tracking-[0.3em] text-white/20">
+          Discover More
+        </span>
+        <div className="w-[2px] h-20 bg-white/5 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1/2 bg-sky-500 animate-[scroll-down_2s_ease-in-out_infinite]" />
+        </div>
       </div>
 
     </section>

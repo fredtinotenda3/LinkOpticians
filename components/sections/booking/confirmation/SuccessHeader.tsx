@@ -6,35 +6,35 @@ interface SuccessHeaderProps {
 
 export const SuccessHeader = ({ title, description }: SuccessHeaderProps) => {
   return (
-    <div className="text-center mb-12">
+    <div className="text-center mb-16">
 
-      {/* Animated success icon */}
-      <div className="relative inline-flex items-center justify-center mb-8">
-        {/* Outer ping rings */}
-        <div className="absolute w-32 h-32 rounded-full border border-green-500/15 animate-ping" />
-        <div className="absolute w-24 h-24 rounded-full border border-green-500/20 animate-ping animation-delay-300" />
+      {/* Animated success icon — Deep Ocean Blue Theme */}
+      <div className="relative inline-flex items-center justify-center mb-10">
+        {/* Outer atmospheric ping rings */}
+        <div className="absolute w-36 h-36 rounded-full border border-blue-500/10 animate-ping" />
+        <div className="absolute w-28 h-28 rounded-full border border-blue-400/10 animate-ping [animation-delay:400ms]" />
 
-        {/* Icon container */}
-        <div className="relative w-20 h-20 rounded-full bg-green-500/20 border border-green-500/30 flex items-center justify-center shadow-[0_0_40px_rgba(36,174,124,0.25)]">
-          <svg className="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        {/* Icon container — Glassmorphism style */}
+        <div className="relative w-24 h-24 rounded-[2rem] bg-blue-500/10 border border-white/10 flex items-center justify-center shadow-[0_0_60px_rgba(37,99,235,0.15)] backdrop-blur-sm">
+          <svg className="w-12 h-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
       </div>
 
-      {/* Eyebrow */}
-      <div className="inline-flex items-center gap-2 mb-4">
-        <span className="w-6 h-px bg-green-500" />
-        <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">
+      {/* Eyebrow — Digital Concierge typography */}
+      <div className="inline-flex items-center justify-center gap-4 mb-6">
+        <span className="w-8 h-px bg-blue-500/30" />
+        <span className="text-blue-500 text-[10px] font-black tracking-[0.4em] uppercase">
           Request received
         </span>
-        <span className="w-6 h-px bg-green-500" />
+        <span className="w-8 h-px bg-blue-500/30" />
       </div>
 
-      <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+      <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tighter leading-tight">
         {title}
       </h1>
-      <p className="text-white/55 text-lg max-w-md mx-auto leading-relaxed">
+      <p className="text-white/40 text-lg max-w-xl mx-auto leading-relaxed font-light italic">
         {description}
       </p>
     </div>

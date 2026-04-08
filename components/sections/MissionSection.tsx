@@ -1,4 +1,5 @@
-// components/sections/MissionSection.tsx
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,50 +15,49 @@ interface MissionSectionProps {
 }
 
 const stats = [
-  { value: "17+", label: "Years of service" },
-  { value: "2,500+", label: "Patients served" },
-  { value: "3", label: "Clinics across Zimbabwe" },
+  { value: "18", label: "Years of Practice" },
+  { value: "5", label: "Strategic Branches" },
+  { value: "Direct", label: "Medical Aid Claims" },
 ];
 
 export const MissionSection = ({
-  title = "Our Mission",
-  description = "Link Opticians is on a mission to make quality eye care accessible to every Zimbabwean. From Harare's CBD to the most remote villages, we're committed to serving our communities.",
-  buttonText = "Discover our story",
+  title = "Our Clinical Mission",
+  description = "Since 2008, Link Opticians has focused on delivering accessible, high-standard eye care across Zimbabwe. We combine clinical precision with in-house lens manufacturing to ensure every patient receives optimal vision solutions.",
+  buttonText = "View Clinical History",
   buttonHref = "/about",
   backgroundImage = "/assets/images/mission-bg.png",
   foregroundImage = "/assets/images/dr-richard.jpg",
-  foregroundAlt = "Dr. Richard Maveneka",
+  foregroundAlt = "Lead Optometrist",
   reverse = false,
 }: MissionSectionProps) => {
   return (
-    <section className="relative py-28 bg-dark-400 overflow-hidden">
+    <section className="relative py-32 bg-[#001a33] overflow-hidden">
+      
+      {/* Deep Ocean subtle glows */}
+      <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-sky-500/5 blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full bg-sky-500/5 blur-[100px] pointer-events-none" />
 
-      {/* Subtle background glow */}
-      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full bg-green-500/5 blur-[120px] pointer-events-none" />
-      <div className="absolute -bottom-40 -right-40 w-[400px] h-[400px] rounded-full bg-green-500/5 blur-[100px] pointer-events-none" />
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className={`flex flex-col lg:flex-row items-center gap-16 xl:gap-28 ${reverse ? "lg:flex-row-reverse" : ""}`}>
 
-      <div className="relative mx-auto max-w-7xl px-[5%]">
-        <div className={`flex flex-col lg:flex-row items-center gap-16 xl:gap-24 ${reverse ? "lg:flex-row-reverse" : ""}`}>
-
-          {/* ── Image side ─────────────────────────────────────────────────── */}
+          {/* ── Visual Side ─────────────────────────────────────────────────── */}
           <div className="lg:w-1/2 w-full">
             <div className="relative">
-
-              {/* Main image */}
-              <div className="relative w-full aspect-[4/5] max-w-[480px] mx-auto lg:mx-0 rounded-3xl overflow-hidden">
+              
+              {/* Main Clinical Environment Image */}
+              <div className="relative w-full aspect-[4/5] max-w-[500px] mx-auto lg:mx-0 rounded-[2rem] overflow-hidden shadow-2xl border border-white/5">
                 <Image
                   src={backgroundImage}
-                  alt=""
+                  alt="Clinical Facility"
                   fill
-                  className="object-cover"
+                  className="object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700"
                 />
-                {/* Subtle overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-400/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#001a33]/80 via-transparent to-transparent" />
               </div>
 
-              {/* Floating doctor card */}
-              <div className="absolute -bottom-6 -right-4 md:right-0 lg:-right-8 flex items-center gap-4 bg-dark-300/95 backdrop-blur-md border border-dark-500 rounded-2xl px-5 py-4 shadow-2xl max-w-[260px]">
-                <div className="relative size-14 rounded-xl overflow-hidden shrink-0 border border-dark-500">
+              {/* Professional Practitioner Card */}
+              <div className="absolute -bottom-8 -right-4 md:right-4 lg:-right-10 flex items-center gap-5 bg-[#002b4d]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] max-w-[280px]">
+                <div className="relative size-16 rounded-xl overflow-hidden shrink-0 border border-sky-500/30">
                   <Image
                     src={foregroundImage}
                     alt={foregroundAlt}
@@ -66,62 +66,60 @@ export const MissionSection = ({
                   />
                 </div>
                 <div>
-                  <p className="text-white text-sm font-semibold leading-tight">{foregroundAlt}</p>
-                  <p className="text-green-400 text-xs mt-0.5">Lead Optometrist</p>
-                  <p className="text-white/40 text-[11px] mt-0.5">Est. 2008</p>
+                  <p className="text-white text-sm font-bold leading-tight">{foregroundAlt}</p>
+                  <p className="text-sky-400 text-[11px] font-bold uppercase tracking-wider mt-1">Lead Practitioner</p>
+                  <p className="text-white/30 text-[10px] mt-1 font-medium">Link Opticians HQ</p>
                 </div>
               </div>
 
-              {/* Decorative green accent */}
-              <div className="absolute -top-4 -left-4 w-24 h-24 rounded-2xl border-2 border-green-500/20 pointer-events-none" />
-
+              {/* Decorative clinical accent */}
+              <div className="absolute -top-6 -left-6 w-32 h-32 rounded-3xl border border-sky-500/10 pointer-events-none" />
             </div>
           </div>
 
-          {/* ── Content side ───────────────────────────────────────────────── */}
-          <div className="lg:w-1/2 space-y-8">
-
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2">
-              <span className="w-6 h-px bg-green-500" />
-              <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">
-                Who we are
-              </span>
+          {/* ── Content Side ───────────────────────────────────────────────── */}
+          <div className="lg:w-1/2 space-y-10">
+            
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-3">
+                <div className="w-10 h-[2px] bg-sky-500" />
+                <span className="text-sky-500 text-xs font-black tracking-[0.3em] uppercase">
+                  Institutional Profile
+                </span>
+              </div>
+              <h2 className="text-5xl md:text-6xl font-bold text-white leading-[1.1] tracking-tight">
+                {title}
+              </h2>
             </div>
 
-            {/* Title */}
-            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-              {title}
-            </h2>
-
-            {/* Description */}
-            <p className="text-white/60 text-lg leading-relaxed">
+            <p className="text-white/60 text-xl leading-relaxed font-light">
               {description}
             </p>
 
-            {/* Stats row */}
-            <div className="grid grid-cols-3 gap-4 py-6 border-y border-dark-500">
+            {/* Key Clinical Stats */}
+            <div className="grid grid-cols-3 gap-8 py-8 border-y border-white/10">
               {stats.map((stat) => (
-                <div key={stat.label} className="space-y-1">
-                  <p className="text-2xl md:text-3xl font-bold text-white">{stat.value}</p>
-                  <p className="text-white/40 text-xs leading-snug">{stat.label}</p>
+                <div key={stat.label} className="space-y-2">
+                  <p className="text-3xl font-bold text-white tracking-tight">{stat.value}</p>
+                  <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.1em] leading-tight">
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
 
-            {/* CTA */}
-            <Link
-              href={buttonHref}
-              className="group inline-flex items-center gap-3 bg-green-500 hover:bg-green-400 text-white font-semibold text-sm px-7 py-3.5 rounded-full transition-all duration-300 hover:shadow-[0_0_30px_rgba(36,174,124,0.4)] hover:scale-[1.02]"
-            >
-              {buttonText}
-              <svg
-                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            {/* Professional CTA */}
+            <div className="pt-4">
+              <Link
+                href={buttonHref}
+                className="group inline-flex items-center gap-4 bg-white text-[#001a33] font-bold text-base px-10 py-5 rounded-full transition-all duration-300 hover:bg-sky-50 hover:scale-[1.02] shadow-xl shadow-white/5"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
+                {buttonText}
+                <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
 
           </div>
         </div>

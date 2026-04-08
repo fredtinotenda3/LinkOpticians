@@ -18,7 +18,7 @@ interface MissionValuesSectionProps {
   values: Value[];
 }
 
-// SVG icon map — replaces emoji
+// SVG icon map — themed with Blue-400
 const valueIcons: Record<string, JSX.Element> = {
   "👁️": (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,63 +57,64 @@ export const MissionValuesSection = ({
   values,
 }: MissionValuesSectionProps) => {
   return (
-    <section className="relative py-28 bg-dark-400 overflow-hidden">
-
-      <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full bg-green-500/5 blur-[120px] pointer-events-none" />
+    <section className="relative py-28 bg-[#000B18] overflow-hidden">
+      
+      {/* Brand Blue Glow accent */}
+      <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full bg-blue-500/5 blur-[120px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-[5%]">
 
         {/* ── Section header ───────────────────────────────────────────── */}
-        <div className="text-center mb-16 space-y-3">
-          <div className="inline-flex items-center justify-center gap-2">
-            <span className="w-6 h-px bg-green-500" />
-            <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">{subtitle}</span>
-            <span className="w-6 h-px bg-green-500" />
+        <div className="text-center mb-20 space-y-4">
+          <div className="inline-flex items-center justify-center gap-3">
+            <span className="w-8 h-[1px] bg-blue-500/50" />
+            <span className="text-blue-500 text-[10px] font-black tracking-[0.4em] uppercase">{subtitle}</span>
+            <span className="w-8 h-[1px] bg-blue-500/50" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">{title}</h2>
-          <p className="text-white/50 max-w-2xl mx-auto text-base leading-relaxed">{description}</p>
+          <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-tight">{title}</h2>
+          <p className="text-white/40 max-w-2xl mx-auto text-lg font-light leading-relaxed">{description}</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
           {/* ── Mission ──────────────────────────────────────────────── */}
-          <div className="space-y-6 p-8 rounded-3xl bg-dark-300 border border-dark-500">
-            <div className="inline-flex items-center gap-2">
-              <span className="w-6 h-px bg-green-500" />
-              <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">Mission</span>
+          <div className="group space-y-8 p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-all duration-500">
+            <div className="inline-flex items-center gap-3">
+              <span className="w-6 h-[1px] bg-blue-500" />
+              <span className="text-blue-500 text-[10px] font-black tracking-[0.25em] uppercase">Mission</span>
             </div>
-            <h3 className="text-2xl font-bold text-white">{mission.title}</h3>
-            <p className="text-white/60 text-base leading-relaxed">{mission.text}</p>
+            <h3 className="text-3xl font-bold text-white tracking-tight">{mission.title}</h3>
+            <p className="text-white/50 text-lg leading-relaxed font-light">{mission.text}</p>
 
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-dark-500">
+            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
               {mission.stats.map((stat, index) => (
-                <div key={index} className="p-4 rounded-2xl bg-dark-400 border border-dark-500 hover:border-green-500/30 transition-colors duration-300">
-                  <p className="text-2xl font-bold text-green-400 leading-none mb-1">{stat.value}</p>
-                  <p className="text-white/40 text-xs">{stat.label}</p>
+                <div key={index} className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-blue-500/20 transition-all duration-500">
+                  <p className="text-3xl font-bold text-blue-500 leading-none mb-2">{stat.value}</p>
+                  <p className="text-white/30 text-[10px] font-bold uppercase tracking-wider">{stat.label}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* ── Values ───────────────────────────────────────────────── */}
-          <div className="space-y-6 p-8 rounded-3xl bg-dark-300 border border-dark-500">
-            <div className="inline-flex items-center gap-2">
-              <span className="w-6 h-px bg-green-500" />
-              <span className="text-green-500 text-xs font-semibold tracking-[0.25em] uppercase">Values</span>
+          <div className="space-y-8 p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/5">
+            <div className="inline-flex items-center gap-3">
+              <span className="w-6 h-[1px] bg-blue-500" />
+              <span className="text-blue-500 text-[10px] font-black tracking-[0.25em] uppercase">Values</span>
             </div>
-            <h3 className="text-2xl font-bold text-white">Our values</h3>
-            <div className="space-y-3">
+            <h3 className="text-3xl font-bold text-white tracking-tight">Our values</h3>
+            <div className="space-y-4">
               {values.map((value, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-4 p-4 rounded-2xl bg-dark-400 border border-dark-500 hover:border-green-500/30 transition-all duration-300"
+                  className="group flex items-start gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-500"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-green-500/15 flex items-center justify-center text-green-400 shrink-0">
+                  <div className="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
                     {valueIcons[value.icon] ?? <FallbackIcon />}
                   </div>
                   <div>
-                    <h4 className="text-white text-sm font-bold mb-0.5">{value.title}</h4>
-                    <p className="text-white/45 text-xs leading-relaxed">{value.description}</p>
+                    <h4 className="text-white text-base font-bold mb-1">{value.title}</h4>
+                    <p className="text-white/40 text-xs leading-relaxed font-medium">{value.description}</p>
                   </div>
                 </div>
               ))}

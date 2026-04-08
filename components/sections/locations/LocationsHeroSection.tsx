@@ -21,8 +21,8 @@ const trustPills = [
   {
     icon: (
       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
     ),
     text: "3 clinic locations",
@@ -30,7 +30,7 @@ const trustPills = [
   {
     icon: (
       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     ),
     text: "Open 6 days a week",
@@ -38,7 +38,7 @@ const trustPills = [
   {
     icon: (
       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
       </svg>
     ),
     text: "Mobile outreach units",
@@ -53,91 +53,86 @@ export const LocationsHeroSection = ({
   quickLinks,
 }: LocationsHeroSectionProps) => {
   return (
-    <section className="relative min-h-[65vh] w-full overflow-hidden flex items-center">
+    <section className="relative min-h-[75vh] w-full overflow-hidden flex items-center bg-[#000d1a]">
 
-      {/* Background — map image with lighter gradient so it's visible */}
+      {/* ── Background: Cinematic Map Treatment ────────────────────── */}
       <div className="absolute inset-0">
         <Image
           src="/assets/images/zimbabwe-map-detailed.png"
-          alt="Map of Zimbabwe showing clinic locations"
+          alt="Map of Zimbabwe"
           fill
-          className="object-cover"
+          className="object-cover opacity-40 grayscale contrast-125"
           priority
           quality={95}
         />
-        {/* Lighter gradient — map breathes */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/25" />
-        <div className="absolute inset-0 bg-gradient-to-t from-dark-300/60 via-transparent to-transparent" />
-        <div className="absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_50%,rgba(0,0,0,0.4)_100%)]" />
+        {/* Deep Ocean Wash */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#000d1a] via-[#000d1a]/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#000d1a] via-transparent to-transparent" />
+        <div className="absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_30%,rgba(0,13,26,0.8)_100%)]" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-[5%] py-24 w-full">
-        <div className="max-w-2xl mx-auto space-y-7 text-center flex flex-col items-center">
+        <div className="max-w-3xl space-y-10">
 
-          {/* Breadcrumb */}
-          <nav className="flex items-center justify-center gap-1.5 text-xs text-white/40">
-            <Link href="/" className="hover:text-white/70 transition-colors duration-200 flex items-center gap-1">
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              Home
-            </Link>
-            <svg className="w-3 h-3 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          {/* ── Navigation ────────────────────────────────────────── */}
+          <nav className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+            <Link href="/" className="hover:text-sky-500 transition-colors duration-300">Home</Link>
+            <svg className="w-2.5 h-2.5 text-white/10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
             </svg>
-            <span className="text-white/70">Locations</span>
+            <span className="text-sky-500 italic">Locations</span>
           </nav>
 
-          {/* Badge — with ping */}
-          <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/20">
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex size-2 rounded-full bg-green-500" />
+          {/* ── Status Badge ──────────────────────────────────────── */}
+          <div className="inline-flex items-center gap-4 bg-white/[0.03] backdrop-blur-xl px-6 py-3 rounded-2xl border border-white/10 shadow-2xl">
+            <span className="relative flex size-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
+              <span className="relative inline-flex size-2.5 rounded-full bg-sky-500 shadow-[0_0_10px_rgba(14,165,233,0.8)]" />
             </span>
-            <span className="text-sm font-medium tracking-wide text-white/90">
+            <span className="text-[11px] font-black tracking-[0.2em] text-white/90 uppercase">
               {badge}
             </span>
           </div>
 
-          {/* Headline */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-tight">
-            {title}
-            <br />
-            <span className="text-green-400">{titleHighlight}</span>
-          </h1>
+          {/* ── Headline ──────────────────────────────────────────── */}
+          <div className="space-y-4">
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] tracking-[ -0.04em] uppercase italic">
+              {title}
+              <br />
+              <span className="text-sky-500 not-italic">{titleHighlight}</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-white/40 max-w-xl leading-relaxed font-medium italic">
+              {description}
+            </p>
+          </div>
 
-          {/* Description */}
-          <p className="text-lg text-white/65 max-w-lg leading-relaxed text-center mx-auto">
-            {description}
-          </p>
-
-          {/* Trust pills */}
-          <div className="flex flex-wrap gap-2 justify-center">
+          {/* ── Trust Indicators ───────────────────────────────────── */}
+          <div className="flex flex-wrap gap-3">
             {trustPills.map((pill) => (
               <div
                 key={pill.text}
-                className="inline-flex items-center gap-2 bg-white/8 backdrop-blur-sm border border-white/12 text-white/75 text-xs font-medium px-3.5 py-2 rounded-full"
+                className="inline-flex items-center gap-3 bg-white/[0.02] backdrop-blur-md border border-white/5 text-white/50 text-[10px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl transition-colors duration-500 hover:bg-white/[0.05]"
               >
-                <span className="text-green-400">{pill.icon}</span>
+                <span className="text-sky-500">{pill.icon}</span>
                 {pill.text}
               </div>
             ))}
           </div>
 
-          {/* Quick links — clinic anchor pills */}
-          <div className="flex flex-wrap gap-2 pt-2 justify-center">
+          {/* ── Clinic Navigation Pills ───────────────────────────── */}
+          <div className="flex flex-wrap gap-3 pt-6 border-t border-white/[0.05]">
             {quickLinks.map((link) => (
               <a
                 key={link.id}
                 href={`#${link.id}`}
-                className="group inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/8 backdrop-blur-sm hover:bg-green-500 border border-white/15 hover:border-green-500 text-white/70 hover:text-white transition-all duration-300 text-xs font-semibold"
+                className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-white/[0.03] backdrop-blur-md hover:bg-sky-500 border border-white/10 hover:border-sky-400 text-white/40 hover:text-white transition-all duration-500 text-[11px] font-black uppercase tracking-widest hover:-translate-y-1 shadow-lg"
               >
                 {link.isMobile ? (
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
                   </svg>
                 ) : (
-                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
                 )}
@@ -149,10 +144,10 @@ export const LocationsHeroSection = ({
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-white/30 text-[10px] tracking-[0.2em] uppercase">
-        <span>Scroll</span>
-        <div className="w-px h-10 bg-gradient-to-b from-white/30 to-transparent animate-scroll-line" />
+      {/* ── Scroll Indicator ──────────────────────────────────── */}
+      <div className="absolute bottom-12 left-[5%] hidden md:flex flex-col items-start gap-4 text-white/20 text-[10px] font-black tracking-[0.4em] uppercase">
+        <div className="w-px h-16 bg-gradient-to-b from-sky-500 to-transparent" />
+        <span className="[writing-mode:vertical-lr]">Scroll Exploration</span>
       </div>
 
     </section>

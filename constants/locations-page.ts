@@ -1,5 +1,5 @@
 // constants/locations-page.ts
-import { BRANCHES_DATA, MOBILE_UNIT_DATA } from "./branches";
+import { BRANCHES_DATA } from "./branches";
 
 export const LOCATIONS_PAGE_CONFIG = {
   hero: {
