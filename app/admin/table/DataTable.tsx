@@ -1,4 +1,3 @@
-// components/table/DataTable.tsx
 "use client";
 
 import {
@@ -9,7 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -32,6 +31,8 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter();
+
   const encryptedKey =
     typeof window !== "undefined"
       ? window.localStorage.getItem("accessKey")
@@ -40,9 +41,9 @@ export function DataTable<TData, TValue>({
   useEffect(() => {
     const accessKey = encryptedKey && decryptKey(encryptedKey);
     if (accessKey !== process.env.NEXT_PUBLIC_ADMIN_PASSKEY!.toString()) {
-      redirect("/");
+      router.push("/");
     }
-  }, [encryptedKey]);
+  }, [encryptedKey, router]);
 
   const table = useReactTable({
     data,
@@ -102,7 +103,6 @@ export function DataTable<TData, TValue>({
         </TableBody>
       </Table>
 
-      {/* ── Pagination ──────────────────────────────────────────────── */}
       <div className="table-actions">
         <Button
           variant="outline"
@@ -120,7 +120,6 @@ export function DataTable<TData, TValue>({
           />
         </Button>
 
-        {/* Page indicator */}
         <span className="text-white/40 text-xs font-medium px-2">
           {currentPage} / {totalPages || 1}
         </span>

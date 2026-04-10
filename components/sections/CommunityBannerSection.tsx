@@ -15,7 +15,7 @@ export const CommunityBannerSection = ({
   title = "Care Beyond the Clinic",
   subtitle = "COMMUNITY IMPACT",
   description = "Our vision extends to every corner of Zimbabwe. Through mobile diagnostic units and national school screening programs, we ensure that distance is never a barrier to high-standard ocular health.",
-  image = "/assets/images/community-outreach.jpg", // Suggested: A high-quality photo of the mobile unit or a school screening
+  image = "/assets/images/community-banner.png", // Suggested: A high-quality photo of the mobile unit or a school screening
   stats = [
     { value: "45+", label: "Rural Districts Reached" },
     { value: "12k", label: "Students Screened" },

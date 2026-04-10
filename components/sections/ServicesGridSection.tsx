@@ -80,10 +80,11 @@ export const ServicesGridSection = ({
                 alt={featured.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover opacity-80 transition-all duration-1000 group-hover:scale-110 group-hover:opacity-100"
+                className="object-cover transition-all duration-1000 group-hover:scale-110"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#001a33] via-[#001a33]/20 to-transparent" />
+              {/* REMOVED blue gradient overlay - only dark gradient for text */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
               {/* Index Number Overlay */}
               <div className="absolute top-8 left-8">
@@ -98,7 +99,7 @@ export const ServicesGridSection = ({
                 <h3 className="text-3xl font-bold text-white mb-4 group-hover:text-sky-300 transition-colors duration-300">
                   {featured.title}
                 </h3>
-                <p className="text-white/60 text-lg font-light leading-relaxed mb-6 line-clamp-2">
+                <p className="text-white/80 text-lg font-light leading-relaxed mb-6 line-clamp-2">
                   {featured.description}
                 </p>
                 <span className="inline-flex items-center gap-3 text-sky-400 text-sm font-bold uppercase tracking-widest">
@@ -121,9 +122,10 @@ export const ServicesGridSection = ({
                 alt={service.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 25vw"
-                className="object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-700"
+                className="object-cover transition-all duration-700 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#001a33] via-[#001a33]/40 to-transparent" />
+              {/* REMOVED blue gradient overlay - only dark gradient for text */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
               <div className="absolute top-6 left-6 flex items-center gap-4">
                 <span className="text-white/10 text-3xl font-black leading-none italic">

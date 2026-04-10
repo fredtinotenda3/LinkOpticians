@@ -16,17 +16,18 @@ export type CMSStory = {
 const FeaturedCard = ({ story }: { story: CMSStory }) => (
   <article className="col-span-1 md:col-span-2 relative overflow-hidden rounded-3xl bg-[#002b4d] border border-white/10 h-full min-h-[440px]">
     
-    {/* Full-bleed background with professional overlay */}
+    {/* Full-bleed background - IMAGE FULLY VISIBLE */}
     <div className="absolute inset-0">
       <Image
         src={story.image.url}
         alt={story.image.alt ?? story.title}
         fill
         sizes="(max-width: 768px) 100vw, 50vw"
-        className="object-cover opacity-70"
+        className="object-cover"
         priority
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#001a33] via-[#001a33]/60 to-transparent" />
+      {/* Dark gradient overlay for text readability - NO BLUE TINT */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
     </div>
 
     {/* Primary Milestone Badge */}
@@ -39,16 +40,16 @@ const FeaturedCard = ({ story }: { story: CMSStory }) => (
     {/* Content */}
     <div className="absolute bottom-0 left-0 right-0 z-10 p-8">
       <div className="flex items-center gap-3 mb-4">
-        <span className="text-sky-400 text-xs font-bold tracking-[0.2em] uppercase">
+        <span className="text-sky-300 text-xs font-bold tracking-[0.2em] uppercase">
           {story.category}
         </span>
-        <span className="text-white/30 text-xs">•</span>
-        <span className="text-white/50 text-xs font-medium">{story.publishedAt}</span>
+        <span className="text-white/40 text-xs">•</span>
+        <span className="text-white/60 text-xs font-medium">{story.publishedAt}</span>
       </div>
       <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
         {story.title}
       </h3>
-      <p className="text-white/70 text-base leading-relaxed max-w-lg">
+      <p className="text-white/80 text-base leading-relaxed max-w-lg">
         {story.excerpt}
       </p>
     </div>
@@ -65,25 +66,26 @@ const StoryCard = ({ story }: { story: CMSStory }) => (
         alt={story.image.alt ?? story.title}
         fill
         sizes="(max-width: 768px) 100vw, 25vw"
-        className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+        className="object-cover transition-all duration-700 group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#001a33] to-transparent" />
+      {/* Dark gradient overlay - NO BLUE TINT */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
       
       <div className="absolute top-4 left-4">
-        <span className="px-3 py-1 bg-[#001a33]/80 backdrop-blur-md rounded-full text-[10px] font-bold text-sky-400 border border-white/10 uppercase tracking-wider">
+        <span className="px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-bold text-sky-300 border border-white/10 uppercase tracking-wider">
           {story.category}
         </span>
       </div>
     </div>
 
     <div className="p-6 space-y-3 flex-1">
-      <span className="text-white/30 text-[10px] font-bold tracking-widest uppercase">
+      <span className="text-white/40 text-[10px] font-bold tracking-widest uppercase">
         {story.publishedAt}
       </span>
       <h3 className="text-lg font-bold text-white leading-snug group-hover:text-sky-300 transition-colors">
         {story.title}
       </h3>
-      <p className="text-white/50 text-sm leading-relaxed line-clamp-3">
+      <p className="text-white/60 text-sm leading-relaxed line-clamp-3">
         {story.excerpt}
       </p>
     </div>
@@ -153,15 +155,15 @@ export default function StoriesSection({ stories }: { stories?: CMSStory[] }) {
   const [featured, ...rest] = allStories;
 
   return (
-    <section className="py-32 bg-[#001a33]">
+    <section className="py-32 bg-[#000d1a]">
       <div className="mx-auto max-w-7xl px-6">
 
-        {/* Header Section */}
+        {/* Header Section - Deep Ocean theme */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-end mb-16">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-[2px] bg-sky-500" />
-              <span className="text-sky-500 text-xs font-bold tracking-[0.3em] uppercase">
+              <span className="text-sky-400 text-xs font-bold tracking-[0.3em] uppercase">
                 Established 2008
               </span>
             </div>
@@ -169,7 +171,7 @@ export default function StoriesSection({ stories }: { stories?: CMSStory[] }) {
               Our Journey
             </h2>
           </div>
-          <p className="text-white/50 text-lg leading-relaxed max-w-md lg:pb-1">
+          <p className="text-white/60 text-lg leading-relaxed max-w-md lg:pb-1">
             Nearly two decades of providing consistent, high-standard optometry services to the Zimbabwean community.
           </p>
         </div>

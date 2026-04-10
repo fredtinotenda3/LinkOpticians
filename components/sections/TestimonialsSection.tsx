@@ -59,13 +59,35 @@ export const TestimonialsSection = ({
   const items = [...testimonials, ...testimonials];
 
   return (
-    <section className="py-32 bg-[#001a33] overflow-hidden">
-      <div className="mx-auto max-w-7xl px-6 mb-20">
+    <section className="relative py-32 overflow-hidden bg-[#000d1a]">
+      
+      {/* Dotted Pattern Background - Deep Ocean with Light Blue Dots */}
+      <div className="absolute inset-0">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="testimonial-dots" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+              {/* Deep Ocean base dot */}
+              <circle cx="4" cy="4" r="1.5" fill="#0B2F6C" opacity="0.4" />
+              {/* Light blue dot */}
+              <circle cx="18" cy="18" r="2" fill="#38BDF8" opacity="0.15" />
+              {/* Smaller light blue accent dot */}
+              <circle cx="28" cy="8" r="1" fill="#7DD3FC" opacity="0.1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#testimonial-dots)" />
+        </svg>
+      </div>
+
+      {/* Subtle top/bottom accent lines */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-sky-500/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-sky-500/20 to-transparent" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-6 mb-20">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-10">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-px bg-sky-500" />
-              <span className="text-sky-500 text-xs font-black tracking-[0.3em] uppercase">{subtitle}</span>
+              <span className="text-sky-400 text-xs font-black tracking-[0.3em] uppercase">{subtitle}</span>
             </div>
             <h2 className="text-5xl font-bold text-white tracking-tight">{title}</h2>
           </div>
@@ -88,9 +110,9 @@ export const TestimonialsSection = ({
         </div>
       </div>
 
-      <div className="relative group/track">
-        <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-[#001a33] to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-[#001a33] to-transparent z-10 pointer-events-none" />
+      <div className="relative group/track z-10">
+        <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-[#000d1a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-[#000d1a] to-transparent z-10 pointer-events-none" />
 
         <div 
           ref={trackRef}
