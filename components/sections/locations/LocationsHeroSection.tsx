@@ -1,155 +1,110 @@
 // components/sections/locations/LocationsHeroSection.tsx
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-interface QuickLink {
-  id: string;
-  label: string;
-  name: string;
-  isMobile?: boolean;
-}
 
 interface LocationsHeroSectionProps {
   title: string;
   titleHighlight: string;
-  description: string;
-  badge: string;
-  quickLinks: QuickLink[];
 }
-
-const trustPills = [
-  {
-    icon: (
-      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-    ),
-    text: "3 clinic locations",
-  },
-  {
-    icon: (
-      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    text: "Open 6 days a week",
-  },
-  {
-    icon: (
-      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-      </svg>
-    ),
-    text: "Mobile outreach units",
-  },
-];
 
 export const LocationsHeroSection = ({
   title,
   titleHighlight,
-  description,
-  badge,
-  quickLinks,
 }: LocationsHeroSectionProps) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   return (
     <section className="relative min-h-[75vh] w-full overflow-hidden flex items-center bg-[#000d1a]">
-
-      {/* ── Background: Cinematic Map Treatment ────────────────────── */}
+      {/* ===== BACKGROUND LAYER - CRYSTAL CLEAR ===== */}
       <div className="absolute inset-0">
+        {/* Loading skeleton */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 bg-[#001a33] animate-pulse" />
+        )}
+
         <Image
           src="/assets/images/zimbabwe-map-detailed.png"
           alt="Map of Zimbabwe"
           fill
-          className="object-cover opacity-40 grayscale contrast-125"
+          className={`object-cover transition-opacity duration-700 ${
+            imageLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoad={() => setImageLoaded(true)}
           priority
           quality={95}
         />
-        {/* Deep Ocean Wash */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#000d1a] via-[#000d1a]/80 to-transparent" />
+
+        {/* MINIMAL Overlays - Only for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#000d1a]/60 via-[#000d1a]/30 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#000d1a] via-transparent to-transparent" />
-        <div className="absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_30%,rgba(0,13,26,0.8)_100%)]" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-[5%] py-24 w-full">
-        <div className="max-w-3xl space-y-10">
+      {/* ===== CONTENT LAYER ===== */}
+      <div className="relative mx-auto max-w-7xl px-6 py-24 w-full">
+        <div
+          className={`max-w-3xl space-y-8 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          {/* Headline */}
+          <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter drop-shadow-lg">
+            {title}
+            <br />
+            <span className="text-sky-400 block mt-2">{titleHighlight}</span>
+          </h1>
 
-          {/* ── Navigation ────────────────────────────────────────── */}
-          <nav className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
-            <Link href="/" className="hover:text-sky-500 transition-colors duration-300">Home</Link>
-            <svg className="w-2.5 h-2.5 text-white/10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-            </svg>
-            <span className="text-sky-500 italic">Locations</span>
-          </nav>
-
-          {/* ── Status Badge ──────────────────────────────────────── */}
-          <div className="inline-flex items-center gap-4 bg-white/[0.03] backdrop-blur-xl px-6 py-3 rounded-2xl border border-white/10 shadow-2xl">
-            <span className="relative flex size-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
-              <span className="relative inline-flex size-2.5 rounded-full bg-sky-500 shadow-[0_0_10px_rgba(14,165,233,0.8)]" />
-            </span>
-            <span className="text-[11px] font-black tracking-[0.2em] text-white/90 uppercase">
-              {badge}
-            </span>
-          </div>
-
-          {/* ── Headline ──────────────────────────────────────────── */}
-          <div className="space-y-4">
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] tracking-[ -0.04em] uppercase italic">
-              {title}
-              <br />
-              <span className="text-sky-500 not-italic">{titleHighlight}</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-white/40 max-w-xl leading-relaxed font-medium italic">
-              {description}
-            </p>
-          </div>
-
-          {/* ── Trust Indicators ───────────────────────────────────── */}
-          <div className="flex flex-wrap gap-3">
-            {trustPills.map((pill) => (
-              <div
-                key={pill.text}
-                className="inline-flex items-center gap-3 bg-white/[0.02] backdrop-blur-md border border-white/5 text-white/50 text-[10px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl transition-colors duration-500 hover:bg-white/[0.05]"
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-5 pt-6">
+            <Link
+              href="/book"
+              className="group inline-flex items-center justify-center gap-3 bg-sky-600 hover:bg-sky-500 text-white font-black text-xs uppercase tracking-[0.2em] px-10 py-5 rounded-full shadow-2xl shadow-black/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-sky-600/40"
+            >
+              Book Appointment
+              <svg
+                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <span className="text-sky-500">{pill.icon}</span>
-                {pill.text}
-              </div>
-            ))}
-          </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </Link>
 
-          {/* ── Clinic Navigation Pills ───────────────────────────── */}
-          <div className="flex flex-wrap gap-3 pt-6 border-t border-white/[0.05]">
-            {quickLinks.map((link) => (
-              <a
-                key={link.id}
-                href={`#${link.id}`}
-                className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-white/[0.03] backdrop-blur-md hover:bg-sky-500 border border-white/10 hover:border-sky-400 text-white/40 hover:text-white transition-all duration-500 text-[11px] font-black uppercase tracking-widest hover:-translate-y-1 shadow-lg"
+            <Link
+              href="#clinics"
+              className="group inline-flex items-center justify-center gap-2 border border-white/20 bg-black/30 backdrop-blur-sm text-white font-black text-xs uppercase tracking-[0.2em] px-10 py-5 rounded-full hover:bg-white/10 transition-all duration-500 hover:scale-[1.02]"
+            >
+              View All Clinics
+              <svg
+                className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                {link.isMobile ? (
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-                  </svg>
-                ) : (
-                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                  </svg>
-                )}
-                {link.name}
-              </a>
-            ))}
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                />
+              </svg>
+            </Link>
           </div>
-
         </div>
       </div>
-
-      {/* ── Scroll Indicator ──────────────────────────────────── */}
-      <div className="absolute bottom-12 left-[5%] hidden md:flex flex-col items-start gap-4 text-white/20 text-[10px] font-black tracking-[0.4em] uppercase">
-        <div className="w-px h-16 bg-gradient-to-b from-sky-500 to-transparent" />
-        <span className="[writing-mode:vertical-lr]">Scroll Exploration</span>
-      </div>
-
     </section>
   );
 };

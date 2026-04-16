@@ -1,4 +1,5 @@
 // components/sections/products/ContactLensesSection.tsx
+
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/constants/products";
@@ -29,89 +30,99 @@ export const ContactLensesSection = ({
   buttonLink,
 }: ContactLensesSectionProps) => {
   return (
-    <section id={id} className="relative py-32 bg-[#000d1a] overflow-hidden border-b border-white/[0.03]">
-      
-      {/* Deep Ocean Ambient Glows */}
-      <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-sky-500/5 blur-[120px] pointer-events-none" />
-      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full bg-sky-400/5 blur-[100px] pointer-events-none" />
+    <section
+      id={id}
+      className="relative py-24 md:py-32 bg-[#020617] overflow-hidden border-b border-white/[0.05]"
+    >
+      {/* Softer ambient glow */}
+      <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-sky-400/10 blur-[140px] pointer-events-none" />
+      <div className="absolute -bottom-32 -right-32 w-[400px] h-[400px] rounded-full bg-sky-400/10 blur-[120px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-[5%]">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 md:gap-20 items-center">
 
-          {/* ── Image Side (Cinematic Frame) ─────────────────────────── */}
+          {/* ── Image Side ─────────────────────────── */}
           <div className="relative order-2 lg:order-1 group">
-            <div className="relative rounded-[40px] overflow-hidden border border-white/10 aspect-[4/5] lg:aspect-[3/4] bg-[#001222]">
+            <div className="relative rounded-[28px] overflow-hidden border border-white/10 aspect-[4/5] bg-[#001222]">
+
               <Image
                 src={image}
                 alt={imageAlt}
                 fill
-                className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                quality={100} // 🔥 sharper image
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              {/* Overlay for cinematic depth */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#000d1a]/60 via-transparent to-transparent" />
+
+              {/* Cleaner overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/70 via-transparent to-transparent" />
             </div>
-            
-            {/* Decorative Geometric Accent */}
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 rounded-3xl border border-sky-500/20 -z-10 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-700" />
+
+            {/* Softer accent (less aggressive) */}
+            <div className="absolute -bottom-4 -left-4 w-24 h-24 rounded-2xl border border-sky-400/20 -z-10 group-hover:translate-x-1 group-hover:translate-y-1 transition duration-500" />
           </div>
 
-          {/* ── Content Side ───────────────────────────────────────── */}
-          <div className="space-y-10 order-1 lg:order-2">
+          {/* ── Content Side ───────────────────────── */}
+          <div className="space-y-8 md:space-y-10 order-1 lg:order-2">
 
-            {/* Premium Eyebrow */}
+            {/* Eyebrow */}
             <div className="flex items-center gap-4">
-              <span className="w-12 h-[2px] bg-sky-500" />
-              <span className="text-sky-500 text-[10px] font-black tracking-[0.4em] uppercase">
+              <span className="w-10 h-[2px] bg-sky-400" />
+              <span className="text-sky-400/80 text-xs font-semibold tracking-[0.25em] uppercase">
                 {subtitle}
               </span>
             </div>
 
-            {/* Cinematic Title */}
-            <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter italic uppercase">
+            {/* Title (cleaned) */}
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-semibold text-white leading-[1.1] tracking-tight">
               {title}
               <br />
               <span className="text-sky-400">{titleHighlight}</span>
             </h2>
 
-            {/* Regulatory Description */}
-            <p className="text-white/40 text-lg leading-relaxed max-w-xl font-medium">
+            {/* Description */}
+            <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-xl">
               {description}
             </p>
 
-            {/* Product Grid - Glassmorphism Style */}
+            {/* Product Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {products.map((product) => (
                 <Link
                   key={product.id}
                   href={`/products/${product.id}`}
-                  className="group p-6 rounded-[24px] bg-white/[0.02] border border-white/5 hover:border-sky-500/40 transition-all duration-500 hover:bg-white/[0.04]"
+                  className="group p-5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-sky-400/40 transition-all duration-300 hover:bg-white/[0.05]"
                 >
-                  <p className="text-sky-500 text-[9px] font-black uppercase tracking-widest mb-1 opacity-60">
+                  <p className="text-sky-400/70 text-xs font-semibold uppercase tracking-[0.2em] mb-1">
                     {product.brand}
                   </p>
-                  <h3 className="text-white text-base font-bold group-hover:text-sky-400 transition-colors duration-300">
+
+                  <h3 className="text-white text-sm md:text-base font-semibold group-hover:text-sky-400 transition-colors duration-300">
                     {product.name}
                   </h3>
-                  <div className="mt-4 flex items-center gap-2 text-white/20 text-[9px] font-black uppercase tracking-widest group-hover:text-white/40">
-                    Details <span className="w-4 h-px bg-sky-500/30" />
+
+                  <div className="mt-3 flex items-center gap-2 text-white/50 text-xs font-semibold uppercase tracking-wider group-hover:text-white transition">
+                    View
+                    <span className="w-5 h-px bg-sky-400 transition-all duration-300 group-hover:w-8" />
                   </div>
                 </Link>
               ))}
             </div>
 
-            {/* CTA Button */}
-            <div className="pt-4">
+            {/* CTA */}
+            <div className="pt-2">
               <Link
                 href={buttonLink}
-                className="group inline-flex items-center gap-4 bg-sky-500 hover:bg-sky-400 text-white font-black text-[11px] uppercase tracking-[0.2em] px-10 py-5 rounded-full transition-all duration-500 hover:shadow-[0_20px_40px_rgba(14,165,233,0.25)] hover:-translate-y-1"
+                className="group inline-flex items-center gap-3 bg-sky-500 hover:bg-sky-400 text-white font-semibold text-xs uppercase tracking-wider px-8 py-4 rounded-full transition-all duration-300 hover:shadow-[0_15px_30px_rgba(56,189,248,0.25)] hover:-translate-y-0.5"
               >
                 {buttonText}
                 <svg
-                  className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-2"
-                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
             </div>

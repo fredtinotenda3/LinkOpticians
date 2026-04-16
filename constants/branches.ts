@@ -33,8 +33,8 @@ export const BRANCHES_DATA: BranchDetail[] = [
     phone: '+263 242 700 000',
     email: 'robinson@linkopticians.co.zw',
     operatingHours: {
-      weekdays: '8:00 AM - 6:00 PM',
-      saturday: '9:00 AM - 1:00 PM',
+      weekdays: '8:00 AM - 5:00 PM',
+      saturday: '8:00 AM - 1:00 PM',
       sunday: 'Closed',
       publicHolidays: 'Emergency services available'
     },
@@ -75,8 +75,8 @@ export const BRANCHES_DATA: BranchDetail[] = [
     phone: '+263 242 700 001',
     email: 'kensington@linkopticians.co.zw',
     operatingHours: {
-      weekdays: '8:30 AM - 5:30 PM',
-      saturday: '9:00 AM - 1:00 PM',
+      weekdays: '8:00 AM - 5:00 PM',
+      saturday: '8:00 AM - 1:00 PM',
       sunday: 'Closed',
       publicHolidays: 'By appointment only'
     },
@@ -104,7 +104,7 @@ export const BRANCHES_DATA: BranchDetail[] = [
     accessibility: ['Wheelchair accessible', 'Ramp access'],
     notes: 'Clinic location in Kensington',
     mapUrl: 'https://maps.google.com/?q=Kensington+Harare+Argyle+Street',
-    image: '/assets/images/branches/kensington.png'
+    image: '/assets/images/branches/kensington.jpeg'
   },
   {
     id: 'honey-dew',
@@ -114,9 +114,9 @@ export const BRANCHES_DATA: BranchDetail[] = [
     phone: '+263 242 700 002',
     email: 'honeydew@linkopticians.co.zw',
     operatingHours: {
-      weekdays: '9:00 AM - 7:00 PM',
-      saturday: '9:00 AM - 6:00 PM',
-      sunday: '10:00 AM - 4:00 PM',
+      weekdays: '8:00 AM - 1:00 PM',
+      saturday: '8:00 AM - 1:00 PM',
+      sunday: '10:00 AM - 1:00 PM',
       publicHolidays: '10:00 AM - 4:00 PM'
     },
     services: [
@@ -141,7 +141,7 @@ export const BRANCHES_DATA: BranchDetail[] = [
     accessibility: ['Wheelchair accessible', 'Mall access'],
     notes: 'Weekend appointments available',
     mapUrl: 'https://maps.google.com/?q=Honey+Dew+Lifestyle+Centre+Greendale',
-    image: '/assets/images/branches/honey-dew.png'
+    image: '/assets/images/branches/honey-dew.jpeg'
   },
   {
     id: 'chipinge',
@@ -152,7 +152,7 @@ export const BRANCHES_DATA: BranchDetail[] = [
     email: 'chipinge@linkopticians.co.zw',
     operatingHours: {
       weekdays: '8:00 AM - 5:00 PM',
-      saturday: '8:00 AM - 12:00 PM',
+      saturday: '8:00 AM - 1:00 PM',
       sunday: 'Emergency services available',
       publicHolidays: 'Closed'
     },
@@ -179,7 +179,7 @@ export const BRANCHES_DATA: BranchDetail[] = [
     accessibility: ['Ground floor access'],
     notes: 'Serving Chipinge district. Mobile unit based at this location.',
     mapUrl: 'https://maps.google.com/?q=Chipinge+Moodie+Street',
-    image: '/assets/images/branches/chipinge.png'
+    image: '/assets/images/branches/chipinge.jpeg'
   },
   {
     id: 'chiredzi',
@@ -190,7 +190,7 @@ export const BRANCHES_DATA: BranchDetail[] = [
     email: 'chiredzi@linkopticians.co.zw',
     operatingHours: {
       weekdays: '8:00 AM - 5:00 PM',
-      saturday: '8:00 AM - 12:00 PM',
+      saturday: '8:00 AM - 1:00 PM',
       sunday: 'Emergency services available',
       publicHolidays: 'Closed'
     },
@@ -217,7 +217,7 @@ export const BRANCHES_DATA: BranchDetail[] = [
     accessibility: ['Ground floor access'],
     notes: 'Serving Tongaat Hulletts employees and local community',
     mapUrl: 'https://maps.google.com/?q=Chiredzi+Mopani+Drive',
-    image: '/assets/images/branches/chiredzi.png'
+    image: '/assets/images/branches/chiredzi.jpeg'
   }
 ];
 

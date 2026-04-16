@@ -1,4 +1,5 @@
 // components/sections/about/MissionValuesSection.tsx
+
 import { Value } from "@/constants/about";
 
 interface MissionStat {
@@ -18,7 +19,7 @@ interface MissionValuesSectionProps {
   values: Value[];
 }
 
-// SVG icon map — themed with Blue-400
+// ICONS (UNCHANGED)
 const valueIcons: Record<string, JSX.Element> = {
   "👁️": (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,65 +58,101 @@ export const MissionValuesSection = ({
   values,
 }: MissionValuesSectionProps) => {
   return (
-    <section className="relative py-28 bg-[#000B18] overflow-hidden">
-      
-      {/* Brand Blue Glow accent */}
-      <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full bg-blue-500/5 blur-[120px] pointer-events-none" />
+    <section className="relative py-24 md:py-32 overflow-hidden">
+
+      {/* ── UNIQUE BACKGROUND (BLUEPRINT STYLE) ── */}
+
+      {/* Base */}
+      <div className="absolute inset-0 bg-[#020617]" />
+
+      {/* Blueprint grid */}
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [background-size:60px_60px]" />
+
+      {/* Subtle highlight */}
+      <div className="absolute top-0 left-0 w-[400px] h-[300px] bg-sky-400/10 blur-[140px]" />
 
       <div className="relative mx-auto max-w-7xl px-[5%]">
 
-        {/* ── Section header ───────────────────────────────────────────── */}
-        <div className="text-center mb-20 space-y-4">
-          <div className="inline-flex items-center justify-center gap-3">
-            <span className="w-8 h-[1px] bg-blue-500/50" />
-            <span className="text-blue-500 text-[10px] font-black tracking-[0.4em] uppercase">{subtitle}</span>
-            <span className="w-8 h-[1px] bg-blue-500/50" />
+        {/* HEADER */}
+        <div className="text-center mb-16 space-y-4">
+          <div className="flex items-center justify-center gap-4">
+            <span className="w-10 h-px bg-sky-400" />
+            <span className="text-sky-400/80 text-xs font-semibold tracking-[0.3em] uppercase">
+              {subtitle}
+            </span>
+            <span className="w-10 h-px bg-sky-400" />
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-tight">{title}</h2>
-          <p className="text-white/40 max-w-2xl mx-auto text-lg font-light leading-relaxed">{description}</p>
+
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-semibold text-white tracking-tight">
+            {title}
+          </h2>
+
+          <p className="text-white/60 max-w-2xl mx-auto text-base md:text-lg">
+            {description}
+          </p>
         </div>
 
+        {/* GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-          {/* ── Mission ──────────────────────────────────────────────── */}
-          <div className="group space-y-8 p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-all duration-500">
-            <div className="inline-flex items-center gap-3">
-              <span className="w-6 h-[1px] bg-blue-500" />
-              <span className="text-blue-500 text-[10px] font-black tracking-[0.25em] uppercase">Mission</span>
-            </div>
-            <h3 className="text-3xl font-bold text-white tracking-tight">{mission.title}</h3>
-            <p className="text-white/50 text-lg leading-relaxed font-light">{mission.text}</p>
+          {/* MISSION (more structured) */}
+          <div className="p-10 rounded-[20px] bg-white/[0.03] border border-white/10">
 
-            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+            <p className="text-sky-400 text-xs uppercase tracking-wider mb-4">
+              Mission
+            </p>
+
+            <h3 className="text-2xl md:text-3xl font-semibold text-white mb-4">
+              {mission.title}
+            </h3>
+
+            <p className="text-white/60 leading-relaxed mb-8">
+              {mission.text}
+            </p>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
               {mission.stats.map((stat, index) => (
-                <div key={index} className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-blue-500/20 transition-all duration-500">
-                  <p className="text-3xl font-bold text-blue-500 leading-none mb-2">{stat.value}</p>
-                  <p className="text-white/30 text-[10px] font-bold uppercase tracking-wider">{stat.label}</p>
+                <div key={index}>
+                  <p className="text-xl font-semibold text-white">
+                    {stat.value}
+                  </p>
+                  <p className="text-white/40 text-xs uppercase">
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ── Values ───────────────────────────────────────────────── */}
-          <div className="space-y-8 p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/5">
-            <div className="inline-flex items-center gap-3">
-              <span className="w-6 h-[1px] bg-blue-500" />
-              <span className="text-blue-500 text-[10px] font-black tracking-[0.25em] uppercase">Values</span>
-            </div>
-            <h3 className="text-3xl font-bold text-white tracking-tight">Our values</h3>
-            <div className="space-y-4">
+          {/* VALUES (clean list style) */}
+          <div className="p-10 rounded-[20px] bg-white/[0.03] border border-white/10">
+
+            <p className="text-sky-400 text-xs uppercase tracking-wider mb-4">
+              Values
+            </p>
+
+            <h3 className="text-2xl md:text-3xl font-semibold text-white mb-6">
+              Our values
+            </h3>
+
+            <div className="space-y-5">
               {values.map((value, index) => (
-                <div
-                  key={index}
-                  className="group flex items-start gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-500"
-                >
-                  <div className="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
+                <div key={index} className="flex items-start gap-4">
+
+                  <div className="w-10 h-10 rounded-lg bg-sky-400/10 flex items-center justify-center text-sky-400 shrink-0">
                     {valueIcons[value.icon] ?? <FallbackIcon />}
                   </div>
+
                   <div>
-                    <h4 className="text-white text-base font-bold mb-1">{value.title}</h4>
-                    <p className="text-white/40 text-xs leading-relaxed font-medium">{value.description}</p>
+                    <p className="text-white font-semibold mb-1">
+                      {value.title}
+                    </p>
+                    <p className="text-white/50 text-sm leading-relaxed">
+                      {value.description}
+                    </p>
                   </div>
+
                 </div>
               ))}
             </div>

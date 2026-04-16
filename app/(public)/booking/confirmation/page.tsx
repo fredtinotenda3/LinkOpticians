@@ -5,16 +5,16 @@ import { formatDateTime } from "@/lib/utils";
 import { SearchParamProps } from "@/types";
 import { BOOKING_CONFIRMATION_CONFIG } from "@/constants/booking-page";
 import {
-  ConfirmationHeader,
+  //ConfirmationHeader,
   SuccessHeader,
   AppointmentDetailsCard,
-  NextStepsCard,
-  ConfirmationActions,
+  // NextStepsCard,
+  //ConfirmationActions,
   ConfirmationContactInfo,
   BookingErrorState
 } from "@/components/sections/booking/confirmation";
 
-export default async function BookingConfirmation({
+  export default async function BookingConfirmation({
   searchParams,
 }: SearchParamProps) {
   const params = await searchParams;
@@ -29,10 +29,10 @@ export default async function BookingConfirmation({
 
   return (
     <div className="min-h-screen">
-      <ConfirmationHeader 
+      {/* <ConfirmationHeader 
         logoSrc={BOOKING_CONFIRMATION_CONFIG.header.logo}
         logoAlt={BOOKING_CONFIRMATION_CONFIG.header.alt}
-      />
+      /> */}
 
       <main className="py-16 md:py-24">
         <div className="mx-auto max-w-3xl px-[5%]">
@@ -51,15 +51,15 @@ export default async function BookingConfirmation({
             bookingId={bookingId}
           />
 
-          <NextStepsCard 
+          {/* <NextStepsCard 
             title={BOOKING_CONFIRMATION_CONFIG.nextSteps.title}
             steps={BOOKING_CONFIRMATION_CONFIG.nextSteps.steps}
-          />
+          /> */}
 
-          <ConfirmationActions 
+          {/* <ConfirmationActions 
             returnHome={BOOKING_CONFIRMATION_CONFIG.actions.returnHome}
             bookAnother={BOOKING_CONFIRMATION_CONFIG.actions.bookAnother}
-          />
+          /> */}
 
           <ConfirmationContactInfo 
             text={BOOKING_CONFIRMATION_CONFIG.contact.text}

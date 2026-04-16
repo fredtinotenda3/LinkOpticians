@@ -3,10 +3,10 @@ import {
   BrandsStripSection,
   ProductCategorySection,
   ContactLensesSection,
-  LensTechnologySection,
-  AccessoriesSection,
+  // LensTechnologySection,
+  //AccessoriesSection,
   ProductsCTASection,
-  DisclaimerSection
+  // DisclaimerSection
 } from "@/components/sections/products";
 import { PRODUCTS_PAGE_CONFIG } from "@/constants/products-page";
 
@@ -29,10 +29,10 @@ export default function ProductsPage() {
       />
       
       <ContactLensesSection {...PRODUCTS_PAGE_CONFIG.contactLenses} />
-      <LensTechnologySection {...PRODUCTS_PAGE_CONFIG.lensTechnology} />
-      <AccessoriesSection {...PRODUCTS_PAGE_CONFIG.accessories} />
+      {/* <LensTechnologySection {...PRODUCTS_PAGE_CONFIG.lensTechnology} /> */}
+      {/* <AccessoriesSection {...PRODUCTS_PAGE_CONFIG.accessories} /> */}
       <ProductsCTASection {...PRODUCTS_PAGE_CONFIG.cta} />
-      <DisclaimerSection text={PRODUCTS_PAGE_CONFIG.disclaimer.text} />
+      {/* <DisclaimerSection text={PRODUCTS_PAGE_CONFIG.disclaimer.text} /> */}
     </div>
   );
 }

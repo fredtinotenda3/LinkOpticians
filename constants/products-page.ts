@@ -6,8 +6,8 @@ export const PRODUCTS_PAGE_CONFIG = {
     // S.I. 63 s.6(2): factual, not misleading, dignified, no reference to efficiency
     title: "Eyewear",
     titleHighlight: "dispensing services",
-    description: "Spectacle frames, sunglasses, and contact lenses available at our registered premises. Dispensed by registered optometrists and dispensing opticians.",
-    badge: "REGISTERED OPTOMETRY PRACTICE • EST. 2008",
+    description: "Spectacle frames, sunglasses, and contact lenses available at our registered premises.",
+    badge: "EST. 2008",
     categories: PRODUCT_CATEGORIES
   },
 

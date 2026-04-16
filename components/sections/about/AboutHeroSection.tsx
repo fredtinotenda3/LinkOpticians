@@ -1,108 +1,91 @@
 // components/sections/about/AboutHeroSection.tsx
-import Image from "next/image";
-import Link from "next/link";
+"use client";
 
-interface Stat {
-  value: string;
-  label: string;
-}
+import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface AboutHeroSectionProps {
   title: string;
   titleHighlight: string;
-  description: string;
-  badge: string;
-  badgeSubtext: string;
-  stats: Stat[];
 }
 
 export const AboutHeroSection = ({
   title,
   titleHighlight,
-  description,
-  badge,
-  badgeSubtext,
-  stats,
 }: AboutHeroSectionProps) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   return (
-    <section className="relative min-h-[85vh] w-full overflow-hidden flex items-center">
-      
-      {/* Background - Layered for depth */}
+    <section className="relative min-h-[85vh] w-full overflow-hidden flex items-center bg-[#000d1a]">
+      {/* ===== BACKGROUND LAYER - CRYSTAL CLEAR ===== */}
       <div className="absolute inset-0">
+        {/* Loading skeleton */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 bg-[#001a33] animate-pulse" />
+        )}
+
         <Image
           src="/assets/images/about-hero.jpg"
           alt="Link Opticians History"
           fill
-          className="object-cover scale-105 animate-subtle-zoom"
+          className={`object-cover transition-opacity duration-700 ${
+            imageLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoad={() => setImageLoaded(true)}
           priority
           quality={95}
         />
-        {/* Deep Ocean Blue Overlay: Heavy on the left for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#000B18] via-[#000B18]/70 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#000B18] via-transparent to-transparent opacity-80" />
+
+        {/* MINIMAL Overlays - Only for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#000d1a]/60 via-[#000d1a]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#000d1a] via-transparent to-transparent" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-[5%] py-20 w-full">
-        <div className="max-w-3xl space-y-8 animate-fade-in-up">
-          
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] uppercase text-white/30">
-            <Link href="/" className="hover:text-blue-400 transition-colors">Home</Link>
-            <span className="opacity-50">/</span>
-            <span className="text-blue-500">About Our Mission</span>
-          </nav>
-
-          {/* Established Badge */}
-          <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10 shadow-2xl">
-            <div className="relative flex size-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75" />
-              <span className="relative inline-flex size-2 rounded-full bg-blue-500" />
-            </div>
-            <span className="text-[10px] font-black tracking-[0.2em] text-white uppercase">{badge}</span>
-            <div className="w-px h-3 bg-white/20" />
-            <span className="text-[10px] font-medium text-white/50 uppercase tracking-wider">{badgeSubtext}</span>
-          </div>
-
+      {/* ===== CONTENT LAYER ===== */}
+      <div className="relative mx-auto max-w-7xl px-6 py-20 w-full">
+        <div
+          className={`max-w-3xl space-y-8 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           {/* Headline */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[0.85] tracking-tighter">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter drop-shadow-lg">
             {title}
-            <span className="block text-blue-500 mt-2">{titleHighlight}</span>
+            <br />
+            <span className="text-sky-400 block mt-2">{titleHighlight}</span>
           </h1>
 
-          {/* Description */}
-          <p className="text-lg md:text-xl text-white/50 max-w-xl leading-relaxed font-light">
-            {description}
-          </p>
-
-          {/* Stats Grid - High contrast glassmorphism */}
-          <div className="flex flex-wrap gap-4 pt-6">
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className="min-w-[140px] p-6 bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-[2rem] hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-500 group"
+          {/* CTA Button */}
+          <div className="pt-6">
+            <div className="flex flex-col sm:flex-row gap-5">
+              <a
+                href="#story"
+                className="group inline-flex items-center justify-center gap-3 bg-sky-600 hover:bg-sky-500 text-white font-black text-xs uppercase tracking-[0.2em] px-10 py-5 rounded-full shadow-2xl shadow-black/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-sky-600/40"
               >
-                <p className="text-3xl font-bold text-white group-hover:text-blue-400 transition-colors duration-500">
-                  {stat.value}
-                </p>
-                <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mt-2">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
+                Our Story
+                <svg
+                  className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                  />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Modern Scroll Indicator */}
-      <div className="absolute bottom-12 left-[5%] hidden md:flex items-center gap-6">
-        <div className="flex flex-col items-center gap-2">
-            <div className="w-[1px] h-12 bg-gradient-to-b from-blue-500 to-transparent animate-pulse" />
-        </div>
-        <span className="text-white/20 text-[9px] font-bold tracking-[0.4em] uppercase vertical-text">
-            Explore 16 Years
-        </span>
-      </div>
-
     </section>
   );
 };

@@ -1,104 +1,116 @@
 // components/sections/contact/ContactHeroSection.tsx
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 interface ContactHeroSectionProps {
   title: string;
   titleHighlight: string;
-  description: string;
-  emergencyText: string;
-  emergencyPhone: string;
-  emergencyBadge: string;
 }
 
 export const ContactHeroSection = ({
   title,
   titleHighlight,
-  description,
-  emergencyText,
-  emergencyPhone,
-  emergencyBadge,
 }: ContactHeroSectionProps) => {
-  return (
-    <section className="relative min-h-[60vh] w-full overflow-hidden flex items-center">
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
-      {/* Background with Brand Deep Blue Overlay */}
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  return (
+    <section className="relative min-h-[60vh] w-full overflow-hidden flex items-center bg-[#000d1a]">
+      {/* ===== BACKGROUND LAYER - CRYSTAL CLEAR ===== */}
       <div className="absolute inset-0">
+        {/* Loading skeleton */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 bg-[#001a33] animate-pulse" />
+        )}
+
         <Image
           src="/assets/images/contact-hero.jpg"
           alt="Link Opticians clinic interior"
           fill
-          className="object-cover"
+          className={`object-cover transition-opacity duration-700 ${
+            imageLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoad={() => setImageLoaded(true)}
           priority
           quality={95}
         />
-        {/* Deep Ocean gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#000B18]/90 via-[#000B18]/60 to-[#000B18]/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#000B18] via-transparent to-transparent" />
-        <div className="absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_40%,rgba(0,11,24,0.7)_100%)]" />
+
+        {/* MINIMAL Overlays - Only for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#000d1a]/60 via-[#000d1a]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#000d1a] via-transparent to-transparent" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-[5%] py-24 w-full">
-        <div className="max-w-2xl mx-auto space-y-8 text-center flex flex-col items-center">
-
-          {/* Breadcrumb */}
-          <nav className="flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/30">
-            <Link href="/" className="hover:text-blue-400 transition-colors duration-200 flex items-center gap-1.5">
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              Home
-            </Link>
-            <span className="w-1 h-1 rounded-full bg-white/10" />
-            <span className="text-white/60">Contact</span>
-          </nav>
-
-          {/* Eyebrow */}
-          <div className="inline-flex items-center justify-center gap-3">
-            <span className="w-8 h-[1px] bg-blue-500/50" />
-            <span className="text-blue-500 text-[10px] font-black tracking-[0.4em] uppercase">
-              Support & Inquiries
-            </span>
-            <span className="w-8 h-[1px] bg-blue-500/50" />
-          </div>
-
+      {/* ===== CONTENT LAYER ===== */}
+      <div className="relative mx-auto max-w-7xl px-6 py-24 w-full">
+        <div
+          className={`max-w-3xl space-y-8 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           {/* Headline */}
-          <h1 className="text-5xl md:text-7xl font-bold text-white leading-[0.9] tracking-tighter">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter drop-shadow-lg">
             {title}
             <br />
-            <span className="text-blue-500">{titleHighlight}</span>
+            <span className="text-sky-400 block mt-2">{titleHighlight}</span>
           </h1>
 
-          {/* Description */}
-          <p className="text-lg text-white/50 max-w-lg leading-relaxed font-light">
-            {description}
-          </p>
-
-          {/* Emergency pill - Keeping high-alert red but with brand-consistent styling */}
-          <div className="inline-flex items-center gap-4 bg-red-500/10 backdrop-blur-xl px-6 py-3.5 rounded-full border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
-            <span className="relative flex size-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
-              <span className="relative inline-flex size-2.5 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]" />
-            </span>
-            <span className="text-white/70 text-xs font-bold uppercase tracking-wider">{emergencyText}</span>
-            <a
-              href={`tel:${emergencyPhone.replace(/\D/g, "")}`}
-              className="text-white font-black hover:text-red-400 transition-colors duration-200 text-sm"
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-5 pt-6">
+            <Link
+              href="/book"
+              className="group inline-flex items-center justify-center gap-3 bg-sky-600 hover:bg-sky-500 text-white font-black text-xs uppercase tracking-[0.2em] px-10 py-5 rounded-full shadow-2xl shadow-black/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-sky-600/40"
             >
-              {emergencyPhone}
-            </a>
-            <span className="text-white/20 text-[10px] border-l border-white/10 pl-4 font-black tracking-tighter">{emergencyBadge}</span>
-          </div>
+              Book Appointment
+              <svg
+                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </Link>
 
+            <Link
+              href="/locations"
+              className="group inline-flex items-center justify-center gap-2 border border-white/20 bg-black/30 backdrop-blur-sm text-white font-black text-xs uppercase tracking-[0.2em] px-10 py-5 rounded-full hover:bg-white/10 transition-all duration-500 hover:scale-[1.02]"
+            >
+              Find a Clinic
+              <svg
+                className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </Link>
+          </div>
         </div>
       </div>
-
-      {/* Scroll indicator - Themed Blue */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-3 text-white/20 text-[9px] font-black tracking-[0.3em] uppercase">
-        <span>Scroll</span>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-blue-500/40 via-blue-500/10 to-transparent" />
-      </div>
-
     </section>
   );
 };

@@ -27,27 +27,70 @@ export const ServicesGridSection = ({
   const [featured, ...rest] = services;
 
   return (
-    <section className="relative py-32 bg-[#001a33] overflow-hidden">
-      
-      {/* Professional subtle lighting accent */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-sky-500/5 blur-[120px] pointer-events-none" />
+    <section className="relative py-32 overflow-hidden">
+
+      {/* ── BASE ── */}
+      <div className="absolute inset-0 bg-[#020617]" />
+
+      {/* ── PRIMARY GRID (VISIBLE STRUCTURE) ── */}
+      <div className="absolute inset-0 opacity-[0.12] pointer-events-none 
+        bg-[linear-gradient(to_right,rgba(255,255,255,0.18)_1px,transparent_1px),
+             linear-gradient(to_bottom,rgba(255,255,255,0.18)_1px,transparent_1px)]
+        [background-size:70px_70px]" 
+      />
+
+      {/* ── SECONDARY GRID (DEPTH COLOR) ── */}
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none 
+        bg-[linear-gradient(to_right,rgba(56,189,248,0.2)_1px,transparent_1px),
+             linear-gradient(to_bottom,rgba(168,85,247,0.2)_1px,transparent_1px)]
+        [background-size:140px_140px]" 
+      />
+
+      {/* ── MICRO STARS ── */}
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none 
+        bg-[radial-gradient(circle,white_1px,transparent_1px)]
+        [background-size:80px_80px]" 
+      />
+
+      {/* ── COLORED STAR ACCENTS ── */}
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none 
+        bg-[radial-gradient(circle_at_20%_30%,rgba(56,189,248,0.6)_1px,transparent_1px),
+             radial-gradient(circle_at_80%_70%,rgba(168,85,247,0.6)_1px,transparent_1px)]
+        [background-size:120px_120px]" 
+      />
+
+      {/* ── NEBULA ── */}
+      <div className="absolute top-0 right-0 w-[600px] h-[400px] bg-sky-400/10 blur-[160px]" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[300px] bg-violet-500/10 blur-[140px]" />
+
+      {/* ── FOCUS BAND ── */}
+      <div className="absolute top-1/2 left-0 right-0 h-[160px] -translate-y-1/2 
+        bg-gradient-to-r from-transparent via-sky-400/20 to-transparent blur-3xl" 
+      />
+
+      {/* ── VIGNETTE ── */}
+      <div className="absolute inset-0 
+        bg-[radial-gradient(circle_at_center,transparent,rgba(2,6,23,0.9))]" 
+      />
 
       <div className="relative mx-auto max-w-7xl px-6">
 
-        {/* ── Section Header ────────────────────────────────────────────── */}
+        {/* HEADER */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-20">
           <div className="space-y-4 max-w-2xl">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-[2px] bg-sky-500" />
-              <span className="text-sky-500 text-xs font-black tracking-[0.3em] uppercase">
+              <div className="w-10 h-[2px] bg-sky-400" />
+              <span className="text-sky-400 text-xs font-semibold tracking-[0.3em] uppercase">
                 {subtitle}
               </span>
             </div>
-            <h2 className="text-5xl md:text-6xl font-bold text-white tracking-tight leading-[1.1]">
+
+            <h2 className="text-5xl md:text-6xl font-semibold text-white leading-[1.1]">
               {title}
             </h2>
+
             {description && (
-              <p className="text-white/50 text-xl font-light leading-relaxed">
+              <p className="text-white/50 text-lg">
                 {description}
               </p>
             )}
@@ -56,88 +99,60 @@ export const ServicesGridSection = ({
           {showViewAll && (
             <Link
               href={viewAllHref}
-              className="hidden md:inline-flex items-center gap-3 px-8 py-4 rounded-full border border-white/10 text-white/70 hover:text-white hover:bg-white/5 text-sm font-bold uppercase tracking-widest transition-all duration-300 group shrink-0"
+              className="hidden md:inline-flex items-center gap-3 px-8 py-4 rounded-full border border-white/10 text-white/70 hover:text-white hover:bg-white/5 text-sm font-semibold uppercase tracking-widest transition-all group"
             >
               {viewAllText}
-              <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+              <span className="transition-transform group-hover:translate-x-1">→</span>
             </Link>
           )}
         </div>
 
-        {/* ── Clinical Bento Grid ────────────────────────────────────────── */}
+        {/* GRID */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
 
-          {/* Featured Service Card (Laboratory/Exams) */}
+          {/* FEATURED */}
           {featured && (
             <Link
               href={featured.href}
-              className="group md:col-span-2 md:row-span-2 relative overflow-hidden rounded-[2.5rem] bg-[#002b4d] border border-white/10 hover:border-sky-500/40 transition-all duration-700 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] min-h-[450px]"
+              className="group md:col-span-2 md:row-span-2 relative overflow-hidden rounded-[2.5rem] border border-white/10 hover:border-sky-400/40 transition-all duration-700 min-h-[450px]"
             >
               <Image
                 src={featured.image}
                 alt={featured.title}
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover transition-all duration-1000 group-hover:scale-110"
                 priority
               />
-              {/* REMOVED blue gradient overlay - only dark gradient for text */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-              {/* Index Number Overlay */}
-              <div className="absolute top-8 left-8">
-                <span className="text-white/10 text-7xl font-black leading-none select-none tracking-tighter italic">01</span>
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
 
-              {/* Content Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-10">
-                <span className="inline-block bg-sky-600 text-white text-[10px] font-black tracking-[0.2em] uppercase px-4 py-2 rounded-full mb-6 shadow-lg">
-                  Clinical Lead
-                </span>
-                <h3 className="text-3xl font-bold text-white mb-4 group-hover:text-sky-300 transition-colors duration-300">
+              <div className="absolute bottom-0 p-10">
+                <h3 className="text-3xl font-semibold text-white mb-4 group-hover:text-sky-300 transition">
                   {featured.title}
                 </h3>
-                <p className="text-white/80 text-lg font-light leading-relaxed mb-6 line-clamp-2">
-                  {featured.description}
-                </p>
-                <span className="inline-flex items-center gap-3 text-sky-400 text-sm font-bold uppercase tracking-widest">
-                  Explore Service
-                  <div className="w-8 h-px bg-sky-400/50 group-hover:w-12 transition-all duration-500" />
-                </span>
+                <p className="text-white/70">{featured.description}</p>
               </div>
             </Link>
           )}
 
-          {/* Rest of the Services */}
-          {rest.map((service, index) => (
+          {/* REST */}
+          {rest.map((service) => (
             <Link
               key={service.id}
               href={service.href}
-              className="group relative overflow-hidden rounded-[2rem] bg-[#002b4d]/50 border border-white/5 hover:border-white/20 transition-all duration-500 hover:-translate-y-2 min-h-[220px]"
+              className="group relative overflow-hidden rounded-[2rem] border border-white/5 hover:border-white/20 transition-all duration-500 min-h-[220px]"
             >
               <Image
                 src={service.image}
                 alt={service.title}
                 fill
-                sizes="(max-width: 768px) 100vw, 25vw"
                 className="object-cover transition-all duration-700 group-hover:scale-110"
               />
-              {/* REMOVED blue gradient overlay - only dark gradient for text */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
-              <div className="absolute top-6 left-6 flex items-center gap-4">
-                <span className="text-white/10 text-3xl font-black leading-none italic">
-                  {String(index + 2).padStart(2, "0")}
-                </span>
-                <span className="text-sky-400/40 text-[9px] font-bold tracking-[0.2em] uppercase">
-                  {service.category}
-                </span>
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
-              <div className="absolute bottom-0 left-0 right-0 p-8">
-                <h3 className="text-xl font-bold text-white group-hover:text-sky-300 transition-colors duration-300">
+              <div className="absolute bottom-0 p-6">
+                <h3 className="text-lg font-semibold text-white group-hover:text-sky-300 transition">
                   {service.title}
                 </h3>
               </div>
@@ -145,12 +160,12 @@ export const ServicesGridSection = ({
           ))}
         </div>
 
-        {/* Mobile-only CTA */}
+        {/* MOBILE CTA */}
         {showViewAll && (
           <div className="mt-12 text-center md:hidden">
             <Link
               href={viewAllHref}
-              className="inline-flex items-center gap-3 px-10 py-5 rounded-full bg-white text-[#001a33] text-sm font-black uppercase tracking-widest shadow-xl"
+              className="inline-flex items-center gap-3 px-10 py-5 rounded-full bg-white text-[#020617] text-sm font-semibold uppercase tracking-widest"
             >
               {viewAllText}
             </Link>

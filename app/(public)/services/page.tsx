@@ -5,7 +5,7 @@ import {
   ServicesGridSection,
   LaboratorySection,
   CorporateSection,
-  LegalNoticeSection
+  // LegalNoticeSection
 } from "@/components/sections/services";
 import { SERVICES_PAGE_CONFIG } from "@/constants/services-page";
 
@@ -54,7 +54,7 @@ export default function ServicesPage() {
       {/* 5. Legal Notice 
           Quiet, professional regulatory disclosure before the final push.
       */}
-      <LegalNoticeSection text={SERVICES_PAGE_CONFIG.legalNotice.text} />
+      {/* <LegalNoticeSection text={SERVICES_PAGE_CONFIG.legalNotice.text} /> */}
 
       {/* 6. Final CTA 
           Reused globally to drive appointments to Harare, Chipinge, or Chiredzi branches.

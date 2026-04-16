@@ -35,7 +35,7 @@ export const BookingFAQSection = ({
         {parts[0]}
         <a
           href={`tel:${phone.replace(/\D/g, "")}`}
-          className="text-blue-400 hover:text-blue-300 transition-colors font-bold underline underline-offset-4 decoration-blue-500/30"
+          className="text-sky-400 hover:text-white transition font-medium"
         >
           {phone}
         </a>
@@ -45,97 +45,100 @@ export const BookingFAQSection = ({
   };
 
   return (
-    <section className="relative py-32 bg-[#000B18] overflow-hidden">
+    <section className="relative py-24 md:py-32 overflow-hidden">
 
-      {/* Background glow — Atmospheric Depth */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-blue-600/[0.04] blur-[120px] pointer-events-none" />
+      {/* ── BASE ── */}
+      <div className="absolute inset-0 bg-[#020617]" />
 
-      <div className="relative mx-auto max-w-3xl px-[5%]">
+      {/* ── GRID (CONSISTENT BUT LIGHT) ── */}
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none 
+        bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),
+             linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)]
+        [background-size:80px_80px]" 
+      />
 
-        {/* ── Section header ───────────────────────────────────────────── */}
-        <div className="text-center mb-16 space-y-4">
-          <div className="inline-flex items-center justify-center gap-4">
-            <span className="w-10 h-px bg-blue-500/30" />
-            <span className="text-blue-500 text-[10px] font-black tracking-[0.4em] uppercase">
+      {/* ── SCAN LINES (UNIQUE HERE) ── */}
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none 
+        bg-[linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)]
+        [background-size:100%_6px]" 
+      />
+
+      {/* ── LEFT GLOW (TERMINAL STYLE) ── */}
+      <div className="absolute left-0 top-1/3 w-[400px] h-[300px] bg-sky-400/10 blur-[140px]" />
+
+      {/* ── VIGNETTE ── */}
+      <div className="absolute inset-0 
+        bg-[radial-gradient(circle_at_left,transparent,rgba(2,6,23,0.9))]" 
+      />
+
+      <div className="relative mx-auto max-w-5xl px-[5%]">
+
+        {/* ── HEADER (LEFT-ALIGNED) ── */}
+        <div className="mb-16 space-y-4">
+
+          <div className="flex items-center gap-4">
+            <span className="w-12 h-px bg-sky-400/40" />
+            <span className="text-sky-400 text-xs font-semibold tracking-[0.3em] uppercase">
               {subtitle}
             </span>
-            <span className="w-10 h-px bg-blue-500/30" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tighter leading-tight">
+
+          <h2 className="text-3xl md:text-5xl font-semibold text-white leading-tight">
             {title}
           </h2>
+
         </div>
 
-        {/* ── Accordion ────────────────────────────────────────────────── */}
-        <div className="space-y-4">
+        {/* ── FAQ STACK (NO CARDS) ── */}
+        <div className="divide-y divide-white/10 border-t border-white/10">
+
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
+
             return (
-              <div
-                key={index}
-                className={`rounded-[2rem] border transition-all duration-500 overflow-hidden backdrop-blur-md ${
-                  isOpen
-                    ? "bg-white/[0.04] border-blue-500/30 shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
-                    : "bg-white/[0.02] border-white/5 hover:border-white/10"
-                }`}
-              >
-                {/* Question */}
+              <div key={index} className="py-6">
+
+                {/* QUESTION */}
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full flex items-center justify-between gap-6 p-7 text-left"
-                  aria-expanded={isOpen}
+                  className="w-full flex items-start justify-between gap-6 text-left group"
                 >
-                  <h3 className={`font-bold text-sm md:text-base tracking-tight transition-colors duration-500 ${
-                    isOpen ? "text-blue-400" : "text-white"
+                  <h3 className={`text-base md:text-lg transition ${
+                    isOpen ? "text-sky-400" : "text-white/80 group-hover:text-white"
                   }`}>
                     {faq.question}
                   </h3>
 
-                  {/* Animated +/× icon */}
-                  <div className={`shrink-0 w-8 h-8 rounded-xl flex items-center justify-center border transition-all duration-500 ${
-                    isOpen
-                      ? "bg-blue-500/20 border-blue-500/40 text-blue-400"
-                      : "bg-white/5 border-white/5 text-white/20"
+                  <span className={`text-sky-400 transition-transform duration-300 ${
+                    isOpen ? "rotate-45" : ""
                   }`}>
-                    <svg
-                      className={`w-4 h-4 transition-transform duration-500 ${isOpen ? "rotate-45" : "rotate-0"}`}
-                      fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m-8-8h16" />
-                    </svg>
-                  </div>
+                    +
+                  </span>
                 </button>
 
-                {/* Answer — smooth reveal */}
-                <div
-                  className={`transition-all duration-500 ease-in-out ${
-                    isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
-                  }`}
-                >
-                  <div className="px-8 pb-8 pt-0 border-t border-white/5">
-                    <p className="text-white/40 text-sm leading-relaxed pt-6 font-light italic">
-                      {formatAnswer(faq.answer, faq.phone)}
-                    </p>
-                  </div>
+                {/* ANSWER */}
+                <div className={`transition-all duration-300 ${
+                  isOpen ? "mt-4 opacity-100 max-h-[300px]" : "max-h-0 opacity-0 overflow-hidden"
+                }`}>
+                  <p className="text-white/60 text-sm leading-relaxed max-w-2xl">
+                    {formatAnswer(faq.answer, faq.phone)}
+                  </p>
                 </div>
+
               </div>
             );
           })}
+
         </div>
 
-        {/* ── CTA ──────────────────────────────────────────────────────── */}
-        <div className="text-center mt-16">
+        {/* ── CTA (MINIMAL) ── */}
+        <div className="mt-16">
           <Link
             href={moreButtonLink}
-            className="group inline-flex items-center gap-3 px-8 py-4 rounded-full border border-white/10 bg-white/[0.02] text-white/50 hover:text-white hover:border-blue-500/40 text-[11px] font-black uppercase tracking-widest transition-all duration-500"
+            className="inline-flex items-center gap-2 text-sky-400 hover:text-white text-sm transition"
           >
             {moreButtonText}
-            <svg
-              className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1.5 text-blue-500"
-              fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
+            <span>→</span>
           </Link>
         </div>
 

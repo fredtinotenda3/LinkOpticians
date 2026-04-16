@@ -1,18 +1,14 @@
 // components/sections/products/ProductsHeroSection.tsx
-import Image from "next/image";
-import Link from "next/link";
+"use client";
 
-interface Category {
-  id: string;
-  label: string;
-}
+import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface ProductsHeroSectionProps {
   title: string;
   titleHighlight: string;
   description: string;
   badge: string;
-  categories: Category[];
 }
 
 export const ProductsHeroSection = ({
@@ -20,90 +16,83 @@ export const ProductsHeroSection = ({
   titleHighlight,
   description,
   badge,
-  categories,
 }: ProductsHeroSectionProps) => {
-  return (
-    <section className="relative min-h-[85vh] w-full overflow-hidden flex items-center">
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
-      {/* Background with cinematic overlay */}
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  return (
+    <section className="relative min-h-[85vh] w-full overflow-hidden flex items-center bg-[#000d1a]">
+      {/* ===== BACKGROUND LAYER - CRYSTAL CLEAR ===== */}
       <div className="absolute inset-0">
+        {/* Loading skeleton */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 bg-[#001a33] animate-pulse" />
+        )}
+
         <Image
           src="/assets/images/products-hero.jpg"
-          alt="Premium eyewear collection at Link Opticians"
+          alt="Eyewear collection at Link Opticians"
           fill
-          className="object-cover object-center scale-105"
+          className={`object-cover transition-opacity duration-700 ${
+            imageLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoad={() => setImageLoaded(true)}
           priority
-          quality={100}
+          quality={95}
         />
-        {/* Multi-layered gradient for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#000d1a]/95 via-[#000d1a]/60 to-transparent" />
+
+        {/* MINIMAL Overlays - Only for text readability, image stays CLEAR */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#000d1a]/70 via-[#000d1a]/30 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#000d1a] via-transparent to-transparent" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-[5%] py-32 w-full">
-        <div className="max-w-3xl space-y-10">
-
-          {/* Breadcrumb - Clean & Minimal */}
-          <nav className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
-            <Link href="/" className="hover:text-sky-400 transition-colors duration-300">
-              Home
-            </Link>
-            <span className="size-1 rounded-full bg-white/20" />
-            <span className="text-white/80">Collections</span>
-          </nav>
-
+      {/* ===== CONTENT LAYER ===== */}
+      <div className="relative mx-auto max-w-7xl px-6 py-32 w-full">
+        <div
+          className={`max-w-3xl space-y-10 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           {/* Headline - Deep Ocean & Sky Blue */}
           <div className="space-y-6">
-            <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10">
+            <div className="inline-flex items-center gap-3 bg-black/40 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/20">
               <span className="relative flex size-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
-                <span className="relative inline-flex size-2 rounded-full bg-sky-500" />
+                <span className="relative inline-flex size-2 rounded-full bg-sky-500 shadow-[0_0_10px_rgba(14,165,233,0.8)]" />
               </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/90">{badge}</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
+                {badge}
+              </span>
             </div>
 
-            <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter drop-shadow-lg">
               {title}
               <br />
-              <span className="text-sky-400">{titleHighlight}</span>
+              <span className="text-sky-400 block mt-2">{titleHighlight}</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-white/40 max-w-xl leading-relaxed font-medium">
+            <p className="text-lg md:text-xl text-white/80 max-w-xl leading-relaxed font-light drop-shadow-md">
               {description}
             </p>
           </div>
-
-          {/* Category Anchor Pills */}
-          <div className="flex flex-wrap gap-3">
-            {categories.map((category) => (
-              <a
-                key={category.id}
-                href={`#${category.id}`}
-                className="group flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:border-sky-500/50 hover:bg-sky-500/10 transition-all duration-500"
-              >
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 group-hover:text-white">
-                  {category.label}
-                </span>
-                <svg className="size-3 text-white/20 group-hover:text-sky-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
-                </svg>
-              </a>
-            ))}
-          </div>
-
         </div>
       </div>
 
-      {/* Vertical Scroll Indicator */}
-      <div className="absolute bottom-12 right-[5%] hidden lg:flex flex-col items-center gap-4">
-        <span className="[writing-mode:vertical-lr] text-[10px] font-black uppercase tracking-[0.3em] text-white/20">
-          Discover More
-        </span>
-        <div className="w-[2px] h-20 bg-white/5 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1/2 bg-sky-500 animate-[scroll-down_2s_ease-in-out_infinite]" />
-        </div>
-      </div>
-
+      {/* Add keyframes animation for scroll indicator */}
+      <style jsx global>{`
+        @keyframes scroll-down {
+          0% {
+            transform: translateY(-100%);
+          }
+          100% {
+            transform: translateY(200%);
+          }
+        }
+      `}</style>
     </section>
   );
 };
