@@ -1,3 +1,5 @@
+// ===== FILE: lib/actions/booking.actions.ts (FIXED) =====
+
 "use server";
 
 import { ID, Query } from "node-appwrite";
@@ -5,7 +7,7 @@ import { parseStringify, formatDateTime } from "../utils";
 import { databases, users } from "../appwrite.config";
 import { DATABASE_ID, APPOINTMENT_COLLECTION_ID, PATIENT_COLLECTION_ID } from "../appwrite.config";
 import { revalidatePath } from "next/cache";
-import { sendSMSNotification } from "./appointment.actions";
+import { sendAppointmentSMS } from "./appointment.actions"; // CHANGED: import sendAppointmentSMS instead
 
 interface CreateSimpleAppointmentParams {
   branchId: string;
@@ -14,7 +16,7 @@ interface CreateSimpleAppointmentParams {
   patientEmail: string;
   patientPhone: string;
   reason?: string;
-  smsOptIn?: boolean; // ADDED
+  smsOptIn?: boolean;
 }
 
 export const createSimpleAppointment = async (
@@ -104,21 +106,28 @@ export const createSimpleAppointment = async (
         schedule: params.schedule,
         status: "pending",
         reason: params.reason || "General appointment",
-        note: `Created via simplified booking. SMS Opt-in: ${params.smsOptIn !== false ? 'Yes' : 'No'}`, // ADDED
+        note: `Created via simplified booking. SMS Opt-in: ${params.smsOptIn !== false ? 'Yes' : 'No'}`,
         primaryPhysician: "To be assigned",
       }
     );
 
     // Send SMS only if opted in (default is true)
     if (params.patientPhone && params.smsOptIn !== false) {
-      await sendSMSNotification(
+      // CHANGED: Use sendAppointmentSMS instead of sendSMSNotification
+      await sendAppointmentSMS(
         params.patientPhone,
-        `Link Opticians: Appointment requested for ${formatDateTime(params.schedule).dateTime}. We'll contact you to confirm. Reply STOP to unsubscribe.`
+        'confirmation',  // Use the confirmation template
+        {
+          patientName: params.patientName,
+          appointmentDate: params.schedule,
+          branchName: "our clinic", // You can get branch name here if needed
+        }
       );
     }
 
     revalidatePath("/admin");
     
+    // Return the booking ID for redirect
     return parseStringify({
       success: true,
       bookingId: appointment.$id,

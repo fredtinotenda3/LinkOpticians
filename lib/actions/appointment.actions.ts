@@ -1,4 +1,5 @@
-// ===== FILE: lib/actions/appointment.actions.ts (UPDATE - add reminders tracking) =====
+// ===== FILE: lib/actions/appointment.actions.ts (FIXED - remove remindersSent) =====
+
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -97,7 +98,7 @@ export const sendAppointmentSMS = async (
   }
 };
 
-// ==================== EXISTING FUNCTIONS (UPDATED) ====================
+// ==================== EXISTING FUNCTIONS ====================
 
 export const createAppointment = async (
   appointment: CreateAppointmentParams
@@ -110,7 +111,7 @@ export const createAppointment = async (
       {
         ...appointment,
         branchId: appointment.branchId || "",
-        remindersSent: { reminder24h: false, reminder3h: false }, // Initialize reminders tracking
+        // REMOVED: remindersSent field
       }
     );
 
@@ -200,9 +201,8 @@ export const updateAppointment = async ({
         status = "pending";
     }
 
-    // Get existing appointment to check if we already sent reminders
-    const existingAppointment = await getAppointment(appointmentId);
-    
+    // REMOVED: Get existing appointment and remindersSent logic
+
     const updatedAppointment = await databases.updateDocument(
       DATABASE_ID!,
       APPOINTMENT_COLLECTION_ID!,
@@ -210,8 +210,7 @@ export const updateAppointment = async ({
       {
         ...appointment,
         status: status,
-        // Preserve existing remindersSent if not overwritten
-        remindersSent: existingAppointment?.remindersSent || { reminder24h: false, reminder3h: false },
+        // REMOVED: remindersSent field
       }
     );
 
