@@ -83,7 +83,8 @@ export const Doctors = [
 
 // FIXED: Updated to match database schema: "schedule" instead of "scheduled"
 export const StatusIcon = {
-  schedule: "/assets/icons/check.svg",  // CHANGED: "scheduled" to "schedule"
+  sschedule: "/assets/icons/check.svg",   // Database value
+  scheduled: "/assets/icons/check.svg",  // Display value (alias)
   pending: "/assets/icons/pending.svg",
-  cancelled: "/assets/icons/cancelled.svg",
+  cancelled: "/assets/icons/cancelled.svg"
 };

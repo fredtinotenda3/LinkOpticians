@@ -1,70 +1,71 @@
+// ===== FILE: components/PasskeyModal.tsx (REPLACEMENT) =====
 "use client";
 
 import React, { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { decryptKey, encryptKey } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { verifyAdminPasskey } from "@/app/admin/actions";
+import { AlertDialogCancel } from "@radix-ui/react-alert-dialog";
 
 const PasskeyModal = () => {
   const router = useRouter();
-  const path = usePathname();
   const [open, setOpen] = useState(false);
   const [passkey, setPasskey] = useState("");
   const [error, setError] = useState("");
-
-  const encryptedKey =
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("accessKey")
-      : null;
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Only run this logic on the home page
-    if (path !== "/") return;
-
-    const accessKey = encryptedKey && decryptKey(encryptedKey);
-
-    if (accessKey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY!.toString()) {
-      setOpen(false);
-      router.push("/admin");
-    } else {
-      setOpen(true);
-    }
-  }, [encryptedKey, path, router]);
+    // Check if already authenticated via cookie
+    const checkAuth = async () => {
+      const res = await fetch("/api/admin/check");
+      const data = await res.json();
+      if (data.authenticated) {
+        router.push("/admin");
+      } else {
+        setOpen(true);
+      }
+    };
+    checkAuth();
+  }, [router]);
 
   const closeModal = () => {
     setOpen(false);
     router.push("/");
   };
 
-  const validatePasskey = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const validatePasskey = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
-    if (passkey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
-      const encryptedKey = encryptKey(passkey);
-      localStorage.setItem("accessKey", encryptedKey);
+    const formData = new FormData();
+    formData.append("passkey", passkey);
+    
+    const result = await verifyAdminPasskey(formData);
+    
+    if (result.success) {
       setOpen(false);
       router.push("/admin");
+      router.refresh();
     } else {
       setError("Invalid passkey. Please try again.");
     }
+    
+    setIsLoading(false);
   };
 
   return (
@@ -112,10 +113,11 @@ const PasskeyModal = () => {
 
         <AlertDialogFooter>
           <AlertDialogAction
-            onClick={(e) => validatePasskey(e)}
+            onClick={validatePasskey}
             className="shad-primary-btn w-full"
+            disabled={isLoading}
           >
-            Enter Admin Passkey
+            {isLoading ? "Verifying..." : "Enter Admin Passkey"}
           </AlertDialogAction>
         </AlertDialogFooter>
 

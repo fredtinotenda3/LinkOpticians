@@ -1,3 +1,4 @@
+// ===== FILE: components/LayoutHeader.tsx (UPDATE - add scroll lock) =====
 "use client";
 
 import Link from "next/link";
@@ -5,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { NAVIGATION_LINKS } from "@/constants/navigation";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 interface LayoutHeaderProps {
   activePage?: string;
@@ -14,6 +16,9 @@ export const LayoutHeader = ({ activePage }: LayoutHeaderProps) => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  
+  // Use the scroll lock hook
+  useBodyScrollLock(isMobileMenuOpen);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -21,10 +26,11 @@ export const LayoutHeader = ({ activePage }: LayoutHeaderProps) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [isMobileMenuOpen]);
+  // Removed the manual body overflow management since hook handles it
+  // useEffect(() => {
+  //   document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+  //   return () => { document.body.style.overflow = ""; };
+  // }, [isMobileMenuOpen]);
 
   const getActivePage = () => {
     if (activePage) return activePage;
@@ -72,11 +78,10 @@ export const LayoutHeader = ({ activePage }: LayoutHeaderProps) => {
                 }`}
               >
                 {link.label}
-                {/* Active Indicator Pulse */}
                 {currentPage === link.id && (
                   <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex h-1 w-1">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1 w-1 bg-sky-500"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-1 w-1 bg-sky-500" />
                   </span>
                 )}
               </Link>
@@ -100,6 +105,8 @@ export const LayoutHeader = ({ activePage }: LayoutHeaderProps) => {
           <button
             className="md:hidden relative z-50 p-2 text-white/70 hover:text-white transition-colors"
             onClick={() => setIsMobileMenuOpen((o) => !o)}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
           >
             <div className="w-6 flex flex-col items-end gap-1.5">
               <span className={`h-0.5 bg-current transition-all duration-300 ${isMobileMenuOpen ? "w-6 rotate-45 translate-y-2" : "w-6"}`} />
@@ -111,16 +118,32 @@ export const LayoutHeader = ({ activePage }: LayoutHeaderProps) => {
       </header>
 
       {/* Mobile Drawer */}
-      <div className={`fixed inset-0 z-40 md:hidden transition-all duration-500 ${isMobileMenuOpen ? "visible" : "invisible"}`}>
-        <div className={`absolute inset-0 bg-[#001a33]/80 backdrop-blur-md transition-opacity duration-500 ${isMobileMenuOpen ? "opacity-100" : "opacity-0"}`} onClick={closeMobileMenu} />
-        <div className={`absolute top-0 right-0 h-full w-[300px] bg-[#002b4d] border-l border-white/5 p-8 flex flex-col transition-transform duration-500 ease-out ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
+      <div
+        className={`fixed inset-0 z-40 md:hidden transition-all duration-500 ${
+          isMobileMenuOpen ? "visible" : "invisible"
+        }`}
+        aria-hidden={!isMobileMenuOpen}
+      >
+        <div
+          className={`absolute inset-0 bg-[#001a33]/80 backdrop-blur-md transition-opacity duration-500 ${
+            isMobileMenuOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={closeMobileMenu}
+        />
+        <div
+          className={`absolute top-0 right-0 h-full w-[300px] bg-[#002b4d] border-l border-white/5 p-8 flex flex-col transition-transform duration-500 ease-out ${
+            isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
           <div className="mt-20 flex flex-col gap-4">
             {NAVIGATION_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={closeMobileMenu}
-                className={`text-2xl font-bold tracking-tight transition-all duration-300 ${currentPage === link.id ? "text-sky-400 translate-x-2" : "text-white/40 hover:text-white"}`}
+                className={`text-2xl font-bold tracking-tight transition-all duration-300 ${
+                  currentPage === link.id ? "text-sky-400 translate-x-2" : "text-white/40 hover:text-white"
+                }`}
               >
                 {link.label}
               </Link>

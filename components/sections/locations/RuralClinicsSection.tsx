@@ -1,24 +1,27 @@
-// components/sections/locations/RuralClinicsSection.tsx
+// ===== FILE: components/sections/locations/RuralClinicsSection.tsx (FULL REPLACEMENT) =====
 
 import Image from "next/image";
 import Link from "next/link";
-import { BranchDetail } from "@/constants/branches";
+import { type AppBranch } from "@/lib/branch-adapter";
 
 interface RuralClinicsSectionProps {
   subtitle: string;
   title: string;
   description: string;
-  clinics: BranchDetail[];
+  clinics: AppBranch[];
 }
 
-const getRegionLabel = (id: string) => {
-  if (id === "chipinge") return "Eastern Highlands";
-  if (id === "chiredzi") return "Lowveld";
+const getRegionLabel = (branch: AppBranch) => {
+  const name = branch.name.toLowerCase();
+  if (name.includes("chipinge")) return "Eastern Highlands";
+  if (name.includes("chiredzi")) return "Lowveld";
   return "Zimbabwe";
 };
 
-const getSpecialtyBadge = (id: string) => {
-  if (id === "chipinge")
+const getSpecialtyBadge = (branch: AppBranch) => {
+  const name = branch.name.toLowerCase();
+  
+  if (name.includes("chipinge")) {
     return {
       text: "Mobile Unit Base",
       icon: (
@@ -27,8 +30,9 @@ const getSpecialtyBadge = (id: string) => {
         </svg>
       ),
     };
+  }
 
-  if (id === "chiredzi")
+  if (name.includes("chiredzi")) {
     return {
       text: "Industrial Care",
       icon: (
@@ -37,6 +41,7 @@ const getSpecialtyBadge = (id: string) => {
         </svg>
       ),
     };
+  }
 
   return { text: "Regional Hub", icon: null };
 };
@@ -47,6 +52,11 @@ export const RuralClinicsSection = ({
   description,
   clinics,
 }: RuralClinicsSectionProps) => {
+  // If no clinics, don't render the section
+  if (!clinics || clinics.length === 0) {
+    return null;
+  }
+
   return (
     <section className="relative py-24 md:py-32 overflow-hidden" id="rural">
 
@@ -90,24 +100,31 @@ export const RuralClinicsSection = ({
             </p>
           </div>
 
-          {/* (kept minimal, removed noisy counters earlier) */}
+          {/* Rural clinics count indicator */}
+          <div className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10">
+            <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+              {clinics.length} Rural Clinics
+            </span>
+          </div>
         </div>
 
         {/* ── GRID ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {clinics.map((clinic) => {
-            const badge = getSpecialtyBadge(clinic.id);
+            const badge = getSpecialtyBadge(clinic);
+            const region = getRegionLabel(clinic);
 
             return (
               <div
-                key={clinic.id}
-                id={clinic.id}
+                key={clinic.$id}
+                id={clinic.$id}
                 className="group relative overflow-hidden rounded-[24px] bg-white/[0.03] border border-white/10 hover:border-sky-400/40 transition-all duration-500 flex flex-col hover:-translate-y-1.5"
               >
                 {/* IMAGE */}
                 <div className="relative aspect-[16/9] overflow-hidden bg-[#001222]">
                   <Image
-                    src={clinic.image}
+                    src={clinic.image || "/assets/images/branches/fallback-rural.jpg"}
                     alt={clinic.name}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -128,7 +145,7 @@ export const RuralClinicsSection = ({
                   {/* Region */}
                   <div className="absolute top-4 right-4">
                     <span className="px-3 py-1.5 bg-black/50 border border-white/20 rounded-full text-[10px] text-white/70 uppercase tracking-wider">
-                      {getRegionLabel(clinic.id)}
+                      {region}
                     </span>
                   </div>
                 </div>
@@ -139,7 +156,7 @@ export const RuralClinicsSection = ({
                     {clinic.name}
                   </h3>
 
-                  <p className="text-white/50 text-xs mb-6 line-clamp-1">
+                  <p className="text-white/50 text-xs mb-6 line-clamp-2">
                     {clinic.address}
                   </p>
 
@@ -159,21 +176,21 @@ export const RuralClinicsSection = ({
                       <p className="text-white/40 text-[10px] uppercase mb-1">WhatsApp</p>
                       <a
                         href={`https://wa.me/${clinic.phone.replace(/\D/g, "")}`}
-                        className="text-white text-xs font-medium hover:text-sky-400 transition"
+                        className="text-white text-xs font-medium hover:text-sky-400 transition break-all"
                       >
                         {clinic.phone}
                       </a>
                     </div>
                   </div>
 
-                  {/* TAGS */}
+                  {/* TAGS / SERVICES */}
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {clinic.specialties.slice(0, 4).map((s) => (
+                    {(clinic.services || []).slice(0, 4).map((service: string) => (
                       <span
-                        key={s}
+                        key={service}
                         className="text-[10px] px-3 py-1 rounded-md bg-white/[0.03] border border-white/10 text-white/50"
                       >
-                        {s}
+                        {service}
                       </span>
                     ))}
                   </div>
@@ -181,14 +198,14 @@ export const RuralClinicsSection = ({
                   {/* ACTIONS */}
                   <div className="flex gap-3 mt-auto">
                     <Link
-                      href={`/book?branch=${clinic.id}`}
+                      href={`/book?branch=${clinic.$id}`}
                       className="flex-1 inline-flex items-center justify-center bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold uppercase tracking-wider py-3 rounded-xl transition"
                     >
                       Secure Booking
                     </Link>
 
                     <a
-                      href={clinic.mapUrl}
+                      href={`https://maps.google.com/?q=${encodeURIComponent(clinic.address)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 inline-flex items-center justify-center border border-white/10 text-white/60 hover:text-white hover:border-white/20 text-xs font-semibold uppercase tracking-wider py-3 rounded-xl transition"
@@ -204,6 +221,17 @@ export const RuralClinicsSection = ({
             );
           })}
         </div>
+
+        {/* Mobile clinics count */}
+        <div className="mt-8 text-center lg:hidden">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10">
+            <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+              {clinics.length} Rural Clinics
+            </span>
+          </div>
+        </div>
+
       </div>
     </section>
   );

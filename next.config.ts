@@ -1,3 +1,5 @@
+// ===== FILE: next.config.ts (UPDATED with env validation) =====
+
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
@@ -9,8 +11,84 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  
+  // Images configuration for remote sources
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cloud.appwrite.io",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+    ],
+    // Add fallback for broken images
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
+  
+  // Experimental features
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "2mb",
+    },
+  },
 };
 
+// Environment validation for production builds
+const validateEnv = () => {
+  const required = [
+    "NEXT_PUBLIC_ENDPOINT",
+    "PROJECT_ID",
+    "API_KEY",
+    "DATABASE_ID",
+    "PATIENT_COLLECTION_ID",
+    "APPOINTMENT_COLLECTION_ID",
+    "BRANCHES_COLLECTION_ID",
+    "NEXT_PUBLIC_BUCKET_ID",
+    "NEXT_PUBLIC_ADMIN_PASSKEY",
+  ];
+  
+  const optional = [
+    "TWILIO_ACCOUNT_SID",
+    "TWILIO_AUTH_TOKEN",
+    "TWILIO_PHONE_NUMBER",
+    "SENTRY_DSN",
+    "CRON_SECRET",
+    "NEXT_PUBLIC_GA_MEASUREMENT_ID",
+  ];
+  
+  const missing = required.filter(key => !process.env[key]);
+  const missingOptional = optional.filter(key => !process.env[key]);
+  
+  if (missing.length > 0) {
+    console.error("❌ Missing required environment variables:", missing.join(", "));
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(`Build failed: Missing required env vars: ${missing.join(", ")}`);
+    }
+  }
+  
+  if (missingOptional.length > 0) {
+    console.warn("⚠️ Optional environment variables missing:", missingOptional.join(", "));
+  }
+  
+  // Special warning for Twilio (SMS will be disabled)
+  if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
+    console.warn("⚠️ SMS notifications will be disabled - Twilio credentials missing");
+  }
+  
+  return { missing, missingOptional };
+};
+
+// Run validation in production builds
+if (process.env.NODE_ENV === "production") {
+  validateEnv();
+}
+
+// Sentry configuration
 export default withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options

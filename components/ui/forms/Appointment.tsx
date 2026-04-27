@@ -1,3 +1,5 @@
+// ===== FILE: components/ui/forms/Appointment.tsx (FULL REPLACEMENT) =====
+
 "use client";
 
 import {
@@ -8,18 +10,18 @@ import { getAppointmentSchema } from "@/lib/validation";
 import { Status } from "@/types";
 import { Appointment } from "@/types/appwite.types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form } from "../form";
 import CustomFormField from "../CustomFormField";
-import { Doctors } from "@/constants";
 import { FormFieldType } from "./PatientForm";
 import { SelectItem } from "../select";
 import Image from "next/image";
 import SubmitButton from "@/components/SubmitButton";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { getDoctors, type Doctor } from "@/lib/doctors";
 
 export const AppointmentForm = ({
   patientId,
@@ -38,6 +40,23 @@ export const AppointmentForm = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [isLoadingDoctors, setIsLoadingDoctors] = useState(true);
+
+  // Fetch doctors dynamically on mount
+  useEffect(() => {
+    const loadDoctors = async () => {
+      try {
+        const fetchedDoctors = await getDoctors();
+        setDoctors(fetchedDoctors);
+      } catch (error) {
+        console.error("Failed to load doctors:", error);
+      } finally {
+        setIsLoadingDoctors(false);
+      }
+    };
+    loadDoctors();
+  }, []);
 
   // For schedule action, create a simplified schema
   const ScheduleAppointmentSchema = z.object({
@@ -175,6 +194,15 @@ export const AppointmentForm = ({
       buttonLabel = "Submit Appointment";
   }
 
+  // Show loading state while fetching doctors
+  if (isLoadingDoctors && type !== "cancel") {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="inline-block size-8 border-2 border-sky-400 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
@@ -197,7 +225,7 @@ export const AppointmentForm = ({
               label="Doctor"
               placeholder="Select doctor"
             >
-              {Doctors.map((doctor, i) => (
+              {doctors.map((doctor, i) => (
                 <SelectItem key={doctor.name + i} value={doctor.name}>
                   <div className="flex cursor-pointer items-center gap-2">
                     <Image
@@ -258,7 +286,7 @@ export const AppointmentForm = ({
               label="Doctor"
               placeholder="Select doctor"
             >
-              {Doctors.map((doctor, i) => (
+              {doctors.map((doctor, i) => (
                 <SelectItem key={doctor.name + i} value={doctor.name}>
                   <div className="flex cursor-pointer items-center gap-2">
                     <Image

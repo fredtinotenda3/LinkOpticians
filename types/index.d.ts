@@ -39,14 +39,18 @@ declare interface RegisterUserParams extends CreateUserParams {
   identificationDocument: FormData | undefined;
   privacyConsent: boolean;
 }
-
 declare interface Branch {
   $id?: string;
   name: string;
   address: string;
   phone: string;
   email: string;
-  operatingHours: string; // CHANGED: Based on your database schema, it's a string, not an object
+  operatingHours: {
+    weekdays: string;
+    saturday: string;
+    sunday: string;
+    publicHolidays?: string;
+  }; 
   services: string[];
   doctors: string[];
   isActive: boolean;

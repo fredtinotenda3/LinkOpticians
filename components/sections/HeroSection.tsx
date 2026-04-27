@@ -86,8 +86,7 @@ export const HeroSection = () => {
           {/* HEADLINE */}
           <div className="space-y-4">
             <h1 className="text-6xl md:text-7xl lg:text-[85px] font-bold text-white leading-[1.05]">
-              Precision <br />
-              Vision. <span className="text-sky-300">For All.</span>
+              PrecisionVision.
             </h1>
 
             <p className="text-xl md:text-2xl text-white/90 max-w-xl">

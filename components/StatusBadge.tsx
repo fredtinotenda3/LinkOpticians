@@ -1,23 +1,30 @@
-// components/StatusBadge.tsx
+// ===== FILE: components/StatusBadge.tsx (REPLACE) =====
+
+"use client";
+
 import clsx from "clsx";
 import Image from "next/image";
 import { StatusIcon } from "@/constants";
 import { Status } from "@/types";
+import { toDisplayStatus, isScheduled, isPending, isCancelled } from "@/lib/status-utils";
 
 export const StatusBadge = ({ status }: { status: Status }) => {
-  const displayText = status === "schedule" ? "scheduled" : status;
+  // Normalize status for display
+  const displayStatus = toDisplayStatus(status as any);
+  const displayText = displayStatus;
+
+  // Use safe check functions
+  const scheduled = isScheduled(status);
+  const pending = isPending(status);
+  const cancelled = isCancelled(status);
 
   return (
     <div
-      className={clsx(
-        "status-badge",
-        {
-          // On-brand — matches site's green/dark palette
-          "bg-green-500/10 border border-green-500/25": status === "schedule",
-          "bg-blue-500/10 border border-blue-500/25": status === "pending",
-          "bg-red-500/10 border border-red-500/25": status === "cancelled",
-        }
-      )}
+      className={clsx("status-badge", {
+        "bg-green-500/10 border border-green-500/25": scheduled,
+        "bg-blue-500/10 border border-blue-500/25": pending,
+        "bg-red-500/10 border border-red-500/25": cancelled,
+      })}
     >
       <Image
         src={StatusIcon[status] || StatusIcon.pending}
@@ -28,9 +35,9 @@ export const StatusBadge = ({ status }: { status: Status }) => {
       />
       <p
         className={clsx("text-12-semibold capitalize", {
-          "text-green-400": status === "schedule",
-          "text-blue-400": status === "pending",
-          "text-red-400": status === "cancelled",
+          "text-green-400": scheduled,
+          "text-blue-400": pending,
+          "text-red-400": cancelled,
         })}
       >
         {displayText}
