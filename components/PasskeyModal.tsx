@@ -1,4 +1,4 @@
-// ===== FILE: components/PasskeyModal.tsx (REPLACEMENT) =====
+// ===== FILE: components/PasskeyModal.tsx (Fixed for hydration) =====
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -27,20 +27,33 @@ const PasskeyModal = () => {
   const [passkey, setPasskey] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Handle mounting to prevent hydration issues
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
+    if (!isMounted) return;
+    
     // Check if already authenticated via cookie
     const checkAuth = async () => {
-      const res = await fetch("/api/admin/check");
-      const data = await res.json();
-      if (data.authenticated) {
-        router.push("/admin");
-      } else {
+      try {
+        const res = await fetch("/api/admin/check");
+        const data = await res.json();
+        if (data.authenticated) {
+          router.push("/admin");
+        } else {
+          setOpen(true);
+        }
+      } catch (error) {
+        console.error("Auth check failed:", error);
         setOpen(true);
       }
     };
     checkAuth();
-  }, [router]);
+  }, [router, isMounted]);
 
   const closeModal = () => {
     setOpen(false);
@@ -55,18 +68,28 @@ const PasskeyModal = () => {
     const formData = new FormData();
     formData.append("passkey", passkey);
     
-    const result = await verifyAdminPasskey(formData);
-    
-    if (result.success) {
-      setOpen(false);
-      router.push("/admin");
-      router.refresh();
-    } else {
-      setError("Invalid passkey. Please try again.");
+    try {
+      const result = await verifyAdminPasskey(formData);
+      
+      if (result.success) {
+        setOpen(false);
+        router.push("/admin");
+        router.refresh();
+      } else {
+        setError("Invalid passkey. Please try again.");
+      }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      setError("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
+
+  // Don't render anything until mounted on client
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -74,14 +97,19 @@ const PasskeyModal = () => {
         <AlertDialogHeader>
           <AlertDialogTitle className="flex items-start justify-between">
             Admin Access Verification
-            <Image
-              src="/assets/icons/close.svg"
-              alt="close"
-              width={20}
-              height={20}
-              onClick={() => closeModal()}
-              className="cursor-pointer"
-            />
+            <button
+              onClick={closeModal}
+              className="cursor-pointer focus:outline-none"
+              aria-label="Close"
+            >
+              <Image
+                src="/assets/icons/close.svg"
+                alt="close"
+                width={20}
+                height={20}
+                unoptimized
+              />
+            </button>
           </AlertDialogTitle>
           <AlertDialogDescription>
             To access the admin page, please enter the passkey.

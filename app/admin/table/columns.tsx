@@ -9,6 +9,9 @@ import { Appointment } from "@/types/appwite.types";
 import { StatusBadge } from "@/components/StatusBadge";
 import { AppointmentModal } from "@/components/AppointmentModal";
 
+// Fallback doctor image
+const DEFAULT_DOCTOR_IMAGE = "/assets/icons/doctor-fallback.svg";
+
 // Define an enhanced type that includes branchName
 type EnhancedAppointment = Appointment & {
   branchName?: string;
@@ -26,7 +29,7 @@ export const columns: ColumnDef<EnhancedAppointment>[] = [
     header: "Patient",
     cell: ({ row }) => {
       const appointment = row.original;
-      return <p className="text-14-medium ">{appointment.patient.name}</p>;
+      return <p className="text-14-medium ">{appointment.patient?.name || "Unknown"}</p>;
     },
   },
   {
@@ -48,7 +51,7 @@ export const columns: ColumnDef<EnhancedAppointment>[] = [
       const appointment = row.original;
       return (
         <p className="text-14-regular min-w-[100px]">
-          {formatDateTime(appointment.schedule).dateTime}
+          {appointment.schedule ? formatDateTime(appointment.schedule).dateTime : "Not scheduled"}
         </p>
       );
     },
@@ -75,17 +78,29 @@ export const columns: ColumnDef<EnhancedAppointment>[] = [
         (doctor) => doctor.name === appointment.primaryPhysician
       );
 
+      // Use fallback image if doctor not found or image missing
+      const doctorImage = doctor?.image || DEFAULT_DOCTOR_IMAGE;
+      const doctorName = doctor ? `Dr. ${doctor.name}` : appointment.primaryPhysician || "Not assigned";
+
       return (
         <div className="flex items-center gap-3">
-          <Image
-            src={doctor?.image || "/assets/images/default-doctor.png"}
-            alt="doctor"
-            width={100}
-            height={100}
-            className="size-8 rounded-full border border-dark-500"
-          />
-          <p className="whitespace-nowrap">
-            {doctor ? `Dr. ${doctor.name}` : "Not assigned"}
+          <div className="relative size-8 rounded-full overflow-hidden border border-dark-500 bg-dark-400">
+            <Image
+              src={doctorImage}
+              alt={doctorName}
+              width={32}
+              height={32}
+              className="object-cover w-full h-full"
+              unoptimized
+              onError={(e) => {
+                // Fallback if image fails to load
+                const target = e.target as HTMLImageElement;
+                target.src = DEFAULT_DOCTOR_IMAGE;
+              }}
+            />
+          </div>
+          <p className="whitespace-nowrap text-sm">
+            {doctorName}
           </p>
         </div>
       );
@@ -97,20 +112,17 @@ export const columns: ColumnDef<EnhancedAppointment>[] = [
     cell: ({ row }) => {
       const appointment = row.original;
 
-      // Always show both schedule and cancel buttons
       return (
         <div className="flex gap-2">
-          {/* Schedule Button - always visible, but disabled if already scheduled */}
           <AppointmentModal
-            patientId={appointment.patient.$id}
+            patientId={appointment.patient?.$id || ""}
             appointment={appointment}
             type="schedule"
             description="Please confirm the following details to schedule."
           />
           
-          {/* Cancel Button - always visible, but disabled if already cancelled */}
           <AppointmentModal
-            patientId={appointment.patient.$id}
+            patientId={appointment.patient?.$id || ""}
             appointment={appointment}
             type="cancel"
             description="Are you sure you want to cancel your appointment?"

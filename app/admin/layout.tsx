@@ -1,6 +1,8 @@
-// ===== FILE: app/admin/layout.tsx (CREATE NEW or UPDATE) =====
+// ===== FILE: app/admin/layout.tsx =====
 import { redirect } from "next/navigation";
 import { checkAdminAuth } from "./actions";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminLayout({
   children,

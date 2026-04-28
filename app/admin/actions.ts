@@ -1,10 +1,11 @@
-// ===== FILE: app/admin/actions.ts (CREATE NEW) =====
+// ===== FILE: app/admin/actions.ts =====
 "use server";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-const ADMIN_PASSKEY = process.env.NEXT_PUBLIC_ADMIN_PASSKEY || "default123";
+// Use environment variable with fallback for development
+const ADMIN_PASSKEY = process.env.NEXT_PUBLIC_ADMIN_PASSKEY || process.env.ADMIN_PASSKEY || "default123";
 
 export async function verifyAdminPasskey(formData: FormData) {
   const passkey = formData.get("passkey") as string;
@@ -28,7 +29,6 @@ export async function checkAdminAuth() {
   const cookieStore = await cookies();
   const auth = cookieStore.get("admin-auth");
   return auth?.value === "verified";
-  
 }
 
 export async function logoutAdmin() {

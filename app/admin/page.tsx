@@ -1,6 +1,8 @@
 // app/admin/page.tsx (Admin component)
+"use client";
+
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import StatCard from "@/components/StatCard";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
@@ -8,30 +10,72 @@ import { getAllBranches } from "@/lib/actions/branch.actions";
 import { DataTable } from "./table/DataTable";
 import { columns } from "./table/columns";
 
+// Add this to prevent hydration issues
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
-const Admin = async () => {
-  const appointments = await getRecentAppointmentList();
-  const branches = await getAllBranches();
+interface AppointmentData {
+  scheduledCount: number;
+  pendingCount: number;
+  cancelledCount: number;
+  documents: any[];
+}
 
-  const branchMap = branches.reduce((acc: any, branch: any) => {
-    acc[branch.$id] = branch.name;
-    return acc;
-  }, {});
+const Admin = () => {
+  const [appointments, setAppointments] = useState<AppointmentData | null>(null);
+  const [branches, setBranches] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [enhancedAppointments, setEnhancedAppointments] = useState<any>(null);
 
-  const enhancedAppointments = {
-    ...appointments,
-    documents: appointments.documents.map((appt: any) => ({
-      ...appt,
-      branchName: branchMap[appt.branchId] || appt.branchId,
-    })),
-  };
+  useEffect(() => {
+    // Fetch data only on client side to avoid hydration mismatch
+    const fetchData = async () => {
+      try {
+        const [appointmentsData, branchesData] = await Promise.all([
+          getRecentAppointmentList(),
+          getAllBranches()
+        ]);
+        
+        setAppointments(appointmentsData);
+        setBranches(branchesData);
+        
+        const branchMap = branchesData.reduce((acc: any, branch: any) => {
+          acc[branch.$id] = branch.name;
+          return acc;
+        }, {});
+
+        setEnhancedAppointments({
+          ...appointmentsData,
+          documents: appointmentsData?.documents?.map((appt: any) => ({
+            ...appt,
+            branchName: branchMap[appt.branchId] || appt.branchId,
+          })) || [],
+        });
+      } catch (error) {
+        console.error("Error fetching admin data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, []);
+
+  // Show loading state while fetching
+  if (isLoading || !enhancedAppointments) {
+    return (
+      <div className="min-h-screen bg-dark-300 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-sky-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-white/60">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-dark-300">
 
-      {/* ── Admin Header ──────────────────────────────────────────── */}
+      {/* Admin Header */}
       <header className="sticky top-0 z-50 bg-dark-400/95 backdrop-blur-md border-b border-dark-500">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-[5%] py-4">
           <Link href="/" className="group flex items-center gap-3">
@@ -41,6 +85,8 @@ const Admin = async () => {
               width={1000}
               alt="Link Opticians"
               className="h-8 w-fit transition-opacity duration-300 group-hover:opacity-80"
+              priority
+              unoptimized // Prevents image optimization issues on Vercel
             />
             <div className="h-5 w-px bg-dark-500" />
             <span className="text-white/40 text-xs font-semibold tracking-[0.2em] uppercase">
@@ -70,7 +116,7 @@ const Admin = async () => {
 
       <main className="mx-auto max-w-7xl px-[5%] py-10">
 
-        {/* ── Welcome ───────────────────────────────────────────────── */}
+        {/* Welcome */}
         <section className="mb-10">
           <div className="inline-flex items-center gap-2 mb-3">
             <span className="w-6 h-px bg-green-500" />
@@ -86,30 +132,32 @@ const Admin = async () => {
           </p>
         </section>
 
-        {/* ── Stat cards ────────────────────────────────────────────── */}
+        {/* Stat cards */}
         <section className="admin-stat mb-10">
           <StatCard
             type="appointments"
-            count={appointments.scheduledCount}
+            count={appointments?.scheduledCount || 0}
             label="Scheduled appointments"
             icon="/assets/icons/appointments.svg"
           />
           <StatCard
             type="pending"
-            count={appointments.pendingCount}
+            count={appointments?.pendingCount || 0}
             label="Pending appointments"
             icon="/assets/icons/pending.svg"
           />
           <StatCard
             type="cancelled"
-            count={appointments.cancelledCount}
+            count={appointments?.cancelledCount || 0}
             label="Cancelled appointments"
             icon="/assets/icons/cancelled.svg"
           />
         </section>
 
-        {/* ── Data table ────────────────────────────────────────────── */}
-        <DataTable columns={columns} data={enhancedAppointments.documents} />
+        {/* Data table */}
+        {enhancedAppointments?.documents && (
+          <DataTable columns={columns} data={enhancedAppointments.documents} />
+        )}
 
       </main>
     </div>
