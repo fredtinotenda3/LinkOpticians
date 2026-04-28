@@ -17,8 +17,8 @@ export const CommunityBannerSection = ({
   description = "Our vision extends to every corner of Zimbabwe. Through mobile diagnostic units and national school screening programs, we ensure that distance is never a barrier to high-standard ocular health.",
   image = "/assets/images/community-banner.png", // Suggested: A high-quality photo of the mobile unit or a school screening
   stats = [
-    { value: "45+", label: "Rural Districts Reached" },
-    { value: "12k", label: "Students Screened" },
+    { value: "15+", label: "Rural Districts Reached" },
+    { value: "1k+", label: "Students Screened" },
     { value: "2015", label: "Mobile Unit Launch" },
   ],
 }: CommunityBannerSectionProps) => {

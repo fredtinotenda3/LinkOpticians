@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 interface Location {
   city: string;
@@ -14,6 +15,7 @@ interface LocationsBarSectionProps {
   estYear?: number;
   country?: string;
   showFlag?: boolean;
+  showLogo?: boolean;
 }
 
 export const LocationsBarSection = ({
@@ -23,7 +25,7 @@ export const LocationsBarSection = ({
     { city: "Chiredzi", areas: "Chiredzi Town", href: "/locations#chiredzi" },
   ],
   estYear = 2008,
-  showFlag = true,
+  showLogo = true,
 }: LocationsBarSectionProps) => {
 
   const currentYear = new Date().getFullYear();
@@ -34,22 +36,30 @@ export const LocationsBarSection = ({
       <div className="mx-auto max-w-7xl px-6 py-10 md:py-12">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-8 lg:gap-12">
 
-          {/* ── Heritage Badge ─────────────────────────────────────────────── */}
+          {/* ── Logo & Heritage Badge ─────────────────────────────────────────────── */}
           <div className="flex items-center gap-6 shrink-0 group">
-            {showFlag && (
-              <div className="relative overflow-hidden rounded-md h-10 w-14 shrink-0 shadow-lg ring-1 ring-white/10 group-hover:ring-white/20 transition-all duration-300">
-                <div className="h-[20%] bg-[#319208]" />
-                <div className="h-[20%] bg-[#FFD200]" />
-                <div className="h-[20%] bg-[#D21034]" />
-                <div className="h-[20%] bg-[#000000]" />
-                <div className="h-[20%] bg-[#FFFFFF]" />
+            {showLogo && (
+              <div className="relative">
+                {/* Logo container - CLEAR AND VISIBLE */}
+                <div className="relative bg-white/10 rounded-lg px-4 py-2 group-hover:bg-white/20 transition-all duration-500">
+                  <Image
+                    src="/assets/logos/link-logo.svg"
+                    alt="Link Opticians"
+                    width={140}
+                    height={35}
+                    priority
+                    className="h-8 w-auto transition-all duration-500 group-hover:scale-[1.02]"
+                  />
+                </div>
+                {/* Subtle glow behind logo */}
+                <div className="absolute -inset-1 rounded-lg bg-sky-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
               </div>
             )}
             <div className="space-y-1">
               <p className="text-white text-base md:text-lg font-black tracking-tight leading-tight">
                 Est. {estYear}
               </p>
-              <p className="text-sky-400/60 text-[11px] font-bold uppercase tracking-[0.2em]">
+              <p className="text-sky-400 text-[11px] font-bold uppercase tracking-[0.2em]">
                 {yearsServing} Years of Excellence
               </p>
             </div>
@@ -65,10 +75,10 @@ export const LocationsBarSection = ({
                 >
                   {/* Animated dot indicator */}
                   <div className="absolute -top-1 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="w-1 h-1 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(14,165,233,0.8)]" />
+                    <div className="w-1 h-1 rounded-full bg-sky-400" />
                   </div>
                   
-                  <div className="p-2 rounded-xl bg-sky-500/10 text-sky-400 transition-all duration-500 group-hover:bg-sky-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-sky-500/20">
+                  <div className="p-2 rounded-xl bg-sky-500/15 text-sky-400 transition-all duration-500 group-hover:bg-sky-500 group-hover:text-white">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
@@ -78,7 +88,7 @@ export const LocationsBarSection = ({
                     <p className="text-white font-bold text-sm md:text-base leading-tight group-hover:text-sky-400 transition-colors duration-300">
                       {location.city}
                     </p>
-                    <p className="text-white/30 text-[10px] md:text-[11px] font-medium mt-0.5 group-hover:text-white/50 transition-colors">
+                    <p className="text-white/40 text-[10px] md:text-[11px] font-medium mt-0.5 group-hover:text-white/60 transition-colors">
                       {location.areas}
                     </p>
                   </div>

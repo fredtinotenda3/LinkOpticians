@@ -1,4 +1,4 @@
-// ===== FILE: components/LayoutHeader.tsx (UPDATE - add scroll lock) =====
+// ===== FILE: components/LayoutHeader.tsx (UPDATED - with exact logo and better visibility) =====
 "use client";
 
 import Link from "next/link";
@@ -26,12 +26,6 @@ export const LayoutHeader = ({ activePage }: LayoutHeaderProps) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Removed the manual body overflow management since hook handles it
-  // useEffect(() => {
-  //   document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
-  //   return () => { document.body.style.overflow = ""; };
-  // }, [isMobileMenuOpen]);
-
   const getActivePage = () => {
     if (activePage) return activePage;
     if (pathname === "/") return "home";
@@ -47,34 +41,44 @@ export const LayoutHeader = ({ activePage }: LayoutHeaderProps) => {
       <header
         className={`sticky top-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-[#001a33]/90 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-black/40 py-3"
-            : "bg-transparent border-b border-transparent py-5"
+            ? "bg-[#001a33]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl shadow-black/40 py-3"
+            : "bg-gradient-to-b from-[#000d1a]/60 to-transparent backdrop-blur-sm border-b border-white/5 py-5"
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
 
-          {/* Logo */}
-          <Link href="/" onClick={closeMobileMenu} className="group shrink-0 relative z-50">
-            <Image
-              src="/assets/logos/link-logo.svg"
-              alt="Link Opticians"
-              width={160}
-              height={40}
-              priority
-              className="h-8 w-auto transition-transform duration-500 group-hover:scale-[1.02]"
-            />
+          {/* Logo with improved visibility - using exact logo */}
+          <Link 
+            href="/" 
+            onClick={closeMobileMenu} 
+            className="group shrink-0 relative z-50"
+          >
+            {/* Subtle glow background behind logo */}
+            <div className="absolute -inset-2 rounded-xl bg-sky-500/10 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            
+            {/* Logo container with subtle rounded corners */}
+            <div className="relative bg-white/5 rounded-lg px-2 py-1.5 backdrop-blur-sm group-hover:bg-white/10 transition-all duration-500">
+              <Image
+                src="/assets/logos/link-logo.svg"
+                alt="Link Opticians"
+                width={160}
+                height={40}
+                priority
+                className="h-8 w-auto transition-all duration-500 group-hover:scale-[1.02] group-hover:brightness-110"
+              />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-2 flex-1 justify-center">
+          <nav className="hidden md:flex items-center gap-1 flex-1 justify-center">
             {NAVIGATION_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative px-5 py-2 text-[13px] font-bold uppercase tracking-[0.15em] transition-all duration-300 rounded-full ${
+                className={`relative px-4 lg:px-5 py-2 text-[13px] font-bold uppercase tracking-[0.15em] transition-all duration-300 rounded-full ${
                   currentPage === link.id
-                    ? "text-white bg-white/5"
-                    : "text-white/50 hover:text-white hover:bg-white/5"
+                    ? "text-white bg-white/10 shadow-lg"
+                    : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
                 {link.label}
@@ -92,7 +96,7 @@ export const LayoutHeader = ({ activePage }: LayoutHeaderProps) => {
           <div className="hidden md:flex items-center gap-6 shrink-0">
             <Link
               href="/book"
-              className="group inline-flex items-center gap-3 bg-sky-600 hover:bg-sky-500 text-white font-black text-[11px] uppercase tracking-[0.2em] px-7 py-3 rounded-full transition-all duration-500 shadow-xl shadow-sky-900/20"
+              className="group inline-flex items-center gap-3 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-black text-[11px] uppercase tracking-[0.2em] px-7 py-3 rounded-full transition-all duration-500 shadow-lg shadow-sky-900/30 hover:shadow-xl hover:shadow-sky-900/40 hover:-translate-y-0.5"
             >
               Book Now
               <svg className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,41 +129,73 @@ export const LayoutHeader = ({ activePage }: LayoutHeaderProps) => {
         aria-hidden={!isMobileMenuOpen}
       >
         <div
-          className={`absolute inset-0 bg-[#001a33]/80 backdrop-blur-md transition-opacity duration-500 ${
+          className={`absolute inset-0 bg-[#000d1a]/95 backdrop-blur-md transition-opacity duration-500 ${
             isMobileMenuOpen ? "opacity-100" : "opacity-0"
           }`}
           onClick={closeMobileMenu}
         />
         <div
-          className={`absolute top-0 right-0 h-full w-[300px] bg-[#002b4d] border-l border-white/5 p-8 flex flex-col transition-transform duration-500 ease-out ${
+          className={`absolute top-0 right-0 h-full w-[300px] bg-gradient-to-b from-[#001a33] to-[#000d1a] border-l border-white/10 p-8 flex flex-col transition-transform duration-500 ease-out shadow-2xl ${
             isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          <div className="mt-20 flex flex-col gap-4">
+          {/* Mobile Logo */}
+          <div className="mb-8 pb-6 border-b border-white/10">
+            <div className="bg-white/5 rounded-lg px-3 py-2 inline-block">
+              <Image
+                src="/assets/logos/link-logo.svg"
+                alt="Link Opticians"
+                width={140}
+                height={35}
+                className="h-7 w-auto"
+              />
+            </div>
+            <p className="text-white/30 text-[10px] font-medium tracking-wider mt-3">
+              Est. 2008 • Registered Optometrists
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2">
             {NAVIGATION_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={closeMobileMenu}
-                className={`text-2xl font-bold tracking-tight transition-all duration-300 ${
-                  currentPage === link.id ? "text-sky-400 translate-x-2" : "text-white/40 hover:text-white"
+                className={`text-xl font-bold tracking-tight transition-all duration-300 px-4 py-3 rounded-xl ${
+                  currentPage === link.id 
+                    ? "text-sky-400 bg-white/5 translate-x-2" 
+                    : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
                 {link.label}
               </Link>
             ))}
+          </div>
+          
+          {/* Mobile CTA */}
+          <div className="mt-auto pt-10 space-y-4">
             <Link
               href="/book"
               onClick={closeMobileMenu}
-              className="mt-10 bg-sky-600 text-white text-center font-black uppercase tracking-widest py-5 rounded-2xl shadow-lg shadow-sky-900/20"
+              className="block w-full bg-gradient-to-r from-sky-600 to-sky-500 text-white text-center font-black text-sm uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-sky-900/30 active:scale-95 transition-all duration-300"
             >
               Book Appointment
             </Link>
-          </div>
-          
-          <div className="mt-auto pt-10 border-t border-white/5">
-            <p className="text-white/20 text-[10px] font-bold uppercase tracking-widest">Emergency Line</p>
-            <p className="text-white font-bold mt-1">+263 77 340 7464</p>
+            
+            <div className="pt-4 border-t border-white/10">
+              <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest mb-2">Emergency Line</p>
+              <a 
+                href="tel:+263773407464" 
+                className="text-white font-bold text-lg hover:text-sky-400 transition-colors flex items-center gap-2"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                </span>
+                +263 77 340 7464
+              </a>
+              <p className="text-white/30 text-[10px] mt-1">24/7 Emergency Eye Care</p>
+            </div>
           </div>
         </div>
       </div>

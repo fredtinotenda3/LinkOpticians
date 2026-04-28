@@ -22,7 +22,7 @@ export const ServicesHeroSection = ({
   }, []);
 
   return (
-    <section className="relative min-h-[85vh] w-full overflow-hidden flex items-center bg-[#000d1a]">
+    <section className="relative min-h-[85vh] w-full overflow-hidden flex items-center justify-center bg-[#000d1a]">
       {/* ===== BACKGROUND LAYER - CRYSTAL CLEAR IMAGE ===== */}
       <div className="absolute inset-0">
         {/* Loading skeleton */}
@@ -47,22 +47,22 @@ export const ServicesHeroSection = ({
         <div className="absolute inset-0 bg-gradient-to-t from-[#000d1a] via-transparent to-transparent" />
       </div>
 
-      {/* ===== CONTENT LAYER ===== */}
-      <div className="relative mx-auto max-w-7xl px-6 py-24 w-full">
+      {/* ===== CONTENT LAYER - CENTERED ===== */}
+      <div className="relative mx-auto max-w-7xl px-6 py-24 w-full text-center">
         <div
-          className={`max-w-3xl space-y-8 transition-all duration-700 ${
+          className={`max-w-4xl mx-auto space-y-8 transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
           {/* Headline - Premium Typography */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter drop-shadow-lg">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] tracking-tighter drop-shadow-lg">
             {title}
             <br />
-            <span className="text-sky-400 block mt-2">{titleHighlight}</span>
+            <span className="text-sky-400">{titleHighlight}</span>
           </h1>
 
-          {/* CTA Buttons - Enhanced hover states */}
-          <div className="flex flex-col sm:flex-row gap-5 pt-4">
+          {/* CTA Buttons - Centered */}
+          <div className="flex flex-col sm:flex-row gap-5 justify-center pt-4">
             <Link
               href="/book"
               className="group inline-flex items-center justify-center gap-3 bg-sky-600 hover:bg-sky-500 text-white font-black text-xs uppercase tracking-[0.2em] px-10 py-5 rounded-full shadow-2xl shadow-black/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-sky-600/40"

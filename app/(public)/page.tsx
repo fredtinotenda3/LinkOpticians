@@ -1,7 +1,6 @@
 // app/(public)/page.tsx
 import PasskeyModal from "@/components/PasskeyModal";
 import { SearchParamProps } from "@/types";
-import StoriesSection from "@/components/StoriesSection";
 import { BrandStrip } from "@/components/BrandStrip";
 import {
   HeroSection,
@@ -42,7 +41,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
       <MissionSection />
 
       {/* 6. Human Connection: Emotional engagement */}
-      <StoriesSection />
+      {/* <StoriesSection /> */}
 
       {/* 7. Social Proof: Real Zimbabwean voices */}
       <TestimonialsSection />

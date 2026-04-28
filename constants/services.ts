@@ -164,15 +164,15 @@ export interface ServiceItem {
 export const HOME_SERVICES: ServiceItem[] = [
   {
     id: "comprehensive-exams",
-    image: "/assets/images/service-exam.jpg",
+    image: "/assets/images/service-exam.png",
     title: "Clinical Examinations",
-    description: "Advanced diagnostic testing and ocular health assessments.",
+    description: "Diagnostic testing and ocular health assessments.",
     href: "/services",
     category: "Diagnostics"
   },
   {
     id: "on-site-lab",
-    image: "/assets/images/service-lab.jpg",
+    image: "/assets/images/service-lab.png",
     title: "Precision In-House Lab",
     description: "State-of-the-art lens surfacing and same-day fitting services.",
     href: "/services",
@@ -180,15 +180,15 @@ export const HOME_SERVICES: ServiceItem[] = [
   },
   {
     id: "glasses",
-    image: "/assets/images/service-glasses.jpg",
-    title: "Premium Eyewear",
+    image: "/assets/images/service-glasses.png",
+    title: "Eyewear",
     description: "Curated frames and high-index therapeutic lens options.",
     href: "/products",
     category: "Products"
   },
   {
     id: "contact-lenses",
-    image: "/assets/images/service-contact.jpg",
+    image: "/assets/images/service-contact.png",
     title: "Specialty Contact Lenses",
     description: "Scleral, multifocal, and therapeutic fitting solutions.",
     href: "/services",
