@@ -1,4 +1,4 @@
-// ===== FILE: components/PasskeyModal.tsx (Fixed for hydration) =====
+// ===== FILE: components/PasskeyModal.tsx =====
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -18,42 +18,18 @@ import {
 } from "@/components/ui/input-otp";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { verifyAdminPasskey } from "@/app/admin/actions";
-import { AlertDialogCancel } from "@radix-ui/react-alert-dialog";
 
 const PasskeyModal = () => {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [passkey, setPasskey] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
-  // Handle mounting to prevent hydration issues
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
-    
-    // Check if already authenticated via cookie
-    const checkAuth = async () => {
-      try {
-        const res = await fetch("/api/admin/check");
-        const data = await res.json();
-        if (data.authenticated) {
-          router.push("/admin");
-        } else {
-          setOpen(true);
-        }
-      } catch (error) {
-        console.error("Auth check failed:", error);
-        setOpen(true);
-      }
-    };
-    checkAuth();
-  }, [router, isMounted]);
 
   const closeModal = () => {
     setOpen(false);
@@ -65,21 +41,26 @@ const PasskeyModal = () => {
     setIsLoading(true);
     setError("");
 
-    const formData = new FormData();
-    formData.append("passkey", passkey);
-    
     try {
-      const result = await verifyAdminPasskey(formData);
+      const response = await fetch("/api/admin/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ passkey }),
+      });
+      
+      const result = await response.json();
       
       if (result.success) {
         setOpen(false);
-        router.push("/admin");
-        router.refresh();
+        // Force a hard navigation to admin page
+        window.location.href = "/admin";
       } else {
-        setError("Invalid passkey. Please try again.");
+        setError(result.error || "Invalid passkey. Please try again.");
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      console.error("Verification error:", error);
       setError("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -150,7 +131,12 @@ const PasskeyModal = () => {
         </AlertDialogFooter>
 
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={closeModal}>Cancel</AlertDialogCancel>
+          <button 
+            onClick={closeModal}
+            className="mt-2 sm:mt-0 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full"
+          >
+            Cancel
+          </button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

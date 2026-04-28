@@ -13,6 +13,11 @@ import {
   LocationsBarSection
 } from "@/components/sections";
 
+// REMOVED: export const dynamic = "force-dynamic";
+// REMOVED: export const revalidate = 0;
+// This is a Server Component by default (no "use client"), so revalidate works,
+// but removing it to avoid confusion. Default behavior is fine.
+
 export default async function Home({ searchParams }: SearchParamProps) {
   const params = await searchParams;
   const isAdmin = params?.admin === "true";
@@ -27,7 +32,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
       {/* 2. Convenience: Vital info immediately for returning patients */}
       <LocationsBarSection />
 
-      {/* 3. Authority: Global brands you carry build instant medical trust */}
+      {/* 3. Authority: Global brands you carry build immediate medical trust */}
       <BrandStrip />
 
       {/* 4. Practicality: "Can you solve my problem?" */}

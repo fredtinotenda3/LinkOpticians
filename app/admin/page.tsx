@@ -9,26 +9,53 @@ import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
 import { getAllBranches } from "@/lib/actions/branch.actions";
 import { DataTable } from "./table/DataTable";
 import { columns } from "./table/columns";
+import { useRouter } from "next/navigation";
 
-// Add this to prevent hydration issues
-export const dynamic = "force-dynamic";
+// REMOVED: export const dynamic = "force-dynamic";
+// REMOVED: export const revalidate = 0;
+// These cannot be used in "use client" components
 
-interface AppointmentData {
-  scheduledCount: number;
-  pendingCount: number;
-  cancelledCount: number;
-  documents: any[];
+// Check auth function
+async function checkAuth() {
+  try {
+    const res = await fetch("/api/admin/check");
+    const data = await res.json();
+    return data.authenticated === true;
+  } catch {
+    return false;
+  }
 }
 
 const Admin = () => {
-  const [appointments, setAppointments] = useState<AppointmentData | null>(null);
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [appointments, setAppointments] = useState<any>(null);
   const [branches, setBranches] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [enhancedAppointments, setEnhancedAppointments] = useState<any>(null);
 
+  // Check authentication first
   useEffect(() => {
-    // Fetch data only on client side to avoid hydration mismatch
+    const verifyAuth = async () => {
+      const auth = await checkAuth();
+      setIsAuthenticated(auth);
+      
+      if (!auth) {
+        // Redirect to home with admin modal
+        router.push("/?admin=true");
+        return;
+      }
+    };
+    
+    verifyAuth();
+  }, [router]);
+
+  // Fetch data only if authenticated
+  useEffect(() => {
+    if (isAuthenticated !== true) return;
+    
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const [appointmentsData, branchesData] = await Promise.all([
           getRecentAppointmentList(),
@@ -58,9 +85,26 @@ const Admin = () => {
     };
     
     fetchData();
-  }, []);
+  }, [isAuthenticated]);
 
-  // Show loading state while fetching
+  // Show loading while checking auth
+  if (isAuthenticated === null) {
+    return (
+      <div className="min-h-screen bg-dark-300 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-sky-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-white/60">Verifying access...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if not authenticated (will redirect)
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  // Show loading while fetching data
   if (isLoading || !enhancedAppointments) {
     return (
       <div className="min-h-screen bg-dark-300 flex items-center justify-center">
@@ -81,12 +125,12 @@ const Admin = () => {
           <Link href="/" className="group flex items-center gap-3">
             <Image
               src="/assets/icons/logo-icon.svg"
-              height={1000}
-              width={1000}
+              height={40}
+              width={40}
               alt="Link Opticians"
-              className="h-8 w-fit transition-opacity duration-300 group-hover:opacity-80"
+              className="h-8 w-auto transition-opacity duration-300 group-hover:opacity-80"
               priority
-              unoptimized // Prevents image optimization issues on Vercel
+              unoptimized
             />
             <div className="h-5 w-px bg-dark-500" />
             <span className="text-white/40 text-xs font-semibold tracking-[0.2em] uppercase">
@@ -155,8 +199,12 @@ const Admin = () => {
         </section>
 
         {/* Data table */}
-        {enhancedAppointments?.documents && (
+        {enhancedAppointments?.documents && enhancedAppointments.documents.length > 0 ? (
           <DataTable columns={columns} data={enhancedAppointments.documents} />
+        ) : (
+          <div className="text-center py-12 bg-dark-400/50 rounded-xl border border-dark-500">
+            <p className="text-white/40">No appointments found.</p>
+          </div>
         )}
 
       </main>
