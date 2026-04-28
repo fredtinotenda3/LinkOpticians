@@ -5,16 +5,13 @@ import { formatDateTime } from "@/lib/utils";
 import { SearchParamProps } from "@/types";
 import { BOOKING_CONFIRMATION_CONFIG } from "@/constants/booking-page";
 import {
-  //ConfirmationHeader,
   SuccessHeader,
   AppointmentDetailsCard,
-  // NextStepsCard,
-  //ConfirmationActions,
   ConfirmationContactInfo,
   BookingErrorState
 } from "@/components/sections/booking/confirmation";
 
-  export default async function BookingConfirmation({
+export default async function BookingConfirmation({
   searchParams,
 }: SearchParamProps) {
   const params = await searchParams;
@@ -25,15 +22,15 @@ import {
   }
 
   const appointment = await getAppointment(bookingId);
+  
+  if (!appointment) {
+    return <BookingErrorState {...BOOKING_CONFIRMATION_CONFIG.error} />;
+  }
+  
   const branch = await getBranchById(appointment.branchId);
 
   return (
     <div className="min-h-screen">
-      {/* <ConfirmationHeader 
-        logoSrc={BOOKING_CONFIRMATION_CONFIG.header.logo}
-        logoAlt={BOOKING_CONFIRMATION_CONFIG.header.alt}
-      /> */}
-
       <main className="py-16 md:py-24">
         <div className="mx-auto max-w-3xl px-[5%]">
           <SuccessHeader {...BOOKING_CONFIRMATION_CONFIG.success} />
@@ -50,16 +47,6 @@ import {
             referenceLabel={BOOKING_CONFIRMATION_CONFIG.appointmentDetails.referenceLabel}
             bookingId={bookingId}
           />
-
-          {/* <NextStepsCard 
-            title={BOOKING_CONFIRMATION_CONFIG.nextSteps.title}
-            steps={BOOKING_CONFIRMATION_CONFIG.nextSteps.steps}
-          /> */}
-
-          {/* <ConfirmationActions 
-            returnHome={BOOKING_CONFIRMATION_CONFIG.actions.returnHome}
-            bookAnother={BOOKING_CONFIRMATION_CONFIG.actions.bookAnother}
-          /> */}
 
           <ConfirmationContactInfo 
             text={BOOKING_CONFIRMATION_CONFIG.contact.text}

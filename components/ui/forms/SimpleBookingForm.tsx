@@ -57,6 +57,9 @@ export const SimpleBookingForm = ({ branches }: SimpleBookingFormProps) => {
       const result = await createSimpleAppointment(values);
 
       if (result?.success) {
+        // FIXED: Use absolute path from root - removing the extra "booking" prefix
+        // The file is at app/(public)/booking/confirmation/page.tsx
+        // So the URL should be /booking/confirmation?bookingId=xxx
         router.push(`/booking/confirmation?bookingId=${result.bookingId}`);
       }
     } catch (error) {

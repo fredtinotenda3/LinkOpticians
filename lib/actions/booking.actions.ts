@@ -1,13 +1,13 @@
-// ===== FILE: lib/actions/booking.actions.ts (FIXED) =====
+// ===== FILE: lib/actions/booking.actions.ts (FIXED - with proper return) =====
 
 "use server";
 
 import { ID, Query } from "node-appwrite";
-import { parseStringify, formatDateTime } from "../utils";
+import { parseStringify } from "../utils";
 import { databases, users } from "../appwrite.config";
 import { DATABASE_ID, APPOINTMENT_COLLECTION_ID, PATIENT_COLLECTION_ID } from "../appwrite.config";
 import { revalidatePath } from "next/cache";
-import { sendAppointmentSMS } from "./appointment.actions"; // CHANGED: import sendAppointmentSMS instead
+import { sendAppointmentSMS } from "./appointment.actions";
 
 interface CreateSimpleAppointmentParams {
   branchId: string;
@@ -23,26 +23,31 @@ export const createSimpleAppointment = async (
   params: CreateSimpleAppointmentParams
 ) => {
   try {
+    // Ensure phone number has proper format for Appwrite
+    const formattedPhone = params.patientPhone.startsWith('+') 
+      ? params.patientPhone 
+      : `+${params.patientPhone.replace(/\D/g, '')}`;
+
     let user;
     try {
       user = await users.create(
         ID.unique(),
-        params.patientEmail,
-        params.patientPhone,
+        params.patientEmail || `user_${Date.now()}@temp.com`,
+        formattedPhone,
         undefined,
         params.patientName
       );
     } catch (error: any) {
       if (error?.code === 409) {
         const existingUsers = await users.list([
-          Query.equal("email", [params.patientEmail])
+          Query.equal("email", [params.patientEmail || `user_${Date.now()}@temp.com`])
         ]);
         user = existingUsers.users[0];
       } else {
         user = { 
           $id: ID.unique(), 
-          email: params.patientEmail, 
-          phone: params.patientPhone, 
+          email: params.patientEmail || `user_${Date.now()}@temp.com`, 
+          phone: formattedPhone, 
           name: params.patientName 
         };
       }
@@ -51,8 +56,8 @@ export const createSimpleAppointment = async (
     if (!user?.$id) {
       user = { 
         $id: ID.unique(), 
-        email: params.patientEmail, 
-        phone: params.patientPhone, 
+        email: params.patientEmail || `user_${Date.now()}@temp.com`, 
+        phone: formattedPhone, 
         name: params.patientName 
       };
     }
@@ -75,13 +80,13 @@ export const createSimpleAppointment = async (
           {
             userId: user.$id,
             name: params.patientName,
-            email: params.patientEmail,
-            phone: params.patientPhone,
+            email: params.patientEmail || `user_${Date.now()}@temp.com`,
+            phone: formattedPhone,
             privacyConsent: true,
             identificationDocumentUrl: "simplified-booking-placeholder",
             address: "To be provided",
             emergencyContactName: params.patientName,
-            emergencyContactNumber: params.patientPhone,
+            emergencyContactNumber: formattedPhone,
             primaryPhysician: "To be assigned",
             insuranceProvider: "Not provided",
             insurancePolicyNumber: "Not provided",
@@ -113,24 +118,25 @@ export const createSimpleAppointment = async (
 
     // Send SMS only if opted in (default is true)
     if (params.patientPhone && params.smsOptIn !== false) {
-      // CHANGED: Use sendAppointmentSMS instead of sendSMSNotification
       await sendAppointmentSMS(
-        params.patientPhone,
-        'confirmation',  // Use the confirmation template
+        formattedPhone,
+        'confirmation',
         {
           patientName: params.patientName,
           appointmentDate: params.schedule,
-          branchName: "our clinic", // You can get branch name here if needed
+          branchName: "our clinic",
         }
       );
     }
 
     revalidatePath("/admin");
     
-    // Return the booking ID for redirect
+    // IMPORTANT: Return the booking ID for redirect
+    // Use $id (Appwrite's document ID) which is what the confirmation page expects
     return parseStringify({
       success: true,
-      bookingId: appointment.$id,
+      bookingId: appointment.$id,  // This is the document ID
+      appointmentId: appointment.$id,  // Also return as appointmentId for clarity
       appointment,
     });
   } catch (error) {
