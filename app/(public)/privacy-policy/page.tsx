@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
           <section className="mb-12">
             <h2 className="text-2xl font-bold text-white mb-4">1. Introduction</h2>
             <p className="text-white/70 mb-4">
-              Link Opticians ("we", "our", "us") is committed to protecting your privacy. 
+              Link Opticians (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) is committed to protecting your privacy. 
               This policy explains how we collect, use, and safeguard your personal information 
               when you visit our website or use our services.
             </p>
@@ -62,7 +62,7 @@ export default function PrivacyPolicyPage() {
               <li>Follow-up care instructions</li>
             </ul>
             <p className="text-white/70">
-              You may opt out at any time by replying "STOP" to any message. 
+              You may opt out at any time by replying &quot;STOP&quot; to any message. 
               Standard message and data rates may apply.
             </p>
           </section>
@@ -91,7 +91,7 @@ export default function PrivacyPolicyPage() {
             <p className="text-white/70 mb-4">
               For privacy-related questions, contact:<br />
               Email: <a href="mailto:privacy@linkopticians.co.zw" className="text-green-400 hover:underline">privacy@linkopticians.co.zw</a><br />
-              Phone: <a href="tel:+263242700000" className="text-green-400 hover:underline">+263 242 700 000</a>
+              Phone: <a href="tel:+263242700000" className="text-green-400 hover:underline">0242 757558</a>
             </p>
           </section>
 

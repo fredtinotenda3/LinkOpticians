@@ -1,5 +1,3 @@
-// components/sections/contact/ContactInfoSection.tsx
-
 import { ReactNode } from "react";
 
 interface MainClinic {
@@ -82,19 +80,21 @@ export const ContactInfoSection = ({
                 {mainClinic.address}
               </p>
 
-              <a
-                href={`tel:${mainClinic.phone.replace(/\D/g, "")}`}
-                className="text-white text-sm hover:text-sky-400 transition"
-              >
-                {mainClinic.phone}
-              </a>
+              <div className="space-y-2">
+                <a
+                  href={`tel:${mainClinic.phone.replace(/\D/g, "")}`}
+                  className="text-white text-sm hover:text-sky-400 transition block"
+                >
+                  {mainClinic.phone}
+                </a>
 
-              <a
-                href={`mailto:${mainClinic.email}`}
-                className="text-white text-sm hover:text-sky-400 transition"
-              >
-                {mainClinic.email}
-              </a>
+                <a
+                  href={`mailto:${mainClinic.email}`}
+                  className="text-white text-sm hover:text-sky-400 transition block"
+                >
+                  {mainClinic.email}
+                </a>
+              </div>
             </div>
 
             {/* Hours */}

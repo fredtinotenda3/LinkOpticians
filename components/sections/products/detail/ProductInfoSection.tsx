@@ -120,7 +120,7 @@ export const ProductInfoSection = ({
         <p className="text-center text-white/20 text-[10px] font-bold uppercase tracking-[0.3em]">
           Direct Consultation:{" "}
           <a href="tel:+263242700000" className="text-sky-500/60 hover:text-sky-400 transition-colors duration-300">
-            +263 242 700 000
+            0242 757558
           </a>
         </p>
       </div>

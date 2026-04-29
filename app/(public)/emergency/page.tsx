@@ -39,20 +39,20 @@ export default function EmergencyPage() {
               <div className="space-y-6 mb-8">
                 <div className="p-6 bg-red-900/20 border border-red-800 rounded-xl">
                   <h3 className="text-18-bold text-white mb-3">24/7 Emergency Line</h3>
-                  <p className="text-32-bold text-red-400 mb-2">+263 77 340 7464</p>
+                  <p className="text-32-bold text-red-400 mb-2">0737 683 090</p>
                   <p className="text-dark-600">For eye injuries, sudden vision loss, or severe eye pain</p>
                 </div>
 
                 <div className="p-6 bg-dark-300 border border-dark-500 rounded-xl">
                   <h3 className="text-18-bold text-white mb-3">Practice Emergency Contact</h3>
-                  <p className="text-24-bold text-green-500 mb-2">+263 242 700 000</p>
+                  <p className="text-24-bold text-green-500 mb-2">0242 757558</p>
                   <p className="text-dark-600">During practice hours: 8:00 AM - 6:00 PM</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <Button className="bg-red-800 hover:bg-red-700 text-white w-full py-6 text-lg" asChild>
-                  <Link href="tel:+263773407464">
+                  <Link href="tel:+073 768 3090">
                     <Image src="/assets/icons/phone.svg" width={24} height={24} alt="Call" className="mr-2" />
                     Call Emergency Line Now
                   </Link>
@@ -252,8 +252,8 @@ export default function EmergencyPage() {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button className="bg-red-800 hover:bg-red-700 text-white px-8 py-6" asChild>
-                <Link href="tel:+263773407464">
-                  Emergency Call: +263 77 340 7464
+                <Link href="tel:+073 768 3090">
+                  Emergency Call: 0737 683 090
                 </Link>
               </Button>
               <Button className="shad-gray-btn px-8 py-6" asChild>

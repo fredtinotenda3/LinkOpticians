@@ -185,14 +185,14 @@ export const LayoutHeader = ({ activePage }: LayoutHeaderProps) => {
             <div className="pt-4 border-t border-white/10">
               <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest mb-2">Emergency Line</p>
               <a 
-                href="tel:+263773407464" 
+                href="tel:+073 768 3090" 
                 className="text-white font-bold text-lg hover:text-sky-400 transition-colors flex items-center gap-2"
               >
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
                 </span>
-                +263 77 340 7464
+                0737 683 090
               </a>
               <p className="text-white/30 text-[10px] mt-1">24/7 Emergency Eye Care</p>
             </div>

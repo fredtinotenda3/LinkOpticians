@@ -6,11 +6,18 @@ import { useState, useEffect } from "react";
 export const BrandStrip = () => {
   const partners = [
     { name: "PSMAS", logo: "/assets/logos/psmas.svg" },
-    { name: "Premier", logo: "/assets/logos/premier.svg" },
+    { name: "EMERALD", logo: "/assets/logos/emerald.svg" },
     { name: "CIMAS", logo: "/assets/logos/cimas.svg" },
-    { name: "Old Mutual", logo: "/assets/logos/oldmutual.svg" },
+    { name: "ADVANTAGE HEALTH", logo: "/assets/logos/advantage-health.svg" },
+    { name: "FIDELITY", logo: "/assets/logos/fidelity.svg" },
+    { name: "ALLIANCE HEALTH", logo: "/assets/logos/alliance-health.svg" },
+    { name: "CELLMED HEALTH", logo: "/assets/logos/cellmed-health.svg" },
     { name: "First Mutual", logo: "/assets/logos/fmh.svg" },
-    { name: "Medichlaim", logo: "/assets/logos/medichlaim.svg" },
+    { name: "FBC HEALTH", logo: "/assets/logos/fbc-health.svg" },
+    { name: "EMF", logo: "/assets/logos/emf.svg" },
+    { name: "MIRNEVA", logo: "/assets/logos/mirneva.svg" },
+    { name: "MAISHA", logo: "/assets/logos/maisha.svg" },
+
   ];
 
   const [isPaused, setIsPaused] = useState(false);

@@ -1,3 +1,5 @@
+// components/ui/CustomFormField.tsx
+
 "use client";
 
 import React from "react";
@@ -77,7 +79,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
       return (
         <FormControl>
           <PhoneInput
-            defaultCountry="US"
+            defaultCountry="ZW"
             placeholder={placeholder}
             international
             withCountryCallingCode
@@ -99,14 +101,6 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             className="ml-2"
           />
           <FormControl>
-            {/* <ReactDatePicker
-              showTimeSelect={props.showTimeSelect ?? false}
-              selected={field.value}
-              onChange={(date: Date) => field.onChange(date)}
-              timeInputLabel="Time:"
-              dateFormat={props.dateFormat ?? "MM/dd/yyyy"}
-              wrapperClassName="date-picker"
-            /> */}
             <DatePicker
               selected={field.value}
               onChange={(date) => field.onChange(date)}
@@ -165,6 +159,8 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
           </div>
         </FormControl>
       );
+    default:
+      return null;
   }
 };
 

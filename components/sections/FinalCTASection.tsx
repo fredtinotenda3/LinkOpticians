@@ -21,7 +21,7 @@ export const FinalCTASection = ({
   secondaryButtonText = "View Locations",
   secondaryButtonHref = "/locations",
   emergencyText = "Emergency care needed?",
-  emergencyPhone = "+263 77 340 7464",
+  emergencyPhone = "0737 683 090",
   showEmergency = true,
 }: FinalCTASectionProps) => {
   return (

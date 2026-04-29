@@ -28,16 +28,16 @@ export const CONTACT_DATA = {
     {
       id: "phone",
       title: "Telephone",
-      details: "Main: +263 242 700 000\nEmergency: +263 77 340 7464",
+      details: "Main: 0242 757558\nEmergency: 0737 683 090",
       icon: "/assets/icons/phone.svg",
       action: { type: "tel", value: "+263242700000" }
     },
     {
       id: "email",
       title: "Email",
-      details: "General Inquiries: info@linkopticians.co.zw\nAppointments: appointments@linkopticians.co.zw",
+      details: "General Inquiries: linkoptical@gmail.com\nAppointments: appointments@linkopticians.co.zw",
       icon: "/assets/icons/email.svg",
-      action: { type: "mailto", value: "info@linkopticians.co.zw" }
+      action: { type: "mailto", value: "linkoptical@gmail.com" }
     },
     {
       id: "hours",
@@ -55,8 +55,8 @@ export const CONTACT_DATA = {
   },
   
   phone: {
-    main: "+263 242 700 000",
-    emergency: "+263 77 340 7464"
+    main: "0242 757558",
+    emergency: "0737 683 090"
   },
   
   emergency: {
@@ -94,7 +94,7 @@ export const FAQ_DATA: FAQ[] = [
   {
     id: "hours",
     question: "What are your opening times?",
-    answer: "Standard hours are Monday to Friday, 8:00 AM to 6:00 PM. Saturday hours are 9:00 AM to 1:00 PM. Hours may vary by location.",
+    answer: "Standard hours are Monday to Friday, 8:00 AM to 5:00 PM. Saturday hours are 8:00 AM to 1:00 PM. Hours may vary by location.",
     category: "Practice"
   }
 ];

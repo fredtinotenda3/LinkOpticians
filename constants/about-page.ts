@@ -41,8 +41,8 @@ export const ABOUT_PAGE_CONFIG = {
       title: "Our mission",
       text: "To make quality eye care accessible to every Zimbabwean, regardless of where they live or their ability to pay.",
       stats: [
-        { value: "16+", label: "Years serving" },
-        { value: "50k+", label: "Patients/year" }
+        { value: "18+", label: "Years serving" },
+        { value: "1k+", label: "Patients/year" }
       ]
     },
     values: VALUES
@@ -158,6 +158,6 @@ timeline: {
     primaryButtonHref: "/book",
     secondaryButtonText: "Contact us",
     secondaryButtonHref: "/contact",
-    footerText: "EST. 2008 • 16 years of serving Zimbabwe"
+    footerText: "EST. 2008 • 18+ years of serving Zimbabwe"
   }
 };

@@ -1,4 +1,3 @@
-// components/sections/contact/ContactHeroSection.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -50,7 +49,7 @@ export const ContactHeroSection = ({
       {/* ===== CONTENT LAYER ===== */}
       <div className="relative mx-auto max-w-7xl px-6 py-24 w-full">
         <div
-          className={`max-w-3xl space-y-8 transition-all duration-700 ${
+          className={`max-w-3xl mx-auto space-y-8 text-center transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -62,7 +61,7 @@ export const ContactHeroSection = ({
           </h1>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-5 pt-6">
+          <div className="flex flex-col sm:flex-row gap-5 pt-6 justify-center">
             <Link
               href="/book"
               className="group inline-flex items-center justify-center gap-3 bg-sky-600 hover:bg-sky-500 text-white font-black text-xs uppercase tracking-[0.2em] px-10 py-5 rounded-full shadow-2xl shadow-black/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-sky-600/40"

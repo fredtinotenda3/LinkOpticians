@@ -58,7 +58,7 @@ export const LOCATIONS_PAGE_CONFIG = {
     ],
     buttons: [
       { text: "View schedule", href: "/community", primary: true },
-      { text: "Call mobile unit", href: "tel:+263773407464", primary: false }
+      { text: "Call mobile unit", href: "tel:+073 768 3090", primary: false }
     ],
     schedulePreview: {
       stops: [
@@ -73,7 +73,7 @@ export const LOCATIONS_PAGE_CONFIG = {
         location: "Chipinge rural",
         time: "9am - 4pm"
       },
-      contact: "+263 77 340 7464"
+      contact: "0737 683 090"
     }
   },
 
@@ -87,7 +87,7 @@ export const LOCATIONS_PAGE_CONFIG = {
       {
         name: "Robinson House",
         hours: "Mon-Fri 8-6",
-        phone: "+263 242 700 000",
+        phone: "0242 757558",
         parking: "Street parking",
         bookLink: "/book?branch=robinson-house"
       },
@@ -130,7 +130,7 @@ export const LOCATIONS_PAGE_CONFIG = {
     secondaryButtonText: "Contact us",
     secondaryButtonHref: "/contact",
     emergencyText: "Emergency?",
-    emergencyPhone: "+263 77 340 7464",
+    emergencyPhone: "0737 683 090",
     emergencyNote: "(24/7)"
   }
 };
@@ -200,7 +200,7 @@ export const BRANCH_DETAIL_CONFIG = {
     description: "Book your appointment at",
     buttonText: "Book appointment",
     emergencyText: "Emergency?",
-    emergencyPhone: "+263 77 340 7464",
+    emergencyPhone: "0737 683 090",
     emergencyNote: "(24/7)"
   }
 };

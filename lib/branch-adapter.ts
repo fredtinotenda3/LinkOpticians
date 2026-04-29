@@ -5,6 +5,8 @@
  */
 
 export interface AppBranch {
+  [x: string]: "kensington" | "chipinge" | "chiredzi" | "robinson-house" | "honey-dew";
+  specialties: string[];
   $id: string;
   name: string;
   address: string;
@@ -105,10 +107,10 @@ export function getBranchImage(branchName: string, customImage?: string): string
   // Map branch names to images
   const imageMap: Record<string, string> = {
     "robinson": "/assets/images/branches/robinson-house.png",
-    "kensington": "/assets/images/branches/kensington.jpeg",
-    "honey": "/assets/images/branches/honey-dew.jpeg",
-    "chipinge": "/assets/images/branches/chipinge.jpeg",
-    "chiredzi": "/assets/images/branches/chiredzi.jpeg",
+    "kensington": "/assets/images/branches/kensington.png",
+    "honey": "/assets/images/branches/honey-dew.png",
+    "chipinge": "/assets/images/branches/chipinge.png",
+    "chiredzi": "/assets/images/branches/chiredzi.png",
   };
   
   const lowerName = branchName.toLowerCase();

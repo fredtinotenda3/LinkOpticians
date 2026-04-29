@@ -1,4 +1,3 @@
-// components/sections/services/ServicesHeroSection.tsx
 "use client";
 
 import Image from "next/image";
@@ -22,54 +21,72 @@ export const ServicesHeroSection = ({
   }, []);
 
   return (
-    <section className="relative min-h-[85vh] w-full overflow-hidden flex items-center justify-center bg-[#000d1a]">
-      {/* ===== BACKGROUND LAYER - CRYSTAL CLEAR IMAGE ===== */}
+    <section className="relative min-h-[75vh] sm:min-h-[85vh] lg:min-h-screen w-full overflow-hidden flex items-center justify-center bg-[#000d1a]">
+      
+      {/* ===== BACKGROUND IMAGE ===== */}
       <div className="absolute inset-0">
-        {/* Loading skeleton */}
         {!imageLoaded && (
           <div className="absolute inset-0 bg-[#001a33] animate-pulse" />
         )}
 
         <Image
-          src="/assets/images/services-hero.jpg"
-          alt="Clinical Optometry Equipment"
+          src="/assets/images/services-hero.png"
+          alt="Optometry clinic examination"
           fill
-          className={`object-cover transition-opacity duration-700 ${
+          priority
+          quality={100}
+          sizes="(max-width: 640px) 100vw,
+                 (max-width: 1024px) 100vw,
+                 100vw"
+          className={`object-cover object-[center_right] transition-opacity duration-700 ${
             imageLoaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={() => setImageLoaded(true)}
-          priority
-          quality={95}
         />
 
-        {/* MINIMAL Overlays - Only for text readability, image stays clear */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#000d1a]/70 via-[#000d1a]/40 to-transparent" />
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#000d1a]/80 via-[#000d1a]/50 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#000d1a] via-transparent to-transparent" />
       </div>
 
-      {/* ===== CONTENT LAYER - CENTERED ===== */}
-      <div className="relative mx-auto max-w-7xl px-6 py-24 w-full text-center">
+      {/* ===== CONTENT ===== */}
+      <div className="relative mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 text-center">
         <div
-          className={`max-w-4xl mx-auto space-y-8 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          className={`max-w-4xl mx-auto space-y-6 sm:space-y-8 transition-all duration-700 ${
+            isVisible
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-6"
           }`}
         >
-          {/* Headline - Premium Typography */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] tracking-tighter drop-shadow-lg">
-            {title}
-            <br />
-            <span className="text-sky-400">{titleHighlight}</span>
+          {/* HEADLINE */}
+          <h1 className="font-black text-white leading-[1.05] tracking-tight drop-shadow-lg">
+            
+            {/* Fluid text scaling */}
+            <span className="block text-[clamp(2.2rem,5vw,4rem)] lg:text-[clamp(4rem,6vw,6rem)]">
+              {title}
+            </span>
+
+            <span className="block text-sky-400 text-[clamp(2.2rem,5vw,4rem)] lg:text-[clamp(4rem,6vw,6rem)]">
+              {titleHighlight}
+            </span>
           </h1>
 
-          {/* CTA Buttons - Centered */}
-          <div className="flex flex-col sm:flex-row gap-5 justify-center pt-4">
+          {/* CTA BUTTONS */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center pt-4">
+            
+            {/* PRIMARY CTA */}
             <Link
               href="/book"
-              className="group inline-flex items-center justify-center gap-3 bg-sky-600 hover:bg-sky-500 text-white font-black text-xs uppercase tracking-[0.2em] px-10 py-5 rounded-full shadow-2xl shadow-black/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-sky-600/40"
+              className="group inline-flex items-center justify-center gap-2 sm:gap-3 
+              bg-sky-600 hover:bg-sky-500 text-white font-bold 
+              text-[10px] sm:text-xs uppercase tracking-[0.18em] 
+              px-6 sm:px-8 lg:px-10 py-4 sm:py-5 
+              rounded-full shadow-xl transition-all duration-300 
+              hover:scale-[1.03] hover:shadow-sky-600/40"
             >
               Book Appointment
               <svg
-                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5"
+                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -83,9 +100,15 @@ export const ServicesHeroSection = ({
               </svg>
             </Link>
 
+            {/* SECONDARY CTA */}
             <Link
               href="#services"
-              className="group inline-flex items-center justify-center gap-2 border border-white/20 bg-black/30 backdrop-blur-sm text-white font-black text-xs uppercase tracking-[0.2em] px-10 py-5 rounded-full hover:bg-white/10 transition-all duration-500 hover:scale-[1.02]"
+              className="group inline-flex items-center justify-center gap-2 
+              border border-white/20 bg-black/30 backdrop-blur-sm 
+              text-white font-bold text-[10px] sm:text-xs uppercase tracking-[0.18em] 
+              px-6 sm:px-8 lg:px-10 py-4 sm:py-5 
+              rounded-full hover:bg-white/10 transition-all duration-300 
+              hover:scale-[1.03]"
             >
               View Specialties
               <svg

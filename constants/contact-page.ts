@@ -7,14 +7,14 @@ export const CONTACT_PAGE_CONFIG = {
     titleHighlight: "touch",
     description: "Questions? Appointments? We're here to help.",
     emergencyText: "Emergency?",
-    emergencyPhone: "+263 77 340 7464",
+    emergencyPhone: "0737 683 090",
     emergencyBadge: "24/7"
   },
 
   contactMethods: {
     phone: {
       title: "Call us",
-      number: "+263 242 700 000",
+      number: "0242 757558",
       hours: "Mon-Fri, 8am-6pm",
       icon: "phone"
     },
@@ -27,7 +27,7 @@ export const CONTACT_PAGE_CONFIG = {
     },
     email: {
       title: "Email",
-      address: "info@linkopticians.co.zw",
+      address: "linkoptical@gmail.com",
       responseTime: "24-48 hour response",
       icon: "email"
     },
@@ -45,8 +45,8 @@ export const CONTACT_PAGE_CONFIG = {
     mainClinic: {
       name: "Main clinic",
       address: "Shop 15 & 16 Robinson House, Cnr Angwa/K.Nkrumah, Harare",
-      phone: "+263 242 700 000",
-      email: "info@linkopticians.co.zw"
+      phone: "0242 757558",
+      email: "linkoptical@gmail.com"
     },
     hours: {
       weekdays: "Monday - Friday: 8:00 - 18:00",
@@ -56,7 +56,7 @@ export const CONTACT_PAGE_CONFIG = {
     emergency: {
       title: "24/7 Emergency",
       description: "For eye injuries, sudden vision loss, or severe pain",
-      phone: "+263 77 340 7464"
+      phone: "0737 683 090"
     }
   },
 
@@ -119,7 +119,7 @@ export const CONTACT_PAGE_CONFIG = {
     secondaryButtonText: "Find a clinic",
     secondaryButtonHref: "/locations",
     emergencyText: "Emergency? Call",
-    emergencyPhone: "+263 77 340 7464",
+    emergencyPhone: "0737 683 090",
     emergencyNote: "(24/7)"
   }
 };

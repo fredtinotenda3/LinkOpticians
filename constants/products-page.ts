@@ -13,7 +13,41 @@ export const PRODUCTS_PAGE_CONFIG = {
 
   // S.I. 63 s.6: brand names are factual statements, not claims of superiority
   brands: [
-    "Ray-Ban", "Oakley", "Persol", "Vogue", "Arnette", "Oliver Peoples"
+    // Core (you already have)
+  "Ray-Ban",
+  "Oakley",
+  "Persol",
+  "Vogue",
+  "Arnette",
+  "Oliver Peoples",
+
+  // 🔝 Luxury / Designer
+  "Gucci",
+  "Prada",
+  "Tom Ford",
+  "Versace",
+  "Burberry",
+  "Dior",
+
+  // 🕶️ Premium Lifestyle
+  "Police",
+  "Carrera",
+  "Emporio Armani",
+  "Hugo Boss",
+
+  // 👓 Optical Specialists (VERY important for credibility)
+  "Silhouette",
+  "Zeiss",
+  "Essilor",
+  "Hoya",
+
+  // 👶 Kids / Family
+  "Nano Vista",
+  "Miraflex",
+
+  // 💼 Affordable / Everyday
+  "Polaroid Eyewear",
+  "Lacoste"
   ],
 
   frames: {
@@ -43,7 +77,7 @@ export const PRODUCTS_PAGE_CONFIG = {
     title: "Contact lens",
     titleHighlight: "fitting services",
     description: "Contact lens options available following assessment of suitability by a registered optometrist. Daily, monthly, toric, and multifocal lenses dispensed at registered premises.",
-    image: "/assets/images/contact-lenses-hero.jpg",
+    image: "/assets/images/contact-lenses-hero.png",
     imageAlt: "Contact lenses dispensed at Link Opticians",
     products: PRODUCTS_DATA.filter(p => p.category === 'contact-lenses').slice(0, 4),
     // S.I. 63 s.7: directional information is permitted

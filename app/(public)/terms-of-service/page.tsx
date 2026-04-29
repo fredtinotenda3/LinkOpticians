@@ -95,8 +95,8 @@ export default function TermsOfServicePage() {
             <h2 className="text-2xl font-bold text-white mb-4">9. Contact Information</h2>
             <p className="text-white/70 mb-4">
               For questions about these terms:<br />
-              Email: <a href="mailto:info@linkopticians.co.zw" className="text-green-400 hover:underline">info@linkopticians.co.zw</a><br />
-              Phone: <a href="tel:+263242700000" className="text-green-400 hover:underline">+263 242 700 000</a>
+              Email: <a href="mailto:linkoptical@gmail.com" className="text-green-400 hover:underline">linkoptical@gmail.com</a><br />
+              Phone: <a href="tel:+263242700000" className="text-green-400 hover:underline">0242 757558</a>
             </p>
           </section>
 

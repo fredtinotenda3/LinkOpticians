@@ -22,7 +22,7 @@ export const BOOKING_PAGE_CONFIG = {
 
   rightColumn: {
     image: {
-      src: "/assets/images/appointment-preview.jpg",
+      src: "/assets/images/appointment-preview.png",
       alt: "Optometrist preparing for appointment",
       title: "Ready for your visit?",
       subtitle: "We'll take care of the rest."
@@ -42,7 +42,7 @@ export const BOOKING_PAGE_CONFIG = {
     emergency: {
       title: "Emergency eye care?",
       subtitle: "24/7 emergency line",
-      phone: "+263 77 340 7464"
+      phone: "0737 683 090"
     },
     testimonial: {
       quote: "Booked online and got a call within an hour. Fast, friendly service.",
@@ -89,8 +89,8 @@ export const BOOKING_PAGE_CONFIG = {
       },
       {
         question: "How do I cancel or reschedule?",
-        answer: "Call us at +263 242 700 000 or reply to your confirmation SMS. Free cancellation up to 2 hours before.",
-        phone: "+263 242 700 000"
+        answer: "Call us at 0242 757558 or reply to your confirmation SMS. Free cancellation up to 2 hours before.",
+        phone: "0242 757558"
       },
       {
         question: "What should I bring?",
@@ -104,9 +104,9 @@ export const BOOKING_PAGE_CONFIG = {
   finalCta: {
     title: "Prefer to call?",
     description: "We're here to help. Call us during business hours.",
-    phone: "+263 242 700 000",
+    phone: "0242 757558",
     emergencyText: "Emergency?",
-    emergencyPhone: "+263 77 340 7464",
+    emergencyPhone: "0737 683 090",
     emergencyNote: "(24/7)"
   }
 };
@@ -154,8 +154,8 @@ export const BOOKING_CONFIRMATION_CONFIG = {
 
   contact: {
     text: "Need to make changes?",
-    mainPhone: "+263 242 700 000",
-    emergencyPhone: "+263 77 340 7464",
+    mainPhone: "0242 757558",
+    emergencyPhone: "0737 683 090",
     emergencyLabel: "Emergency:"
   },
 

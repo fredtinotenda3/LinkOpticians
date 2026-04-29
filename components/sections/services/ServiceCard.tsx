@@ -18,11 +18,11 @@ const getImageSrc = (category: string) => {
     contacts: "/assets/images/service-contact-detail.jpg",
     glasses: "/assets/images/service-glasses-detail.jpg",
     treatment: "/assets/images/service-seniors.jpg",
-    specialized: "/assets/images/service-children.jpg",
+    specialized: "/assets/images/service-children.png",
     emergency: "/assets/images/service-emergency.jpg",
     surgical: "/assets/images/service-seniors.jpg",
   };
-  return images[category] || "/assets/images/service-exam-detail.jpg";
+  return images[category] || "/assets/images/service-exam-detail.jpg"
 };
 
 const getBadgeText = (category: string) => {

@@ -14,11 +14,11 @@ import { FormFieldType } from "./PatientForm";
 import { CONTACT_FORM_SUBJECTS, APPOINTMENT_TYPES } from "@/constants/contact";
 
 const ContactFormValidation = z.object({
-  name: z.string().min(2),
-  email: z.string().email().or(z.literal("")),
-  phone: z.string().min(10),
-  subject: z.string().min(2),
-  message: z.string().min(10),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address").or(z.literal("")),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  subject: z.string().min(2, "Please select a subject"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
   appointmentType: z.string().optional(),
 });
 
@@ -62,7 +62,7 @@ export const ContactForm = () => {
       {/* SUCCESS (minimal, inline) */}
       {isSuccess && (
         <p className="text-sky-400 text-sm">
-          Message received. We’ll respond shortly.
+          Message received. We&apos;ll respond shortly.
         </p>
       )}
 
