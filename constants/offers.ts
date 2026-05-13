@@ -21,7 +21,7 @@ export const CURRENT_PROMOTIONS: Promotion[] = [
     id: 'back-to-school-2027',
     title: 'Back to School Eye Check',
     description: 'Ensure your child starts the school year with clear vision. Comprehensive pediatric eye examination.',
-    discount: '20% off children\'s eyewear',
+    discount: '20% off children\'s collection',
     duration: 'January - February 2027',
     validUntil: '2027-02-28',
     category: 'seasonal',
@@ -31,7 +31,7 @@ export const CURRENT_PROMOTIONS: Promotion[] = [
     conditions: [
       'Valid for children under 18 years',
       'Includes comprehensive eye examination',
-      'Eyewear discount applicable with examination',
+      'collection discount applicable with examination',
       'Appointment required'
     ],
     branchSpecific: ['All branches'],
@@ -160,7 +160,7 @@ export const UPCOMING_PROMOTIONS: Promotion[] = [
     conditions: [
       'Valid teacher ID required',
       'Includes complete eye examination',
-      'Applies to eyewear purchase',
+      'Applies to collection purchase',
       'Personal and family appointments'
     ],
     branchSpecific: ['All branches'],

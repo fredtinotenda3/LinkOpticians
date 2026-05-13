@@ -1,3 +1,4 @@
+// components/sections/home/MissionSection.tsx
 "use client";
 
 import Image from "next/image";
@@ -26,70 +27,98 @@ export const MissionSection = ({
   buttonText = "View Clinical History",
   buttonHref = "/about",
   backgroundImage = "/assets/images/mission-bg.png",
-  foregroundImage = "/assets/images/dr-richard.jpg",
+  foregroundImage = "/assets/images/dr-richard.png",
   foregroundAlt = "Lead Optometrist",
   reverse = false,
 }: MissionSectionProps) => {
   return (
-    <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden">
+    <section className="relative overflow-hidden py-16 sm:py-24 md:py-32">
 
-      {/* ── BASE ── */}
+      {/* ───────────────────────────────────────── */}
+      {/* BACKGROUND */}
+      {/* ───────────────────────────────────────── */}
+
       <div className="absolute inset-0 bg-[#020617]" />
 
-      {/* ── PRIMARY GRID (VISIBLE) ── */}
-      <div className="absolute inset-0 opacity-[0.10] pointer-events-none 
+      {/* Primary Grid */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.10]
         bg-[linear-gradient(to_right,rgba(255,255,255,0.15)_1px,transparent_1px),
              linear-gradient(to_bottom,rgba(255,255,255,0.15)_1px,transparent_1px)]
-        [background-size:80px_80px]" 
+        [background-size:80px_80px]"
       />
 
-      {/* ── SECONDARY GRID (SOFT COLOR) ── */}
-      <div className="absolute inset-0 opacity-[0.04] pointer-events-none 
+      {/* Secondary Grid */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.04]
         bg-[linear-gradient(to_right,rgba(56,189,248,0.2)_1px,transparent_1px),
              linear-gradient(to_bottom,rgba(56,189,248,0.2)_1px,transparent_1px)]
-        [background-size:160px_160px]" 
+        [background-size:160px_160px]"
       />
 
-      {/* ── MICRO STARS (VERY SUBTLE) ── */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none 
+      {/* Micro Texture */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.03]
         bg-[radial-gradient(circle,white_1px,transparent_1px)]
-        [background-size:100px_100px]" 
+        [background-size:100px_100px]"
       />
 
-      {/* ── NEBULA (SOFT DEPTH) ── */}
-      <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-sky-400/8 blur-[140px]" />
-      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-violet-500/8 blur-[120px]" />
+      {/* Ambient Glow */}
+      <div className="absolute -top-40 -left-40 h-[600px] w-[600px] bg-sky-400/8 blur-[140px]" />
 
-      {/* ── FOCUS LIGHT BAND ── */}
-      <div className="absolute top-1/2 left-0 right-0 h-[120px] -translate-y-1/2 
+      <div className="absolute -bottom-40 -right-40 h-[500px] w-[500px] bg-violet-500/8 blur-[120px]" />
+
+      {/* Focus Band */}
+      <div
+        className="absolute left-0 right-0 top-1/2 h-[120px] -translate-y-1/2
         bg-gradient-to-r from-transparent via-sky-400/15 to-transparent blur-3xl"
       />
 
-      {/* ── VIGNETTE ── */}
-      <div className="absolute inset-0 
-        bg-[radial-gradient(circle_at_center,transparent,rgba(2,6,23,0.9))]" 
+      {/* Vignette */}
+      <div
+        className="absolute inset-0
+        bg-[radial-gradient(circle_at_center,transparent,rgba(2,6,23,0.9))]"
       />
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className={`flex flex-col lg:flex-row items-center gap-12 md:gap-16 xl:gap-28 ${reverse ? "lg:flex-row-reverse" : ""}`}>
+      {/* ───────────────────────────────────────── */}
+      {/* CONTENT */}
+      {/* ───────────────────────────────────────── */}
 
-          {/* ── VISUAL SIDE ── */}
-          <div className="lg:w-1/2 w-full">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div
+          className={`flex flex-col items-center gap-12 md:gap-16 xl:gap-24 lg:flex-row ${
+            reverse ? "lg:flex-row-reverse" : ""
+          }`}
+        >
+
+          {/* ───────────────────────────────────────── */}
+          {/* VISUAL SIDE */}
+          {/* ───────────────────────────────────────── */}
+
+          <div className="w-full lg:w-1/2">
+
             <div className="relative">
 
-              <div className="relative w-full aspect-[4/5] max-w-[500px] mx-auto lg:mx-0 rounded-2xl sm:rounded-[2rem] overflow-hidden border border-white/10">
+              {/* Main Image */}
+              <div className="relative mx-auto aspect-[4/5] w-full max-w-[500px] overflow-hidden rounded-2xl border border-white/10 sm:rounded-[2rem] lg:mx-0">
+
                 <Image
                   src={backgroundImage}
                   alt="Clinical Facility"
                   fill
-                  className="object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700"
+                  className="object-cover transition-all duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/80 to-transparent" />
+
+                {/* Image Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/70 via-transparent to-transparent" />
               </div>
 
-              {/* Floating Card - Responsive positioning */}
-              <div className="absolute -bottom-6 -right-2 sm:bottom-auto sm:right-4 lg:-right-10 sm:top-1/2 sm:-translate-y-1/2 flex items-center gap-4 sm:gap-5 bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-4 sm:p-5 max-w-[260px] sm:max-w-[280px]">
-                <div className="relative size-14 sm:size-16 rounded-xl overflow-hidden border border-sky-400/30">
+              {/* Practitioner Card */}
+              <div className="absolute bottom-5 left-5 flex items-center gap-3 rounded-2xl border border-white/10 bg-[#020617]/80 px-4 py-3 backdrop-blur-md">
+
+                <div className="relative h-12 w-12 overflow-hidden rounded-xl border border-white/10">
+
                   <Image
                     src={foregroundImage}
                     alt={foregroundAlt}
@@ -97,41 +126,61 @@ export const MissionSection = ({
                     className="object-cover"
                   />
                 </div>
+
                 <div>
-                  <p className="text-white text-sm sm:text-base font-semibold">{foregroundAlt}</p>
-                  <p className="text-sky-400 text-[10px] sm:text-[11px] uppercase mt-1">Lead Practitioner</p>
+                  <p className="text-sm font-semibold text-white">
+                    {foregroundAlt}
+                  </p>
+
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-sky-400/80">
+                    Registered Optometrist
+                  </p>
                 </div>
               </div>
-
             </div>
           </div>
 
-          {/* ── CONTENT SIDE ── */}
-          <div className="lg:w-1/2 space-y-6 sm:space-y-8 md:space-y-10">
+          {/* ───────────────────────────────────────── */}
+          {/* CONTENT SIDE */}
+          {/* ───────────────────────────────────────── */}
 
-            <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-6 sm:space-y-8 md:space-y-10 lg:w-1/2">
+
+            {/* Header */}
+            <div className="space-y-4">
+
               <div className="inline-flex items-center gap-3">
-                <div className="w-8 sm:w-10 h-[2px] bg-sky-400" />
-                <span className="text-sky-400 text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em]">
+
+                <div className="h-[2px] w-8 bg-sky-400 sm:w-10" />
+
+                <span className="text-[10px] uppercase tracking-[0.2em] text-sky-400 sm:text-xs sm:tracking-[0.3em]">
                   Institutional Profile
                 </span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-[1.2] sm:leading-[1.15]">
+              <h2 className="text-3xl font-semibold leading-[1.2] text-white sm:text-4xl md:text-5xl lg:text-6xl">
                 {title}
               </h2>
             </div>
 
-            <p className="text-white/60 text-base sm:text-lg leading-relaxed">
+            {/* Description */}
+            <p className="text-base leading-relaxed text-white/65 sm:text-lg">
               {description}
             </p>
 
-            {/* STATS - Responsive grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 py-6 sm:py-8 border-y border-white/10">
+            {/* Stats */}
+            <div className="grid grid-cols-1 gap-6 border-y border-white/10 py-6 sm:grid-cols-3 sm:gap-8 sm:py-8">
+
               {stats.map((stat) => (
-                <div key={stat.label} className="text-center sm:text-left">
-                  <p className="text-2xl sm:text-3xl font-semibold text-white">{stat.value}</p>
-                  <p className="text-white/40 text-[10px] sm:text-xs uppercase tracking-wider mt-1">
+                <div
+                  key={stat.label}
+                  className="text-center sm:text-left"
+                >
+                  <p className="text-2xl font-semibold text-white sm:text-3xl">
+                    {stat.value}
+                  </p>
+
+                  <p className="mt-1 text-[10px] uppercase tracking-wider text-white/40 sm:text-xs">
                     {stat.label}
                   </p>
                 </div>
@@ -140,15 +189,18 @@ export const MissionSection = ({
 
             {/* CTA */}
             <div>
+
               <Link
                 href={buttonHref}
-                className="inline-flex items-center gap-3 bg-white text-[#020617] px-6 sm:px-8 py-3 sm:py-4 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-widest hover:bg-sky-100 transition"
+                className="inline-flex items-center gap-3 rounded-full bg-white px-6 py-3 text-xs font-semibold uppercase tracking-widest text-[#020617] transition hover:bg-sky-100 sm:px-8 sm:py-4 sm:text-sm"
               >
                 {buttonText}
-                <span className="text-base sm:text-lg">→</span>
+
+                <span className="text-base sm:text-lg">
+                  →
+                </span>
               </Link>
             </div>
-
           </div>
         </div>
       </div>

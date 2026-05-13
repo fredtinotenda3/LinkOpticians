@@ -1,4 +1,5 @@
 // components/sections/products/ProductCategorySection.tsx
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -11,6 +12,7 @@ interface ProductCategorySectionProps {
   subtitle: string;
   title: string;
   titleHighlight: string;
+  description?: string;
   viewAllText?: string;
   viewAllLink?: string;
   products: Product[];
@@ -25,13 +27,18 @@ export const ProductCategorySection = ({
   subtitle,
   title,
   titleHighlight,
+  description,
   viewAllText,
   viewAllLink,
   products,
   badge,
 }: ProductCategorySectionProps) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
+
+  const [loadedImages, setLoadedImages] = useState<
+    Record<string, boolean>
+  >({});
+
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -45,113 +52,153 @@ export const ProductCategorySection = ({
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) observer.observe(sectionRef.current);
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
     return () => observer.disconnect();
   }, []);
 
   const handleImageLoad = (productId: string) => {
-    setLoadedImages((prev) => ({ ...prev, [productId]: true }));
+    setLoadedImages((prev) => ({
+      ...prev,
+      [productId]: true,
+    }));
   };
 
   return (
     <section
       id={id}
       ref={sectionRef}
-      className="relative py-24 md:py-32 bg-[#020617] overflow-hidden border-b border-white/[0.05]"
+      className="relative overflow-hidden border-b border-white/[0.06] bg-[#020617] py-16 md:py-24"
     >
-      {/* ── BACKGROUND SYSTEM (BLUE + PURPLE + TEXTURE) ── */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#020617] via-[#020617] to-[#020617]" />
+      {/* BACKGROUND */}
+      <div className="absolute inset-0 bg-[#020617]" />
 
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-400/10 blur-[140px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-violet-500/10 blur-[140px] rounded-full pointer-events-none" />
+      {/* Soft medical blue glow */}
+      <div className="pointer-events-none absolute top-0 right-0 h-[420px] w-[420px] rounded-full bg-sky-500/10 blur-[120px]" />
 
-      {/* subtle dot texture */}
-      <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[radial-gradient(circle,white_1px,transparent_1px)] [background-size:24px_24px]" />
+      {/* Soft emerald glow */}
+      <div className="pointer-events-none absolute bottom-0 left-0 h-[320px] w-[320px] rounded-full bg-emerald-500/5 blur-[120px]" />
+
+      {/* Subtle texture */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(circle,white_1px,transparent_1px)] [background-size:28px_28px]" />
 
       <div className="relative mx-auto max-w-7xl px-6">
 
-        {/* ── HEADER ── */}
+        {/* HEADER */}
         <div
-          className={`flex flex-col md:flex-row md:items-end justify-between gap-10 mb-20 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          className={`mb-14 flex flex-col gap-8 transition-all duration-700 md:flex-row md:items-end md:justify-between ${
+            isVisible
+              ? "translate-y-0 opacity-100"
+              : "translate-y-8 opacity-0"
           }`}
         >
-          <div className="space-y-5 max-w-xl">
+          <div className="max-w-2xl space-y-5">
+
+            {/* Subtitle */}
             <div className="flex items-center gap-4">
-              <span className="w-10 h-[2px] bg-sky-400" />
-              <span className="text-sky-400/80 text-xs font-semibold tracking-[0.25em] uppercase">
+              <span className="h-[2px] w-10 bg-sky-400" />
+
+              <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-400/80">
                 {subtitle}
               </span>
             </div>
 
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-semibold text-white leading-[1.15] tracking-tight">
+            {/* Title */}
+            <h2 className="text-3xl font-semibold leading-[1.1] tracking-tight text-white md:text-5xl lg:text-6xl">
               {title}
+
               <br />
-              <span className="text-sky-400">{titleHighlight}</span>
+
+              <span className="text-sky-400">
+                {titleHighlight}
+              </span>
             </h2>
+
+            {/* Description */}
+            {description && (
+              <p className="max-w-2xl text-sm leading-relaxed text-white/70 md:text-base">
+                {description}
+              </p>
+            )}
           </div>
 
+          {/* Desktop CTA */}
           {viewAllText && viewAllLink && (
             <Link
               href={viewAllLink}
-              className="group hidden md:inline-flex items-center gap-3 px-7 py-3 rounded-full border border-white/10 text-white/60 hover:text-white hover:border-sky-400/60 text-xs font-semibold uppercase tracking-wider transition-all duration-300"
+              className="group hidden items-center gap-3 rounded-full border border-white/10 px-7 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70 transition-all duration-300 hover:border-sky-400/60 hover:text-white md:inline-flex"
             >
               {viewAllText}
+
               <svg
-                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </Link>
           )}
         </div>
 
-        {/* ── PRODUCT GRID ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+        {/* PRODUCT GRID */}
+        <div className="grid grid-cols-1 gap-7 lg:grid-cols-2">
           {products.map((product, index) => (
             <Link
               key={product.id}
               href={`/products/${product.id}`}
               className={`group block transition-all duration-700 ${
                 isVisible
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-12"
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-10 opacity-0"
               }`}
-              style={{ transitionDelay: `${index * 120}ms` }}
+              style={{
+                transitionDelay: `${index * 120}ms`,
+              }}
             >
-              <div className="relative overflow-hidden rounded-[32px] bg-white/[0.03] border border-white/10 hover:border-sky-400/40 transition-all duration-500 hover:-translate-y-1.5">
+              <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.05] transition-all duration-500 hover:-translate-y-1 hover:border-sky-400/30">
 
-                {/* IMAGE */}
-                <div className="relative aspect-[16/11] overflow-hidden bg-[#001a33]">
+                {/* IMAGE AREA */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-[#001427]">
+
+                  {/* Skeleton */}
                   {!loadedImages[product.id] && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#001a33] to-[#020617] animate-pulse" />
+                    <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-[#001427] to-[#020617]" />
                   )}
 
+                  {/* Product Image */}
                   <Image
                     src={product.image}
                     alt={product.name}
                     fill
+                    priority={index === 0}
+                    quality={100}
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className={`object-contain p-8 md:p-10 transition-all duration-700 group-hover:scale-105 ${
-                      loadedImages[product.id] ? "opacity-100" : "opacity-0"
+                    className={`object-contain p-6 transition-all duration-700 group-hover:scale-105 md:p-8 ${
+                      loadedImages[product.id]
+                        ? "opacity-100"
+                        : "opacity-0"
                     }`}
                     onLoad={() => handleImageLoad(product.id)}
-                    quality={100}
-                    priority={index === 0}
                   />
 
-                  {/* subtle overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/60 via-transparent to-transparent" />
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/70 via-transparent to-transparent" />
 
                   {/* Badge */}
                   {badge && (
-                    <div className="absolute top-5 right-5 z-10">
+                    <div className="absolute right-4 top-4 z-10">
                       <span
-                        className={`px-4 py-2 backdrop-blur-md border border-white/20 rounded-full text-[10px] font-semibold text-white uppercase tracking-wider ${
-                          badge.color || "bg-sky-400/20"
+                        className={`rounded-full border border-white/20 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md ${
+                          badge.color || "bg-sky-500/20"
                         }`}
                       >
                         {badge.text}
@@ -161,44 +208,52 @@ export const ProductCategorySection = ({
                 </div>
 
                 {/* CONTENT */}
-                <div className="p-8 md:p-9">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-sky-400/70 text-xs font-semibold uppercase tracking-[0.2em]">
+                <div className="p-7 md:p-8">
+
+                  {/* Brand + Type */}
+                  <div className="mb-3 flex items-center gap-2">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-400/80">
                       {product.brand}
                     </span>
-                    <span className="w-1 h-1 rounded-full bg-white/20" />
-                    <span className="text-white/40 text-xs uppercase">
+
+                    <span className="h-1 w-1 rounded-full bg-white/20" />
+
+                    <span className="text-[11px] uppercase tracking-wide text-white/50">
                       {product.type}
                     </span>
                   </div>
 
-                  <h3 className="text-xl md:text-2xl font-semibold text-white mb-3 group-hover:text-sky-400 transition-colors duration-300">
+                  {/* Product Name */}
+                  <h3 className="mb-3 text-xl font-semibold text-white transition-colors duration-300 group-hover:text-sky-400 md:text-2xl">
                     {product.name}
                   </h3>
 
-                  <p className="text-white/50 text-sm leading-relaxed mb-6 line-clamp-2">
+                  {/* Description */}
+                  <p className="mb-6 line-clamp-2 text-sm leading-relaxed text-white/70">
                     {product.description}
                   </p>
 
-                  <div className="flex items-center gap-3 text-white/50 group-hover:text-white text-xs font-semibold uppercase tracking-wider transition">
-                    View Product
-                    <span className="w-8 h-px bg-sky-400 group-hover:w-12 transition-all duration-300" />
+                  {/* CTA */}
+                  <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60 transition-all duration-300 group-hover:text-white">
+                    View collection
+
+                    <span className="h-px w-8 bg-sky-400 transition-all duration-300 group-hover:w-12" />
                   </div>
                 </div>
 
-                {/* subtle glow */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-sky-400/5 to-violet-400/5 blur-2xl transition duration-500 pointer-events-none" />
+                {/* Hover glow */}
+                <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-gradient-to-r from-sky-400/5 to-emerald-400/5 blur-2xl" />
               </div>
             </Link>
           ))}
         </div>
 
-        {/* Mobile CTA */}
+        {/* MOBILE CTA */}
         {viewAllText && viewAllLink && (
-          <div className="mt-12 text-center md:hidden">
+          <div className="mt-10 text-center md:hidden">
             <Link
               href={viewAllLink}
-              className="inline-flex items-center gap-3 px-7 py-3 rounded-full border border-white/10 text-white/60 hover:text-white hover:border-sky-400/60 text-xs font-semibold uppercase tracking-wider transition-all duration-300"
+              className="inline-flex items-center gap-3 rounded-full border border-white/10 px-7 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70 transition-all duration-300 hover:border-sky-400/60 hover:text-white"
             >
               {viewAllText}
             </Link>
@@ -207,4 +262,4 @@ export const ProductCategorySection = ({
       </div>
     </section>
   );
-};
+}

@@ -1,4 +1,5 @@
 // components/sections/products/detail/RelatedProductsSection.tsx
+
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/constants/products";
@@ -17,69 +18,105 @@ export const RelatedProductsSection = ({
   if (products.length === 0) return null;
 
   return (
-    <section className="relative py-32 bg-[#000d1a] overflow-hidden border-t border-white/[0.03]">
-      
-      {/* Top Ambient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] rounded-full bg-sky-500/5 blur-[120px] pointer-events-none" />
+    <section className="relative overflow-hidden border-t border-white/[0.06] bg-[#000d1a] py-24 md:py-32">
 
-      <div className="relative mx-auto max-w-7xl px-[5%]">
+      {/* Ambient glow */}
+      <div className="pointer-events-none absolute top-0 left-1/2 h-[320px] w-[700px] -translate-x-1/2 rounded-full bg-sky-500/5 blur-[120px]" />
 
-        {/* ── Header ───────────────────────────────────────────────── */}
-        <div className="text-center mb-16 space-y-6">
-          <div className="inline-flex items-center justify-center gap-4">
-            <span className="w-10 h-[2px] bg-sky-500" />
-            <span className="text-sky-500 text-[10px] font-black tracking-[0.4em] uppercase">
+      {/* Subtle texture */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.03] bg-[radial-gradient(circle,white_1px,transparent_1px)] [background-size:28px_28px]" />
+
+      <div className="relative mx-auto max-w-7xl px-6">
+
+        {/* ========================================= */}
+        {/* HEADER */}
+        {/* ========================================= */}
+        <div className="mb-16 text-center">
+
+          <div className="mb-5 flex items-center justify-center gap-4">
+            <span className="h-[2px] w-10 bg-sky-400" />
+
+            <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-400/80">
               {subtitle}
             </span>
-            <span className="w-10 h-[2px] bg-sky-500" />
+
+            <span className="h-[2px] w-10 bg-sky-400" />
           </div>
-          <h2 className="text-5xl md:text-6xl font-black text-white leading-[0.9] tracking-tighter italic uppercase">
+
+          <h2 className="text-4xl font-semibold tracking-tight text-white md:text-6xl">
             {title}
           </h2>
         </div>
 
-        {/* ── Product Grid ─────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* ========================================= */}
+        {/* GRID */}
+        {/* ========================================= */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+
           {products.map((product) => (
             <Link
               key={product.id}
               href={`/products/${product.id}`}
-              className="group"
+              className="group block"
             >
-              <div className="relative overflow-hidden rounded-[32px] bg-white/[0.02] border border-white/5 transition-all duration-700 hover:border-sky-500/30 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+              <div className="overflow-hidden rounded-[28px] border border-white/[0.08] bg-white/[0.03] transition-all duration-500 hover:-translate-y-1 hover:border-sky-400/20">
 
-                {/* Image Container with Luxury Backdrop */}
+                {/* ========================================= */}
+                {/* IMAGE */}
+                {/* ========================================= */}
                 <div className="relative aspect-square overflow-hidden bg-[#001222]">
+
                   <Image
                     src={product.image}
                     alt={product.name}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-contain p-10 transition-transform duration-1000 group-hover:scale-110"
+                    className="object-contain p-10 transition-transform duration-700 group-hover:scale-105"
                   />
-                  {/* Subtle Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#000d1a]/60 via-transparent to-transparent pointer-events-none" />
+
+                  {/* Overlay */}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#000d1a]/50 via-transparent to-transparent" />
+
+                  {/* Brand badge */}
+                  <div className="absolute left-5 top-5">
+                    <span className="rounded-full border border-white/10 bg-[#000d1a]/70 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.15em] text-white/70 backdrop-blur-md">
+                      {product.brand}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Content Area */}
-                <div className="p-8">
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-sky-400 transition-colors duration-300">
+                {/* ========================================= */}
+                {/* CONTENT */}
+                {/* ========================================= */}
+                <div className="space-y-4 p-7">
+
+                  {/* Product Type */}
+                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-sky-400/80">
+                    {product.type}
+                  </p>
+
+                  {/* Product Name */}
+                  <h3 className="text-2xl font-semibold tracking-tight text-white transition-colors duration-300 group-hover:text-sky-400">
                     {product.name}
                   </h3>
-                  <p className="text-white/30 text-xs mb-6 line-clamp-2 italic font-medium">
+
+                  {/* Description */}
+                  <p className="line-clamp-2 text-sm leading-relaxed text-white/65">
                     {product.description}
                   </p>
-                  
-                  <div className="flex items-center gap-2 text-sky-500/60 group-hover:text-sky-400 text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300">
-                    Explore Product
-                    <svg className="w-3.5 h-3.5 transition-transform duration-500 group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+
+                  {/* CTA */}
+                  <div className="flex items-center gap-3 pt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55 transition-all duration-300 group-hover:text-white">
+
+                    View Collection
+
+                    <span className="h-px w-8 bg-sky-400 transition-all duration-300 group-hover:w-12" />
                   </div>
                 </div>
               </div>
             </Link>
           ))}
+
         </div>
       </div>
     </section>

@@ -70,7 +70,7 @@ export const ABOUT_DATA = {
     initiatives: [
       "Vision screening services",
       "School eye health services",
-      "Eyewear services",
+      "collection services",
       "Diabetes eye health services",
       "Community participation",
       "Workplace eye health services"
@@ -136,7 +136,7 @@ export const VALUES: Value[] = [
   },
   {
     id: "excellence",
-    title: "Professional Standards",
+    title: "Protective Standards",
     description: "Adherence to optometry standards.",
     icon: "⚕️"
   },

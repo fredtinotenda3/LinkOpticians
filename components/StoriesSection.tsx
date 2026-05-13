@@ -147,7 +147,7 @@ export default function StoriesSection({ stories }: { stories?: CMSStory[] }) {
         image: { url: "/assets/images/stories/products.png" },
         publishedAt: "2021",
         title: "Therapeutic Lens Expansion",
-        excerpt: "Integrating advanced contact lens solutions and therapeutic eyewear into our primary inventory.",
+        excerpt: "Integrating advanced contact lens solutions and therapeutic collection into our primary inventory.",
       },
   ];
 

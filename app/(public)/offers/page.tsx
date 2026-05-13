@@ -19,7 +19,7 @@ export default function OffersPage() {
           </h1>
           <p className="text-dark-700 text-lg max-w-3xl mx-auto mb-8">
             Exclusive eye care promotions and seasonal offers from Link Opticians. 
-            Save on eye examinations, eyewear, and specialized services.
+            Save on eye examinations, collection, and specialized services.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Button className="shad-primary-btn" asChild>

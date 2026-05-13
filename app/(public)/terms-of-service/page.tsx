@@ -28,7 +28,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-4">2. Professional Services</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">2. Protective Services</h2>
             <p className="text-white/70 mb-4">
               Link Opticians provides optometry services in accordance with the Pharmacists Council 
               of Zimbabwe regulations. All services are provided by registered optometrists and 
@@ -58,7 +58,7 @@ export default function TermsOfServicePage() {
           <section className="mb-12">
             <h2 className="text-2xl font-bold text-white mb-4">5. Product Sales</h2>
             <p className="text-white/70 mb-4">
-              All eyewear products require a valid prescription. Prescription verification is 
+              All collection products require a valid prescription. Prescription verification is 
               required before dispensing. Products may be returned within 14 days if unworn and 
               in original packaging, subject to inspection.
             </p>

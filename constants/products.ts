@@ -1,10 +1,14 @@
-// constants/products.ts
-
 export interface Product {
   id: string;
   name: string;
   brand: string;
-  category: 'frames' | 'sunglasses' | 'contact-lenses' | 'accessories' | 'lenses';
+  category:
+    | "frames"
+    | "sunglasses"
+    | "contact-lenses"
+    | "accessories"
+    | "lenses";
+
   type: string;
   description: string;
   features: string[];
@@ -14,144 +18,305 @@ export interface Product {
   availability: string[];
 }
 
-/**
- * PRODUCTS_DATA
- * A flat array to support .filter() operations in the page configurations.
- * Aligned with S.I. 63 of 2024 compliance for factual representations.
- */
 export const PRODUCTS_DATA: Product[] = [
-  // ─── LUXURY SUNGLASSES ──────────────────────────────────────────
+  // ─────────────────────────────────────────────
+  // PROTECTIVE EYEWEAR
+  // ─────────────────────────────────────────────
+
   {
-    id: "sunglass-gucci",
-    name: "Gucci GG1220S",
+    id: "rayban-protective",
+
+    name: "Ray-Ban Active Collection",
+
+    brand: "Ray-Ban",
+
+    category: "sunglasses",
+
+    type: "Protective Eyewear",
+
+    description:
+      "Eyewear with UV protection and lightweight comfort for everyday outdoor use.",
+
+    features: [
+      "UV400 Protection",
+      "Lightweight Frame",
+      "Prescription Compatible",
+    ],
+
+    image: "/assets/images/products/rayban-protective.png",
+
+    tags: ["protective", "sunglasses", "rayban"],
+
+    availability: ["Harare", "Honeydew", "Chiredzi"],
+  },
+
+  {
+    id: "oakley-active",
+
+    name: "Oakley Active Shield",
+
+    brand: "Oakley",
+
+    category: "sunglasses",
+
+    type: "Sports Eyewear",
+
+    description:
+      "Durable eyewear designed for active lifestyles, sports, and outdoor environments.",
+
+    features: [
+      "Impact Resistant",
+      "UV Protection",
+      "Sport Performance Design",
+    ],
+
+    image: "/assets/images/products/oakley-shield.png",
+
+    tags: ["protective", "sports", "oakley"],
+
+    availability: ["All Branches"],
+  },
+
+  {
+    id: "prada-blue-light",
+
+    name: "Prada Vision Collection",
+
+    brand: "Prada",
+
+    category: "sunglasses",
+
+    type: "Blue-Light Protection",
+
+    description:
+      "Modern eyewear designed for digital screen exposure and daily visual comfort.",
+
+    features: [
+      "Blue-Light Filtering",
+      "Designer Finish",
+      "Premium Comfort",
+    ],
+
+    image: "/assets/images/products/prada-blue-light.png",
+
+    tags: ["protective", "blue-light", "prada"],
+
+    availability: ["Harare", "Kensington"],
+  },
+
+  {
+    id: "gucci-uv-series",
+
+    name: "Gucci Signature Collection",
+
     brand: "Gucci",
+
     category: "sunglasses",
-    type: "Luxury Eyewear",
-    description: "Iconic aviator silhouette with gold-tone finish and signature web detailing.",
-    features: ["UV400 Protection", "Designer Case Included", "Italian Craftsmanship"],
-    image: "/assets/images/products/gucci-aviator.jpg",
-    tags: ["luxury", "sunglasses", "gucci"],
-    availability: ["Harare", "Honeydew", "Chiredzi"]
-  },
-  {
-    id: "sunglass-armani",
-    name: "Giorgio Armani AR8135",
-    brand: "Giorgio Armani",
-    category: "sunglasses",
-    type: "Luxury Eyewear",
-    description: "Sophisticated rectangular frames for the modern professional.",
-    features: ["Polarized Lenses", "Hand-finished Acetate"],
-    image: "/assets/images/products/armani-rect.jpg",
-    tags: ["luxury", "sunglasses", "armani"],
-    availability: ["Harare", "Kensington"]
-  },
-  {
-    id: "sunglass-police",
-    name: "Police Origins Lite",
-    brand: "Police",
-    category: "sunglasses",
-    type: "Active Lifestyle",
-    description: "Urban design featuring polarized lenses and a lightweight metal chassis.",
-    features: ["Impact Resistance", "Lightweight Alloy", "Polarized Tech"],
-    image: "/assets/images/products/police-lite.jpg",
-    tags: ["active", "sunglasses", "police"],
-    availability: ["All Branches"]
+
+    type: "Protective Eyewear",
+
+    description:
+      "Luxury eyewear combining designer styling with certified UV protection.",
+
+    features: [
+      "UV400 Protection",
+      "Luxury Finish",
+      "Premium Optical Comfort",
+    ],
+
+    image: "/assets/images/products/gucci-uv.png",
+
+    tags: ["protective", "luxury", "gucci"],
+
+    availability: ["Harare", "Honeydew"],
   },
 
-  // ─── SPECTACLE FRAMES ───────────────────────────────────────────
+  // ─────────────────────────────────────────────
+  // OPTICAL FRAMES
+  // ─────────────────────────────────────────────
+
   {
-    id: "frame-felicia",
-    name: "Felicia Signature Series",
-    brand: "Felicia",
+    id: "cartier-signature",
+
+    name: "Cartier Signature Optical",
+
+    brand: "Cartier",
+
     category: "frames",
-    type: "Premium Frames",
-    description: "Elegant feminine designs with crystal embellishments and rose gold accents.",
-    features: ["Hypoallergenic", "Adjustable Nose Pads"],
-    image: "/assets/images/products/felicia-frame.jpg",
-    tags: ["frames", "felicia"],
-    availability: ["All Branches"]
+
+    type: "Luxury Optical Frames",
+
+    description:
+      "Elegant optical frames crafted with refined detailing and premium comfort.",
+
+    features: [
+      "Premium Materials",
+      "Adjustable Nose Pads",
+      "Luxury Finish",
+    ],
+
+    image: "/assets/images/products/cartier-frame.png",
+
+    tags: ["frames", "cartier", "luxury"],
+
+    availability: ["Harare", "Kensington"],
   },
+
   {
-    id: "frame-vision-pro",
-    name: "Vision Pro Titanium",
-    brand: "Vision Plus",
+    id: "montblanc-titanium",
+
+    name: "Montblanc Titanium Series",
+
+    brand: "Montblanc",
+
     category: "frames",
+
     type: "Optical Frames",
-    description: "Minimalist rimless design constructed from aerospace-grade titanium.",
-    features: ["Memory Metal", "Ultra-Lightweight", "Corrosion Resistant"],
-    image: "/assets/images/products/titanium-frame.jpg",
-    tags: ["frames", "titanium", "vision-plus"],
-    availability: ["Harare", "Kensington", "Chiredzi"]
+
+    description:
+      "Minimalist titanium optical frames engineered for lightweight durability and daily wear.",
+
+    features: [
+      "Titanium Build",
+      "Ultra-Lightweight",
+      "Corrosion Resistant",
+    ],
+
+    image: "/assets/images/products/montblanc-titanium.png",
+
+    tags: ["frames", "montblanc", "titanium"],
+
+    availability: ["Harare", "Chiredzi"],
   },
 
-  // ─── CLINICAL LENSES (VISION PLUS TECH) ─────────────────────────
   {
-    id: "lens-digital-hd",
-    name: "Vision Plus HD Digital",
-    brand: "Vision Plus",
-    category: "lenses",
-    type: "Clinical Tech",
-    description: "High-definition digital surfacing for maximized peripheral clarity.",
-    features: ["Blue Light Filter", "Anti-Reflective", "Easy-Clean Coating"],
-    image: "/assets/images/products/lens-tech-1.png",
-    tags: ["lenses", "vision-plus", "clinical"],
-    availability: ["Manufactured in Link Lab"]
-  },
-  {
-    id: "lens-photochromic",
-    name: "Adaptive Light Lenses",
-    brand: "Link Opticians",
-    category: "lenses",
-    type: "Photochromic Tech",
-    description: "Lenses that intelligently adapt to changing UV levels, darkening outdoors.",
-    features: ["Rapid Transition", "Indoor Clarity", "UV Protection"],
-    image: "/assets/images/products/lens-tech-2.png",
-    tags: ["lenses", "transition", "clinical"],
-    availability: ["All Branches"]
+    id: "chanel-classic",
+
+    name: "Chanel Classic Optical",
+
+    brand: "Chanel",
+
+    category: "frames",
+
+    type: "Designer Optical Frames",
+
+    description:
+      "Timeless designer optical frames with sophisticated styling and premium comfort.",
+
+    features: [
+      "Luxury Finish",
+      "Premium Acetate",
+      "Elegant Styling",
+    ],
+
+    image: "/assets/images/products/chanel-classic.png",
+
+    tags: ["frames", "chanel"],
+
+    availability: ["All Branches"],
   },
 
-  // ─── CONTACT LENSES ─────────────────────────────────────────────
+  {
+    id: "calvin-klein-modern",
+
+    name: "Calvin Klein Modern Fit",
+
+    brand: "Calvin Klein",
+
+    category: "frames",
+
+    type: "Optical Frames",
+
+    description:
+      "Contemporary optical frames designed for comfortable everyday wear.",
+
+    features: [
+      "Modern Design",
+      "Lightweight Comfort",
+      "Prescription Ready",
+    ],
+
+    image: "/assets/images/products/ck-modern.png",
+
+    tags: ["frames", "ck"],
+
+    availability: ["All Branches"],
+  },
+
+  // ─────────────────────────────────────────────
+  // CONTACT LENSES
+  // ─────────────────────────────────────────────
+
   {
     id: "contact-daily",
-    name: "Vision-Link Daily Disposables",
-    brand: "Vision Plus",
-    category: "contact-lenses",
-    type: "Daily Disposable",
-    description: "High-moisture content daily lenses for all-day comfort and oxygen breathability.",
-    features: ["UV Blocker", "Hydra-Balance Tech", "Soft Hydrogel"],
-    image: "/assets/images/products/contact-daily.png",
-    tags: ["contacts", "daily", "clinical"],
-    availability: ["Following Optometrist Assessment"]
-  },
 
-  // ─── ACCESSORIES ────────────────────────────────────────────────
-  {
-    id: "acc-premium-kit",
-    name: "Precision Lens Care Kit",
-    brand: "Link Opticians",
-    category: "accessories",
-    type: "Maintenance",
-    description: "Comprehensive care kit for all high-index and anti-reflective lenses.",
-    features: ["Microfiber Cloth", "pH-Balanced Spray", "Travel Case"],
-    image: "/assets/images/products/care-kit.png",
-    tags: ["accessories", "care-kit"],
-    availability: ["In-Store Only"]
-  }
+    name: "Daily Disposable Contact Lenses",
+
+    brand: "Bausch + Lomb",
+
+    category: "contact-lenses",
+
+    type: "Daily Disposable",
+
+    description:
+      "Comfort-focused daily disposable contact lenses available following optometrist assessment.",
+
+    features: [
+      "UV Blocker",
+      "Hydration Technology",
+      "Soft Hydrogel Material",
+    ],
+
+    image: "/assets/images/products/contact-daily.png",
+
+    tags: ["contacts", "daily", "clinical"],
+
+    availability: ["Following Optometrist Assessment"],
+  },
 ];
 
 export const PRODUCT_CATEGORIES = [
-  { id: "all", label: "All Products", icon: "📦" },
-  { id: "luxury", label: "Luxury Collection", icon: "💎" },
-  { id: "frames", label: "Optical Frames", icon: "👓" },
-  { id: "sunglasses", label: "Sunglasses", icon: "🕶️" },
-  { id: "lenses", label: "Lens Tech", icon: "🔍" },
-  { id: "contact-lenses", label: "Contact Lenses", icon: "👁️" }
+  {
+    id: "all",
+    label: "All Products",
+    icon: "📦",
+  },
+
+  {
+    id: "luxury",
+    label: "Luxury Collection",
+    icon: "💎",
+  },
+
+  {
+    id: "frames",
+    label: "Optical Frames",
+    icon: "👓",
+  },
+
+  {
+    id: "sunglasses",
+    label: "Protective Eyewear",
+    icon: "🕶️",
+  },
+
+  {
+    id: "lenses",
+    label: "Lens Technology",
+    icon: "🔍",
+  },
+
+  {
+    id: "contact-lenses",
+    label: "Contact Lenses",
+    icon: "👁️",
+  },
 ];
 
 export const PRODUCT_FEATURES = [
-  "In-House Lens Manufacturing (Vision Plus Lab)",
-  "Full Medical Aid Support (CIMAS, PSMAS, etc.)",
-  "Interest-Free Payment Plans (Harare & Honeydew)",
-  "Professional Eye Examinations on Premises",
-  "Authorized Retailer for Global Luxury Brands"
+  "Comprehensive Eye Examinations",
+  "Prescription Eyewear Dispensing",
+  "Blue-Light Protection Options",
+  "Medical Aid Support",
+  "Authorized Retailer for International Brands",
 ];

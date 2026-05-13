@@ -68,7 +68,7 @@ export const CorporateSection = ({
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-sky-400/8 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-violet-500/8 blur-[120px] rounded-full pointer-events-none" />
 
-      {/* subtle dot grid (professional texture) */}
+      {/* subtle dot grid (Protective texture) */}
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[radial-gradient(circle,white_1px,transparent_1px)] [background-size:28px_28px]" />
 
       <div className="relative mx-auto max-w-7xl px-6">
@@ -131,7 +131,7 @@ export const CorporateSection = ({
               ))}
             </div>
 
-            {/* CTA (more professional, less flashy) */}
+            {/* CTA (more Protective, less flashy) */}
             <Link
               href={buttonHref}
               className="inline-flex items-center gap-3 px-8 py-4 rounded-full border border-sky-400/40 text-white text-xs font-semibold uppercase tracking-wider hover:bg-sky-400 hover:text-black transition-all duration-300"

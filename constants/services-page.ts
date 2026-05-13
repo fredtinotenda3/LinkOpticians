@@ -29,7 +29,7 @@ export const SERVICES_PAGE_CONFIG = {
     title: "Complete eye care",
     titleHighlight: "under one roof",
     subtitle: "WHAT WE OFFER",
-    description: "From diagnosis to treatment to eyewear — everything you need for healthy vision.",
+    description: "From diagnosis to treatment to collection — everything you need for healthy vision.",
     services: SERVICES_DATA // We'll map this to the grid
   },
   
@@ -66,7 +66,7 @@ export const SERVICES_PAGE_CONFIG = {
       },
       {
         icon: "👓",
-        title: "Safety eyewear",
+        title: "Safety collection",
         description: "Industrial prescription glasses"
       },
       {

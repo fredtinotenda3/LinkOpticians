@@ -20,7 +20,7 @@ export const metadata = {
  * 2. Grid: Visual catalog of core clinical services
  * 3. Lab: Spotlight on the unique in-house surfacing technology
  * 4. Corporate: Specialized B2B vision wellness programs
- * 5. Legal: Regulatory disclosure and professional compliance
+ * 5. Legal: Regulatory disclosure and Protective compliance
  * 6. Final CTA: Conversion point for appointments
  */
 export default function ServicesPage() {
@@ -52,7 +52,7 @@ export default function ServicesPage() {
       <CorporateSection {...SERVICES_PAGE_CONFIG.corporate} />
 
       {/* 5. Legal Notice 
-          Quiet, professional regulatory disclosure before the final push.
+          Quiet, Protective regulatory disclosure before the final push.
       */}
       {/* <LegalNoticeSection text={SERVICES_PAGE_CONFIG.legalNotice.text} /> */}
 

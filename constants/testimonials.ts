@@ -15,7 +15,7 @@ export const HOME_TESTIMONIALS: Testimonial[] = [
   {
     id: "amai-tembo",
     image: "/assets/images/testimonial-farmer.jpg",
-    quote: "The mobile unit came to our village in Chipinge. I can see clearly now—the care was truly professional.",
+    quote: "The mobile unit came to our village in Chipinge. I can see clearly now—the care was truly Protective.",
     name: "Amai Tembo",
     location: "Chipinge District",
     rating: 5,
@@ -23,7 +23,7 @@ export const HOME_TESTIMONIALS: Testimonial[] = [
   {
     id: "tendai-m",
     image: "/assets/images/testimonial-teacher.jpg",
-    quote: "Very professional service in Chiredzi. They accepted my medical aid immediately and the glasses were ready fast.",
+    quote: "Very Protective service in Chiredzi. They accepted my medical aid immediately and the glasses were ready fast.",
     name: "Tendai M.",
     location: "Chiredzi Branch",
     rating: 5,
