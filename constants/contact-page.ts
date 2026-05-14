@@ -119,7 +119,7 @@ export const CONTACT_PAGE_CONFIG = {
     secondaryButtonText: "Find a clinic",
     secondaryButtonHref: "/locations",
     emergencyText: "Emergency? Call",
-    emergencyPhone: "0737 683 090",
+    emergencyPhone: "0242 757558",
     emergencyNote: "(24/7)"
   }
 };
